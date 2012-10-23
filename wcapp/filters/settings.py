@@ -10,7 +10,7 @@ from dss import DSS_WEIGHTS
 
 
 #adding radio filter for computer type:
-def type_cut_function(session, computers, answer):
+def type_cut_function(session, computer_components, answer):
 	typeFilter.selected = typeFilter.values.index(answer)
 	return [computer for computer in computers
 		if session.query(wc_Type).filter_by(id = computer.id_wc_Type).first().name in answer ]
@@ -22,7 +22,7 @@ typeFilter.values =  u"Ноутбук,Ультрабук", u"Ультрабук"
 
 
 #adding radio filter for OS:
-def os_cut_function(session, computers, answer):
+def os_cut_function(session, computer_components, answer):
 	osFilter.selected = osFilter.values.index(answer)
 	return [computer for computer in computers
 		if session.query(wc_OS).filter_by(id = computer.id_wc_OS).first().name in answer ]
@@ -34,7 +34,7 @@ osFilter.values =  u"DOS", u"Mac OS x 10.7 Lion", u'Linux'
 
 
 #adding slider filter for cpu frequency:
-def cpu_frequency_cut_function(session, computers, answer):
+def cpu_frequency_cut_function(session, computer_components, answer):
 	cpuFrequencyFilter.value = answer
 	return [computer for computer in computers
 		if session.query(wc_CPU).filter_by(id = computer.id_wc_CPU).first().frequency >= float(answer)] 

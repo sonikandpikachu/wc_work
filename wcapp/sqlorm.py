@@ -32,32 +32,30 @@ class wc_Shop (Base):
 class wc_OS (Base):
     __tablename__ = "wc_OS"
     id = Column(al.Integer, primary_key=True)
-    dssv = Column(al.Float)
+    dss = Column(al.Float)
     name = Column(al.String(100))
+    type = Column(al.String(20))
     
-
-    def __init__( self, dssv = None, name = None, dssc = None ):
-        self.dssv = dssv
+    def __init__(self, id = None, dss = None, name = None, type = None):
+        if id: self.id = id
         self.name = name
-        self.dssc = dssc
+        self.dss = dss
+        self.type = type
 
 
 class wc_Battery (Base):
     __tablename__ = "wc_Battery"
     id = Column(al.Integer, primary_key=True)
-    dssv = Column(al.Float)
+    dss = Column(al.Float)
     capacity = Column(al.String(50))
     voltage = Column(al.String(50))
     power = Column(al.String(50))
     
-    
-
-    def __init__( self, dssv = None, capacity = None, voltage = None, power = None, dssc = None ):
-        self.dssv = dssv
+    def __init__( self, dss = None, capacity = None, voltage = None, power = None):
+        self.dss = dss
         self.capacity = capacity
         self.voltage = voltage
         self.power = power
-        self.dssc = dssc
 
 
 class wc_Type (Base):
@@ -65,7 +63,6 @@ class wc_Type (Base):
     id = Column(al.Integer, primary_key=True)
     name = Column(al.String(50))
     
-
     def __init__( self, name = None ):
         self.name = name
         
@@ -73,35 +70,31 @@ class wc_Type (Base):
 class wc_Screen (Base):
     __tablename__ = "wc_Screen"
     id = Column(al.Integer, primary_key=True)
-    dssv = Column(al.Float)
+    dss = Column(al.Float)
     cover = Column(al.String(50))
     resolution = Column(al.String(50))
-    
     size = Column(al.String(50))
     
 
-    def __init__( self, dssv = None, cover = None, resolution = None, dssc = None, size = None ):
-        self.dssv = dssv
+    def __init__(self, dss = None, cover = None, resolution = None, size = None ):
         self.cover = cover
         self.resolution = resolution
-        self.dssc = dssc
+        self.dss = dss
         self.size = size
 
 
+#done
 class wc_RAM (Base):
     __tablename__ = "wc_RAM"
     id = Column(al.Integer, primary_key=True)
-    dssv = Column(al.Float)
+    dss = Column(al.Float)
     amount = Column(al.Integer)
-    
     name = Column(al.String(50))
     max_amount = Column(al.Integer)
     
-
-    def __init__( self, dssv = None, amount = None, dssc = None, name = None, max_amount = None ):
-        self.dssv = dssv
+    def __init__(self, dss = None, amount = None, name = None, max_amount = None):
+        self.dss = dss
         self.amount = amount
-        self.dssc = dssc
         self.name = name
         self.max_amount = max_amount
 
@@ -109,19 +102,16 @@ class wc_RAM (Base):
 class wc_VGA (Base):
     __tablename__ = "wc_VGA"
     id = Column(al.Integer, primary_key=True)
-    dssv = Column(al.Float)
+    dss = Column(al.Float)
     amount = Column(al.Integer)
     type = Column(al.String(50))
     name = Column(al.String(50))
     
-    
-
-    def __init__( self, dssv = None, amount = None, type = None, name = None, dssc = None ):
-        self.dssv = dssv
+    def __init__(self, dss = None, amount = None, type = None, name = None):
+        self.dss = dss
         self.amount = amount
         self.type = type
         self.name = name
-        self.dssc = dssc
 
 
 class wc_Color (Base):
@@ -136,26 +126,26 @@ class wc_Color (Base):
 class wc_Computer (Base):
     __tablename__ = "wc_Computer"
     id = Column(al.Integer, primary_key=True)
-    slot = Column(al.String(50))
+    slot = Column(al.String(100))
     cardreader = Column(al.Integer)
-    maker_url = Column(al.String(50))
-    name = Column(al.String(50))
+    maker_url = Column(al.String(100))
+    name = Column(al.String(100))
     weight = Column(al.Float)
-    out_ports = Column(al.String(50))
+    out_ports = Column(al.String(100))
     modem56 = Column(al.Integer)
     wifi = Column(al.Integer)
-    dssv = Column(al.Float)
+    dss = Column(al.Float)
     webcamera = Column(al.Float)
     height = Column(al.Float)
     width = Column(al.Float)
     length = Column(al.Float)
     wimax = Column(al.Integer)
-    comments = Column(al.String(100))
-    url = Column(al.String(100))
+    comments = Column(al.String(300))
     network_adapter = Column(al.Integer)
     Bluetooth = Column(al.Integer)
     G3 = Column(al.Integer)
-    cartrider = Column(al.Integer)
+    price = Column(al.Float)
+    norm_price = Column(al.Float)
     id_wc_OS = Column(al.Integer)
     id_wc_Battery = Column(al.Integer)
     id_wc_Type = Column(al.Integer)
@@ -168,17 +158,17 @@ class wc_Computer (Base):
     id_wc_ODD = Column(al.Integer)
     id_wc_CPU = Column(al.Integer)
     id_wc_HD = Column(al.Integer)
-    url = Column(al.String(200))
+    url = Column(al.String(300))
 
 
     def __init__( self, slot = None, cardreader = None, maker_url = None, name = None,
-                   weight = None, out_ports = None, modem56 = None, wifi = None, dssv = None, webcamera = None,
+                   weight = None, out_ports = None, modem56 = None, wifi = None, dss = None, webcamera = None,
                     height = None, width = None, length = None, wimax = None, comments = None,
-                     network_adapter = None, Bluetooth = None, G3 = None, dssc = None, cartrider = None, url = None,
+                     network_adapter = None, Bluetooth = None, G3 = None, cartrider = None, url = None,
                      id_wc_Shop = None,id_wc_OS = None,id_wc_Battery = None,id_wc_Type = None,id_wc_Screen = None,
                      id_wc_RAM = None,id_wc_VGA = None,id_wc_Color = None,id_wc_Computer = None,id_wc_SSD = None,
                      id_wc_Chipset = None,id_wc_CDevice = None,id_wc_Audio = None,id_wc_ODD = None,id_wc_CPU = None,
-                     id_wc_HD = None, ):
+                     id_wc_HD = None, price = None, norm_price = None):
         self.slot = slot
         self.cardreader = cardreader
         self.maker_url = maker_url
@@ -187,7 +177,7 @@ class wc_Computer (Base):
         self.out_ports = out_ports
         self.modem56 = modem56
         self.wifi = wifi
-        self.dssv = dssv
+        self.dss = dss
         self.webcamera = webcamera
         self.height = height
         self.width = width
@@ -198,8 +188,9 @@ class wc_Computer (Base):
         self.network_adapter = network_adapter
         self.Bluetooth = Bluetooth
         self.G3 = G3
-        self.dssc = dssc
         self.cartrider = cartrider
+        self.price = price
+        self.norm_price = norm_price
         self.id_wc_Shop = id_wc_Shop
         self.id_wc_OS = id_wc_OS
         self.id_wc_Battery = id_wc_Battery
@@ -222,12 +213,12 @@ class wc_Computer (Base):
 class wc_Chipset (Base):
     __tablename__ = "wc_Chipset"
     id = Column(al.Integer, primary_key=True)
-    dssv = Column(al.Float)
-    name = Column(al.String(50))
+    dss = Column(al.Float)
+    name = Column(al.String(100))
     
 
-    def __init__( self, dssv = None, name = None, dssc = None ):
-        self.dssv = dssv
+    def __init__(self, dss = None, name = None):
+        self.dss = dss
         self.name = name
 
 
@@ -249,73 +240,62 @@ class wc_CDevice (Base):
 class wc_Audio (Base):
     __tablename__ = "wc_Audio"
     id = Column(al.Integer, primary_key=True)
-    dssv = Column(al.Float)
-    name = Column(al.String(50))
-    
-    
+    dss = Column(al.Float)
+    name = Column(al.String(100))
 
-    def __init__( self, dssv = None, name = None, dssc = None ):
-        self.dssv = dssv
+    def __init__( self, dss = None, name = None):
+        self.dss = dss
         self.name = name
 
 
+#done
 class wc_ODD (Base):
     __tablename__ = "wc_ODD"
     id = Column(al.Integer, primary_key=True)
-    dssv = Column(al.Float)
-    name = Column(al.String(50))
-    
-
-    def __init__( self, dssv = None, name = None, dssc = None ):
-        self.dssv = dssv
-        self.name = name
-        self.dssc = dssc
-
-
-class wc_CPU (Base):
-    __tablename__ = "wc_CPU"
-    id = Column(al.Integer, primary_key=True)
-    kernel_count = Column(al.Integer)
-    mark = Column(al.String(50))
-    frequency = Column(al.Float)
-    dssv = Column(al.Float)
+    dss = Column(al.Float)
+    name = Column(al.String(100))
     type = Column(al.String(50))
     
-
-    def __init__( self, kernel_count = None, dssc = None, mark = None, frequency = None, dssv = None, type = None ):
-        self.kernel_count = kernel_count
-        self.dssc = dssc
-        self.mark = mark
-        self.frequency = frequency
-        self.dssv = dssv
+    def __init__( self, dss = None, name = None, type = None):
+        self.dss = dss
+        self.name = name
         self.type = type
 
 
+#done
+class wc_CPU (Base):
+    __tablename__ = "wc_CPU"
+    id = Column(al.Integer, primary_key=True)
+    cores = Column(al.Integer)
+    threads = Column(al.Float)
+    frequency = Column(al.Float)
+    dss = Column(al.Float)
+    name = Column(al.String(100))
+    
+    def __init__( self, cores = None, frequency = None, dss = None, name = None, threads = None ):
+        self.frequency = frequency
+        self.dss = dss
+        self.name = name
+        self.cores = cores
+        self.threads = threads
+
+#done
 class wc_HD (Base):
     __tablename__ = "wc_HD"
     id = Column(al.Integer, primary_key=True)
-    info = Column(al.String(50))
-    mark = Column(al.String(50))
-    dssv = Column(al.Float)
-    amount = Column(al.Float)
+    dss = Column(al.Float)
+    hdd_amount = Column(al.Float)
     ssd_amount = Column(al.Float)
     interface = Column(al.String(50))
-    speed = Column(al.Float)
+    speed = Column(al.String(100))
     
-
-    def __init__( self, info = None, dssc = None, mark = None, dssv = None, amount = None, ssd_amount = None, interface = None, speed = None ):
-        self.info = info
-        self.dssc = dssc
-        self.mark = mark
-        self.dssv = dssv
+    def __init__(self, id = None, dss = None, amount = None, ssd_amount = None, interface = None, speed = None):
+        self.dss = dss
+        if id: self.id = id
         self.amount = amount
         self.ssd_amount = ssd_amount
         self.interface = interface
         self.speed = speed
-
-
-
-
 
 
 class SQLController:
@@ -334,30 +314,40 @@ class SQLController:
 
 
 if __name__ == '__main__':
-#    pass
-#    Base.metadata.create_all(engine) 
+    # Base.metadata.create_all(engine) 
 
 #    user = User(name = 'name', fullname = 'fullname', password = 'password')
     controller = SQLController()
     session = controller.create_sql_session()
+    computers = session.query(wc_Computer).all()
+    # print computers
+    # print [c.price for c in computers]
+    maximum = max([c.price for c in computers])
+    minimum = min([c.price for c in computers if c.price > 0])
+    print maximum, minimum
+    for comp in computers:
+        print comp.price
+        if comp.price: comp.norm_price = (comp.price - minimum) * 100 / (maximum - minimum)
+        session.flush()
+    session.commit()
     
-    request_computers = []
-    for computer in session.query(wc_Computer).all():
-        battery = session.query(wc_Battery).filter_by(id = computer.id_wc_Battery).first()
-        vga = session.query(wc_VGA).filter_by(id = computer.id_wc_VGA).first()
-        hd = session.query(wc_HD).filter_by(id = computer.id_wc_HD).first()
-        odd = session.query(wc_ODD).filter_by(id = computer.id_wc_ODD).first()
-        type = session.query(wc_Type).filter_by(id = computer.id_wc_Type).first()
-        chipset = session.query(wc_Chipset).filter_by(id = computer.id_wc_Chipset).first()
-        screen = session.query(wc_Screen).filter_by(id = computer.id_wc_Screen).first()
-        ram = session.query(wc_RAM).filter_by(id = computer.id_wc_RAM).first()
-        os = session.query(wc_OS).filter_by(id = computer.id_wc_OS).first()
-        cpu = session.query(wc_CPU).filter_by(id = computer.id_wc_CPU).first()
-        print cpu.frequency
-        dictionary = {'battery': battery, 'vga' : vga, 'hd' : hd, 'odd' : odd, 'type' : type, 'chipset' : chipset,
-                      'screen' : screen, 'ram' : ram, 'os' : os, 'cpu' : cpu, 'name' : computer.name}
-        print dictionary
-        request_computers.append(dictionary)
+    # request_computers = []
+    # for computer in session.query(wc_Computer).all():
+    #     battery = session.query(wc_Battery).filter_by(id = computer.id_wc_Battery).first()
+    #     vga = session.query(wc_VGA).filter_by(id = computer.id_wc_VGA).first()
+    #     hd = session.query(wc_HD).filter_by(id = computer.id_wc_HD).first()
+    #     odd = session.query(wc_ODD).filter_by(id = computer.id_wc_ODD).first()
+    #     type = session.query(wc_Type).filter_by(id = computer.id_wc_Type).first()
+    #     chipset = session.query(wc_Chipset).filter_by(id = computer.id_wc_Chipset).first()
+    #     screen = session.query(wc_Screen).filter_by(id = computer.id_wc_Screen).first()
+    #     ram = session.query(wc_RAM).filter_by(id = computer.id_wc_RAM).first()
+    #     os = session.query(wc_OS).filter_by(id = computer.id_wc_OS).first()
+    #     cpu = session.query(wc_CPU).filter_by(id = computer.id_wc_CPU).first()
+    #     print cpu.frequency
+    #     dictionary = {'battery': battery, 'vga' : vga, 'hd' : hd, 'odd' : odd, 'type' : type, 'chipset' : chipset,
+    #                   'screen' : screen, 'ram' : ram, 'os' : os, 'cpu' : cpu, 'name' : computer.name}
+    #     print dictionary
+    #     request_computers.append(dictionary)
         
     
         

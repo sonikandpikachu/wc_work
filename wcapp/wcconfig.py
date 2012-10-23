@@ -8,7 +8,7 @@ Created on Sep 18, 2012
 DATABASE = 'mysql://'
 USERNAME = 'root'
 PASSWORD = 'wcomp'
-HOST = '127.0.0.1:3307'
+HOST = '127.0.0.1:3306'
 
 GARBAGE_SCHEME = 'wComp'
 REAL_SCHEME = 'wc'

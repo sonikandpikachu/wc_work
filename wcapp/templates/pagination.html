@@ -2,7 +2,7 @@
 	{% for page in pagination_pages %}
 		{% if page != '...' %}
 			{% if page == currentpage %}
-				<li><b><a href="/qa/?page={{ page }}"> {{ page }} </a></b></li>
+				<li><a class = 'select' href="/qa/?page={{ page }}"> {{ page }} </a></b></li>
 			{% else %}
 				<li><a href="/qa/?page={{ page }}"> {{ page }} </a></li>
 			{% endif %}

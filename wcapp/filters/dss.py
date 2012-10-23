@@ -5,26 +5,21 @@ Created on Sep 30, 2012
 @author: Pavel
 '''
 
-DSS_WEIGHTS = { 'comp' : 1, 'cpu' : 0, 'ram' : 0, 'vga' : 0, 
- 	 'battery' : 0, 'hd' : 0, 'odd' : 0, 'os' : 0, 'chipset' : 0}
+DSS_WEIGHTS = {'cpu' : 1, 'ram' : 0.8, 'vga' : 0.9, 
+ 	 'battery' : 0.5, 'hd' : 0.7, 'odd' : 0.1, 'os' : 0.2}
+
+DSS_COMPWEIGHTS = {'norm_price' : -3, 'weight' : -0.3, 'webcamera' : 0.05, 'Bluetooth' : 0.05, 'wifi' : 0.4}
 
 def get_dss_weight (components):
 	weight = 0
 	for w in DSS_WEIGHTS:
-		weight += DSS_WEIGHTS[w]*components[w].dssv
+		if components[w]:
+			if components[w].dss: weight += DSS_WEIGHTS[w]*components[w].dss
+	print weight
+	for w in DSS_COMPWEIGHTS:
+		if w in components['comp'].__dict__:
+			if components['comp'].__dict__[w]: weight += components['comp'].__dict__[w] * DSS_COMPWEIGHTS[w]
+	print weight
 	return weight
 
-def _max_weight(computers_components):
-	maximum = computers_components[0]
-	for cc in computers_components:
-		if maximum['dss'] < cc['dss']: maximum = cc
-	return maximum
-
-def sort_by_weight (computers_components):
-	sorted = []
-	while computers_components:
-		maximum = _max_weight(computers_components)
-		computers_components.remove(maximum)
-		sorted.append(maximum)
-	return sorted
 

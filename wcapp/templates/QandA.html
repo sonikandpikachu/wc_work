@@ -28,56 +28,57 @@
             <div class = "name"> {{ comp.comp.name }} </div>
             <div class="classification">
               <div class="cover"></div>
-              <div class="progress" style="width: {{ comp.comp.dssv }}%;"></div>
+              <div class="progress" style="width: {{ comp.dss }}%;"></div>
             </div>
           </div>
           <ul class = "description">
             <li>
-              <div class="paramName">Название процессора:</div>
-              <div class="paramValue"> {{ comp.cpu.type }}</div>
+              <div class="paramName">Процессор:</div>
+              <div class="paramValue"> {{ comp.cpu.name }} , {{ comp.cpu.frequency }}</div>
               <div class="paramStars">
                 <div class="cover"></div>
-                <div class="progress" style="width: {{ comp.cpu.dssv }}%;"></div>
+                <div class="progress" style="width: {{ comp.cpu.dss }}%;"></div>
               </div>
             </li>
             <li>
-              <div class="paramName">Частота процессора:</div>
-              <div class="paramValue"> {{ comp.cpu.frequency }} </div>
+              <div class="paramName">Оперативная память:</div>
+              <div class="paramValue"> {{ comp.ram.amount }} </div>
               <div class="paramStars">
                 <div class="cover"></div>
-                <div class="progress" style="width: {{ comp.cpu.dssv }}%;"></div>
+                <div class="progress" style="width: {{ comp.ram.dss }}%;"></div>
               </div>
             </li>
             <li>
-              <div class="paramName">Количество ядер/потоков:</div>
-              <div class="paramValue"> {{ comp.cpu.kernel_count}} </div>
+              <div class="paramName">Жесткий диск:</div>
+              <div class="paramValue"> {{ comp.hd.hdd_amount }} , {{ comp.hd.ssd_amount }} </div>
               <div class="paramStars">
                 <div class="cover"></div>
-                <div class="progress" style="width: {{ comp.cpu.dssv }}%;"></div>
+                <div class="progress" style="width: {{ comp.hd.dss }}%;"></div>
               </div>
             </li>
             <li>
-              <div class="paramName">Тип памяти:</div>
-              <div class="paramValue"> {{ comp.ram.name }} </div>
+              <div class="paramName">Цена:</div>
+              <div class="paramValue"> {{ comp.comp.price }} </div>
               <div class="paramStars">
                 <div class="cover"></div>
-                <div class="progress" style="width: {{ comp.ram.dssv }}%;"></div>
+                <div class="progress" style="width: 100%;"></div>
               </div>
             </li>
             <li>
-              <div class="paramName">Общий объем памяти:</div>
-              <div class="paramValue"> {{ comp.ram.amount }} / {{ comp.ram.max_amount }}</div>
+              <div class="paramName"> Операционная система </div>
+              <div class="paramValue"> {{ comp.os.name }}</div>
               <div class="paramStars">
                 <div class="cover"></div>
-                <div class="progress" style="width: {{ comp.ram.dssv }}%;"></div>
+                <div class="progress" style="width: {{ comp.os.dss }}%;"></div>
               </div>
             </li>
             <li>
-              <div class="paramName">Чипсет материнской платы:</div>
-              <div class="paramValue"> {{ comp.chipset.name }} </div>
+              <div class="paramName">Все вместе: </div>
+              <div class="paramValue"> {{ comp.comp.norm_price }} , {{ comp.comp.weight }} , {{ comp.comp.webcamera }}
+              , {{ comp.comp.Bluetooth }}, {{ comp.comp.wifi }} </div>
               <div class="paramStars">
                 <div class="cover"></div>
-                <div class="progress" style="width: {{ comp.chipset.dssv }}%;"></div>
+                <div class="progress" style="width: {{ comp.odd.dss }}%;"></div>
               </div>
             </li>
           </ul>
