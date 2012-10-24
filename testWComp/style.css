@@ -44,11 +44,12 @@ body {
 .answer {
 	margin: 10px 0px;
 	display:inline;
+	background:#FBFBFB;
 	float:left;
 	width: 99%;
 	padding: 10px 0px;
-	border: 3px solid #ECF2F5;
-	border-radius:10px;
+	border: 3px solid #ECF2F5; /* C8DEE7 */
+		border-radius:10px;
 	-moz-border-radius:10px; /* Firefox 3.6 and earlier */
 }
 .image {
@@ -94,6 +95,13 @@ body {
 .answerButtons {
 	background:inherit;
 }
+
+.answerButtons .price {
+	font-size:24px;
+	color:#D9742B;
+	
+}
+
 .answerButtons li {
 	padding-top: 30px;
 }

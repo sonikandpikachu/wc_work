@@ -84,11 +84,7 @@
           </ul>
         </div>
         <ul class = "answerButtons">
-          <li> <a  href = "QandA.html"> <img src="{{ url_for('static', filename='img/img/greenButtons/wNextButton1.jpg') }}" alt="Далее" 
-                                onMouseOver="this.src='img/greenButtons/wNextButton2.jpg'" 
-                                onMouseOut="this.src='img/greenButtons/wNextButton1.jpg'"
-                                onMouseDown="this.src='img/greenButtons/wNextButton3.jpg'"
-                                /> </a></li>
+          <li> <div class = "price">{{ comp.comp.price }}</div> </li>
           <li> <a  href = "QandA.html"> <img src="{{ url_for('static', filename='img/img/greenButtons/wNextButton1.jpg') }}" alt="Далее" 
                                 onMouseOver="this.src='img/greenButtons/wNextButton2.jpg'" 
                                 onMouseOut="this.src='img/greenButtons/wNextButton1.jpg'"
