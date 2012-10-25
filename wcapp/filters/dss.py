@@ -8,7 +8,7 @@ Created on Sep 30, 2012
 DSS_WEIGHTS = {'cpu' : 1, 'ram' : 0.8, 'vga' : 0.9, 
  	 'battery' : 0.5, 'hd' : 0.7, 'odd' : 0.1, 'os' : 0.2}
 
-DSS_COMPWEIGHTS = {'norm_price' : -3, 'weight' : -0.3, 'webcamera' : 0.05, 'Bluetooth' : 0.05, 'wifi' : 0.4}
+DSS_COMPWEIGHTS = {'norm_price' : -6, 'weight' : -0.3, 'webcamera' : 0.05, 'Bluetooth' : 0.05, 'wifi' : 0.4}
 
 def get_dss_weight (components):
 	weight = 0

@@ -34,7 +34,7 @@
           <ul class = "description">
             <li>
               <div class="paramName">Процессор:</div>
-              <div class="paramValue"> {{ comp.cpu.name }} , {{ comp.cpu.frequency }}</div>
+              <div class="paramValue"> {{ comp.cpu.name }} , {{ comp.cpu.frequency }} Ггц</div>
               <div class="paramStars">
                 <div class="cover"></div>
                 <div class="progress" style="width: {{ comp.cpu.dss }}%;"></div>
@@ -50,7 +50,7 @@
             </li>
             <li>
               <div class="paramName">Жесткий диск:</div>
-              <div class="paramValue"> {{ comp.hd.hdd_amount }} , {{ comp.hd.ssd_amount }} </div>
+              <div class="paramValue"> {{ comp.hd.hdd_amount }} , SSD({{ comp.hd.ssd_amount }}) </div>
               <div class="paramStars">
                 <div class="cover"></div>
                 <div class="progress" style="width: {{ comp.hd.dss }}%;"></div>
@@ -58,7 +58,7 @@
             </li>
             <li>
               <div class="paramName">Цена:</div>
-              <div class="paramValue"> {{ comp.comp.price }} </div>
+              <div class="paramValue"> {{ comp.comp.norm_price }}  </div>
               <div class="paramStars">
                 <div class="cover"></div>
                 <div class="progress" style="width: 100%;"></div>
@@ -74,7 +74,7 @@
             </li>
             <li>
               <div class="paramName">Все вместе: </div>
-              <div class="paramValue"> {{ comp.comp.norm_price }} , {{ comp.comp.weight }} , {{ comp.comp.webcamera }}
+              <div class="paramValue"> , {{ comp.comp.weight }} , {{ comp.comp.webcamera }}
               , {{ comp.comp.Bluetooth }}, {{ comp.comp.wifi }} </div>
               <div class="paramStars">
                 <div class="cover"></div>
@@ -84,11 +84,14 @@
           </ul>
         </div>
         <ul class = "answerButtons">
-          <li> <div class = "price">{{ comp.comp.price }}</div> </li>
-          <li> <a  href = "QandA.html"> <img src="{{ url_for('static', filename='img/img/greenButtons/wNextButton1.jpg') }}" alt="Далее" 
-                                onMouseOver="this.src='img/greenButtons/wNextButton2.jpg'" 
-                                onMouseOut="this.src='img/greenButtons/wNextButton1.jpg'"
-                                onMouseDown="this.src='img/greenButtons/wNextButton3.jpg'"
+          <li> 
+            <div class = "price">{{ comp.comp.price }} грн</div> 
+            <div class = "priceRange">3400 - 3700</div>
+          </li>
+          <li> <a  href = "Comp.html"> <img src="{{ url_for('static', filename='img/greenButtons/wNextButton1.jpg') }}" alt="Далее" 
+                                onMouseOver="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton2.jpg') }}'" 
+                                onMouseOut="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton1.jpg') }}'"
+                                onMouseDown="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton3.jpg') }}'"
                                 /> </a> </li>
         </ul>
       </li>
