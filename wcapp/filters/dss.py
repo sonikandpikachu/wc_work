@@ -9,7 +9,7 @@ This module works with dss weights and values.
 DSS_WEIGHTS = {'CPU' : 1, 'RAM' : 0.8, 'VGA' : 0.9, 
  	 'Battery' : 0.5, 'HD' : 0.7, 'ODD' : 0.1, 'OS' : 0.2}
 
-DSS_COMPWEIGHTS = {'norm_price' : -3, 'weight' : -0.3, 'webcamera' : 0.05, 'Bluetooth' : 0.05, 'wifi' : 0.4}
+DSS_COMPWEIGHTS = {'norm_price' : -6, 'weight' : -0.3, 'webcamera' : 0.05, 'Bluetooth' : 0.05, 'wifi' : 0.4}
 
 def dss_weight (computer):
 	'''

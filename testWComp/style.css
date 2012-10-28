@@ -21,6 +21,7 @@ body {
 	padding-bottom:10px;
 	float:left;
 	background:#fff;
+	width: 100%;
 }
 #menu ul {
 	text-align: center;
@@ -41,13 +42,19 @@ body {
 	background:#fff;
 	width: 100%;
 }
+.comp {
+	background:#fff;
+	float:left;
+	width: 100%;
+}
 .answer {
 	margin: 10px 0px;
 	display:inline;
+	background:#FBFBFB;
 	float:left;
 	width: 99%;
 	padding: 10px 0px;
-	border: 3px solid #ECF2F5;
+	border: 3px solid #ECF2F5; /* C8DEE7 B5D3DF*/
 	border-radius:10px;
 	-moz-border-radius:10px; /* Firefox 3.6 and earlier */
 }
@@ -94,6 +101,14 @@ body {
 .answerButtons {
 	background:inherit;
 }
+.answerButtons .price {
+	font-size:24px;
+	color:#D9742B;
+}
+.answerButtons .priceRange {
+	font-size:18px;
+	color:#FFA92B;
+}
 .answerButtons li {
 	padding-top: 30px;
 }
@@ -108,6 +123,7 @@ body {
 	color:#666;
 	float:left;
 }
+/* Stars */
 .classification {
 	float:left;
 	left: 10px;
@@ -156,6 +172,7 @@ body {
 	height: 16px;
 	z-index: 102;
 }
+/* Pagination */
 #pagination {
 	width:100%;
 	float:left;
@@ -176,4 +193,124 @@ body {
 #pagination .select {
 	text-decoration:none;
 	color:#145571;
+}
+/* Tabs */
+#tabContainer {
+	margin-top:10px;
+	width:100%;
+	float:left;
+}
+.tabs {
+	height:30px;
+	border-bottom: 2px solid #3399CC;
+}
+.tabs > ul {
+	float:left;
+	margin-left:150px;
+	font-size: 14px;
+	list-style:none;
+}
+.tabs > ul > li {
+	height:14px;
+	margin:0 10px 0 0;
+	padding:7px 20px;
+	display:block;
+	float:left;
+	color:#3399CC;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
+	border: 2px solid #3399CC;
+	-moz-border-radius-topleft: 15px;
+	-moz-border-radius-topright: 15px;
+	-moz-border-radius-bottomright: 0px;
+	-moz-border-radius-bottomleft: 0px;
+	border-top-left-radius:15px;
+	border-top-right-radius: 15px;
+	border-bottom-right-radius: 0px;
+	border-bottom-left-radius: 0px;
+	background: #fff;
+}
+.tabs > ul > li:hover {
+	background: #FFFFFF; /* old browsers */
+	background: -moz-linear-gradient(top, #FFFFFF 0%, #F5F9F4 10%, #F5F9F4 50%, #FFFFFF 100%); /* firefox */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #FFFFFF), color-stop(10%, #F5F9F4), color-stop(50%, #F5F9F4), color-stop(100%, #FFFFFF)); /* webkit */
+	cursor:pointer;
+	color: #4CE126;
+}
+.tabs > ul > li.tabActiveHeader {
+	border-top: 2px solid #3399CC;
+	border-right: 2px solid #3399CC;
+	border-left: 2px solid #3399CC;
+	border-bottom: 2px solid #fff;
+}
+.tabscontent {
+	float:left;
+	width:98%;
+	-moz-border-radius-topleft: 0px;
+	-moz-border-radius-topright: 4px;
+	-moz-border-radius-bottomright: 4px;
+	-moz-border-radius-bottomleft: 4px;
+	border-top-left-radius: 0px;
+	border-top-right-radius: 4px;
+	border-bottom-right-radius: 4px;
+	border-bottom-left-radius: 4px;
+	padding:1% 1% 25px;
+	background: #FFFFFF; /* old browsers */
+	background: -moz-linear-gradient(top, #FFFFFF 0%, #FFFFFF 98%, #e4e9ed 100%); /* firefox */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #FFFFFF), color-stop(98%, #FFFFFF), color-stop(100%, #e4e9ed)); /* webkit */
+	color: #145571;
+}
+.tabpage table{
+	width: 100%;
+}
+.tabpage  TD {
+	padding: 3px 2px;
+	border-top: 4px solid #fff;
+}
+#parametrs #paramName {
+	width: 30%;
+}
+.tabpage #paramSeparator {
+	padding: 3px 0px;
+	width: 2px;
+	background:#B3B3B3;
+	border-right: 4px solid #fff;
+	border-left: 4px solid #fff;
+}
+#stores TD {
+	vertical-align: middle;
+	padding: 3px 2px;
+	border-top: 4px solid #fff;
+}
+#stores #storeLogo {
+	width: 20%;
+	padding-left:20px;
+}
+#stores #storeInfo  {
+	width: 50%;
+	padding-left:10px;
+}
+#stores #storeInfo #storeName {
+	font-size:16px;
+}
+#stores a {
+	text-decoration:none;
+	color:#145571;
+}
+#stores a:hover {
+	text-decoration:none;
+	color:#4CE126;
+}
+#stores #storePrice  {
+	padding-left:10px;
+	font-size:18px;
+	color:#D9742B; /*FFA92B;*/
+}
+/* Colors */
+.gray {
+	background: #FBFBFB;
+}
+.green {
+	background: #F0F6EF;
 }
