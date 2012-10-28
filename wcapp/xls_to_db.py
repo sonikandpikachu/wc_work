@@ -115,7 +115,8 @@ def insert_simple_column(sh, colname, valuefunction):
 
 
 def valuefunc(column):
-	def Bluetoothfunc (value): return 0 if value in (u'-', u'', u'н.д.') else 1
+	def Bluetoothfunc (value): 
+		return 0 if value in (u'-', u'', u'н.д.') else 1
 	def simplefunc(value): return 0 if not value else 1
 	def strfunc(value): return value
 	def concatestrfunc(value): return value[:100]
@@ -156,7 +157,8 @@ def valuefunc(column):
 		'length' : lengthfunc,
 		'height' : heightfunc,
 		'maker_url' : strfunc,
-		'price' : pricefunc
+		'price' : pricefunc,
+		'type' : strfunc
 	}
 	return all_functions[column]
 
@@ -195,10 +197,10 @@ xls_columns = {'name' : 37, 'Bluetooth' : 39, 'webcamera' : 27, 'wifi' : 32, 'wi
 #first index - column in computers file, second - column in element file
 complex_columns = {
 	'OS' : {(42, 30) : 0},
-	'HD' : {(4,) : 5, (6,): 6, (36, 40) : 7},
+	'HD' : {(4,) : 5, (36, 40) : 7},
 	'ODD' : {(3, 0) : 0},
 	'CPU' : {(8,) : 0},
-	'RAM' : {(5, 26, 29) : 5},
+	'RAM' : {(5, 29) : 5},
 	'Screen' : {(14,) : 0, (20,) : 1, (22,) : 2},
 	'Chipset' : {(25,) : 0},
 	'Type' : {(18,) : 0},
@@ -210,7 +212,7 @@ def insert_comp_columns():
 	sh = wb.sheet_by_index(0)
 
 	# inserting simple columns:
-	columnname = 'price'
+	columnname = 'cardreader'
 	# show_simple_comp_column(sh, xls_columns[columnname])
 	insert_simple_column(sh, columnname, valuefunc(columnname))
 

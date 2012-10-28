@@ -7,12 +7,36 @@ Created on Sep 30, 2012
 
 class Filter(object):
 	'''abstract class for all types of filters'''
-	def __init__(self, ftype, question, name, cut_function, dss_function):
+	def __init__(self, ftype, question, name, values, cut_function, dss_function):
 		self._ftype = ftype
 		self._cut_function = cut_function
 		self._dss_function = dss_function
 		self._question = question
 		self._name = name
+		self._values = values
+		self._selected_values = ()
+
+	def selected_values():
+	    doc = "The selected_values property."
+	    def fget(self):
+	        return self._selected_values
+	    def fset(self, value):
+	        self._selected_values = value
+	    def fdel(self):
+	        del self._selected_values
+	    return locals()
+	selected_values = property(**selected_values())
+
+	def values():
+	    doc = "The values property."
+	    def fget(self):
+	        return self._values
+	    def fset(self, value):
+	        self._values = value
+	    def fdel(self):
+	        del self._values
+	    return locals()
+	values = property(**values())
 
 	def ftype():
 	    doc = "The ftype property."
@@ -71,25 +95,14 @@ class Filter(object):
 
 
 
-class RadioFilter(Filter):
+class CheckboxFilter(Filter):
 	
 	def __init__(self, question, name, cut_function = None, dss_function = None, values = None, texts = None,
 	 selected = 0):
-		super(RadioFilter, self).__init__('radio', question, name, cut_function, dss_function)
+		super(CheckboxFilter, self).__init__('checkbox', question, name, values, cut_function, dss_function)
 		self._values = values
 		self._texts = texts
 		self._selected = selected
-
-	def values():
-	    doc = "The values property."
-	    def fget(self):
-	        return self._values
-	    def fset(self, value):
-	        self._values = value
-	    def fdel(self):
-	        del self._values
-	    return locals()
-	values = property(**values())
 
 	def texts():
 	    doc = "The texts property."
@@ -118,20 +131,8 @@ class SliderFilter(Filter):
 
 	def __init__(self, question, name, cut_function = None, dss_function = None, value = None,
 	 slider_min = None, slider_max = None):
-		super(SliderFilter, self).__init__('slider', question, name, cut_function, dss_function)
-		self._value = value
+		super(SliderFilter, self).__init__('slider', question, name, (value,), cut_function, dss_function)
 		self._slider_min, self._slider_max = slider_min, slider_max  
-
-	def value():
-	    doc = "The value property."
-	    def fget(self):
-	        return self._value
-	    def fset(self, value):
-	        self._value = value
-	    def fdel(self):
-	        del self._value
-	    return locals()
- 	value = property(**value())
 
  	def slider_min():
  	    doc = "The slider_min property."

@@ -2,6 +2,7 @@
 Created on Sep 18, 2012
 
 @author: Pavel
+settings for project
 '''
 
 #database configurations:

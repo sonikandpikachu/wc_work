@@ -2,18 +2,16 @@
 Created on Sep 18, 2012
 
 @author: Pavel
+
+This modul realise our database as orm.
 '''
-
 import sqlalchemy as al
-from sqlalchemy.orm import create_session
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import contains_eager, joinedload
-from sqlalchemy.orm import relationship
-
+from sqlalchemy.orm import contains_eager, joinedload, relationship, create_session
+from sqlalchemy.schema import Column
 
 from wcconfig import REAL_CONNECTION_STRING
-from sqlalchemy.schema import Column
- 
+
 #connetcting to database
 engine = al.create_engine(REAL_CONNECTION_STRING, echo=False)
 metadata = al.MetaData(bind=engine)
@@ -75,7 +73,6 @@ class wc_Screen (Base):
     resolution = Column(al.String(50))
     size = Column(al.String(50))
     
-
     def __init__(self, dss = None, cover = None, resolution = None, size = None ):
         self.cover = cover
         self.resolution = resolution
@@ -146,20 +143,34 @@ class wc_Computer (Base):
     G3 = Column(al.Integer)
     price = Column(al.Float)
     norm_price = Column(al.Float)
-    id_wc_OS = Column(al.Integer)
-    id_wc_Battery = Column(al.Integer)
-    id_wc_Type = Column(al.Integer)
-    id_wc_Screen = Column(al.Integer)
-    id_wc_RAM = Column(al.Integer)
-    id_wc_VGA = Column(al.Integer)
-    id_wc_Color = Column(al.Integer)
-    id_wc_Chipset = Column(al.Integer)
-    id_wc_Audio = Column(al.Integer)
-    id_wc_ODD = Column(al.Integer)
-    id_wc_CPU = Column(al.Integer)
-    id_wc_HD = Column(al.Integer)
+    norm_weight = Column(al.Float)
     url = Column(al.String(300))
 
+    id_wc_OS = Column(al.Integer, al.ForeignKey('wc_OS.id'))
+    id_wc_Battery = Column(al.Integer, al.ForeignKey('wc_Battery.id'))
+    id_wc_Type = Column(al.Integer, al.ForeignKey('wc_Type.id'))
+    id_wc_Screen = Column(al.Integer, al.ForeignKey('wc_Screen.id'))
+    id_wc_RAM = Column(al.Integer, al.ForeignKey('wc_RAM.id'))
+    id_wc_VGA = Column(al.Integer, al.ForeignKey('wc_VGA.id'))
+    id_wc_Color = Column(al.Integer, al.ForeignKey('wc_Color.id'))
+    id_wc_Chipset = Column(al.Integer, al.ForeignKey('wc_Chipset.id'))
+    id_wc_Audio = Column(al.Integer, al.ForeignKey('wc_Audio.id'))
+    id_wc_ODD = Column(al.Integer, al.ForeignKey('wc_ODD.id'))
+    id_wc_CPU = Column(al.Integer, al.ForeignKey('wc_CPU.id'))
+    id_wc_HD = Column(al.Integer, al.ForeignKey('wc_HD.id'))
+
+    HD = relationship('wc_HD', primaryjoin="wc_HD.id==wc_Computer.id_wc_HD")
+    Battery = relationship('wc_Battery', primaryjoin="wc_Battery.id==wc_Computer.id_wc_Battery")
+    Type = relationship('wc_Type', primaryjoin="wc_Type.id==wc_Computer.id_wc_Type")
+    Screen = relationship('wc_Screen', primaryjoin="wc_Screen.id==wc_Computer.id_wc_Screen")
+    RAM = relationship('wc_RAM', primaryjoin="wc_RAM.id==wc_Computer.id_wc_RAM")
+    Color = relationship('wc_Color', primaryjoin="wc_Color.id==wc_Computer.id_wc_Color")
+    Chipset = relationship('wc_Chipset', primaryjoin="wc_Chipset.id==wc_Computer.id_wc_Chipset")
+    Audio = relationship('wc_Audio', primaryjoin="wc_Audio.id==wc_Computer.id_wc_Audio")
+    ODD = relationship('wc_ODD', primaryjoin="wc_ODD.id==wc_Computer.id_wc_ODD")
+    CPU = relationship('wc_CPU', primaryjoin="wc_CPU.id==wc_Computer.id_wc_CPU")
+    VGA = relationship('wc_VGA', primaryjoin="wc_VGA.id==wc_Computer.id_wc_VGA")
+    OS = relationship('wc_OS', primaryjoin="wc_OS.id==wc_Computer.id_wc_OS")
 
     def __init__( self, slot = None, cardreader = None, maker_url = None, name = None,
                    weight = None, out_ports = None, modem56 = None, wifi = None, dss = None, webcamera = None,
@@ -168,7 +179,7 @@ class wc_Computer (Base):
                      id_wc_Shop = None,id_wc_OS = None,id_wc_Battery = None,id_wc_Type = None,id_wc_Screen = None,
                      id_wc_RAM = None,id_wc_VGA = None,id_wc_Color = None,id_wc_Computer = None,id_wc_SSD = None,
                      id_wc_Chipset = None,id_wc_CDevice = None,id_wc_Audio = None,id_wc_ODD = None,id_wc_CPU = None,
-                     id_wc_HD = None, price = None, norm_price = None):
+                     id_wc_HD = None, price = None, norm_price = None, norm_weight = None):
         self.slot = slot
         self.cardreader = cardreader
         self.maker_url = maker_url
@@ -207,7 +218,7 @@ class wc_Computer (Base):
         self.id_wc_ODD = id_wc_ODD
         self.id_wc_CPU = id_wc_CPU
         self.id_wc_HD = id_wc_HD
-
+        self.norm_weight = norm_weight
 
 
 class wc_Chipset (Base):
@@ -215,7 +226,6 @@ class wc_Chipset (Base):
     id = Column(al.Integer, primary_key=True)
     dss = Column(al.Float)
     name = Column(al.String(100))
-    
 
     def __init__(self, dss = None, name = None):
         self.dss = dss
@@ -228,8 +238,6 @@ class wc_CDevice (Base):
     price = Column(al.Float)
     id_wc_Computer = Column(al.Integer)
     id_wc_Shop = Column(al.Integer)
-    
-    
 
     def __init__( self, price = None, id_wc_Computer = None, id_wc_Shop = None ):
         self.price = price
@@ -248,7 +256,6 @@ class wc_Audio (Base):
         self.name = name
 
 
-#done
 class wc_ODD (Base):
     __tablename__ = "wc_ODD"
     id = Column(al.Integer, primary_key=True)
@@ -262,7 +269,6 @@ class wc_ODD (Base):
         self.type = type
 
 
-#done
 class wc_CPU (Base):
     __tablename__ = "wc_CPU"
     id = Column(al.Integer, primary_key=True)
@@ -279,7 +285,7 @@ class wc_CPU (Base):
         self.cores = cores
         self.threads = threads
 
-#done
+
 class wc_HD (Base):
     __tablename__ = "wc_HD"
     id = Column(al.Integer, primary_key=True)
@@ -299,7 +305,9 @@ class wc_HD (Base):
 
 
 class SQLController:
-
+    '''
+    respons for all non-object database operations
+    '''
     def __init__(self):
         from sqlalchemy.orm import sessionmaker
         self._session_maker = sessionmaker(bind=engine)
@@ -314,6 +322,9 @@ class SQLController:
 
 
 if __name__ == '__main__':
+    '''
+    this part is only for development and have to be deleted in final reliase
+    ''' 
     # Base.metadata.create_all(engine) 
 
 #    user = User(name = 'name', fullname = 'fullname', password = 'password')
@@ -322,14 +333,20 @@ if __name__ == '__main__':
     computers = session.query(wc_Computer).all()
     # print computers
     # print [c.price for c in computers]
-    maximum = max([c.price for c in computers])
-    minimum = min([c.price for c in computers if c.price > 0])
-    print maximum, minimum
+    # maximum = max([c.weight for c in computers])
+    # minimum = min([c.weight for c in computers if c.weight > 0])
+    # print maximum, minimum
+    # for comp in computers:
+    #     print comp.weight
+    #     if comp.weight: comp.norm_weight = (comp.weight - minimum) * 100 / (maximum - minimum)
+    #     session.flush()
+    # session.commit()
+
     for comp in computers:
-        print comp.price
-        if comp.price: comp.norm_price = (comp.price - minimum) * 100 / (maximum - minimum)
+        if not comp.id_wc_Type: comp.id_wc_Type = 1
         session.flush()
-    session.commit()
+    session.commit()       
+    # print qqq
     
     # request_computers = []
     # for computer in session.query(wc_Computer).all():
@@ -348,11 +365,3 @@ if __name__ == '__main__':
     #                   'screen' : screen, 'ram' : ram, 'os' : os, 'cpu' : cpu, 'name' : computer.name}
     #     print dictionary
     #     request_computers.append(dictionary)
-        
-    
-        
-#    controller.close_sql_session()
-#    session.new
-#    session.add(user)
-#    session.commit()
-#    print session.query(User).first().name
