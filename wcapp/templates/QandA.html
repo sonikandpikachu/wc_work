@@ -12,7 +12,7 @@
   <div id = "content">
     <div id = "question"> 
       <!-- <img src="{{ url_for('static', filename='img/tempImg.jpg') }}" alt="tempImgr"/> --> 
-       <form method = 'post'>
+       <form method = 'post' action = '/qa/'>
           {% include 'filters.html' %}
           <p><input type="submit"></p>
        </form>  
@@ -25,7 +25,7 @@
         <div class = "image"> <img src="img/compImg.jpg" alt = "Рисунок"/></div>
         <div class = "descriptionSection">
           <div class="title">
-            <div class = "name"> {{ comp.comp.name }} </div>
+            <div class = "name"> {{ comp.name }} </div>
             <div class="classification">
               <div class="cover"></div>
               <div class="progress" style="width: {{ comp.dss }}%;"></div>
@@ -34,31 +34,31 @@
           <ul class = "description">
             <li>
               <div class="paramName">Процессор:</div>
-              <div class="paramValue"> {{ comp.cpu.name }} , {{ comp.cpu.frequency }} Ггц</div>
+              <div class="paramValue"> {{ comp.cpu_name }} , {{ comp.cpu_frequency }} Ггц</div>
               <div class="paramStars">
                 <div class="cover"></div>
-                <div class="progress" style="width: {{ comp.cpu.dss }}%;"></div>
+                <div class="progress" style="width: {{ comp.cpu_dss }}%;"></div>
               </div>
             </li>
             <li>
               <div class="paramName">Оперативная память:</div>
-              <div class="paramValue"> {{ comp.ram.amount }} </div>
+              <div class="paramValue"> {{ comp.ram_amount }} </div>
               <div class="paramStars">
                 <div class="cover"></div>
-                <div class="progress" style="width: {{ comp.ram.dss }}%;"></div>
+                <div class="progress" style="width: {{ comp.ram_dss }}%;"></div>
               </div>
             </li>
             <li>
               <div class="paramName">Жесткий диск:</div>
-              <div class="paramValue"> {{ comp.hd.hdd_amount }} , SSD({{ comp.hd.ssd_amount }}) </div>
+              <div class="paramValue"> {{ comp.hdd_amount }} , SSD({{ comp.ssd_amount }}) </div>
               <div class="paramStars">
                 <div class="cover"></div>
-                <div class="progress" style="width: {{ comp.hd.dss }}%;"></div>
+                <div class="progress" style="width: {{ comp.hd_dss }}%;"></div>
               </div>
             </li>
             <li>
               <div class="paramName">Цена:</div>
-              <div class="paramValue"> {{ comp.comp.norm_price }}  </div>
+              <div class="paramValue"> {{ comp.norm_price }}  </div>
               <div class="paramStars">
                 <div class="cover"></div>
                 <div class="progress" style="width: 100%;"></div>
@@ -66,26 +66,25 @@
             </li>
             <li>
               <div class="paramName"> Операционная система </div>
-              <div class="paramValue"> {{ comp.os.name }}</div>
+              <div class="paramValue"> {{ comp.os_name }}</div>
               <div class="paramStars">
                 <div class="cover"></div>
-                <div class="progress" style="width: {{ comp.os.dss }}%;"></div>
+                <div class="progress" style="width: {{ comp.os_dss }}%;"></div>
               </div>
             </li>
             <li>
-              <div class="paramName">Все вместе: </div>
-              <div class="paramValue"> , {{ comp.comp.weight }} , {{ comp.comp.webcamera }}
-              , {{ comp.comp.Bluetooth }}, {{ comp.comp.wifi }} </div>
+              <div class="paramName">Тип: </div>
+              <div class="paramValue"> {{ comp.type_name }} </div>
               <div class="paramStars">
                 <div class="cover"></div>
-                <div class="progress" style="width: {{ comp.odd.dss }}%;"></div>
+                <div class="progress" style="width: 0%;"></div>
               </div>
             </li>
           </ul>
         </div>
         <ul class = "answerButtons">
           <li> 
-            <div class = "price">{{ comp.comp.price }} грн</div> 
+            <div class = "price">{{ comp.price }} грн</div> 
             <div class = "priceRange">3400 - 3700</div>
           </li>
           <li> <a  href = "Comp.html"> <img src="{{ url_for('static', filename='img/greenButtons/wNextButton1.jpg') }}" alt="Далее" 

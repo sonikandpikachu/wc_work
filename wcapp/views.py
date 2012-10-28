@@ -7,10 +7,11 @@ Created on Sep 18, 2012
 import operator
 
 from sqlorm import *
-from flask import Flask, render_template, request, abort
+from flask import Flask, render_template, request, abort, redirect, url_for
 
 from filters.settings import ALL_FILTERS
 from filters import dss
+import pretty_data
 
 
 #move to html settings
@@ -28,7 +29,7 @@ def second():
     #getting all computer_components for first query:
     computers = filtered_computers(ALL_FILTERS, request.form) if request.method == 'POST' else filtered_computers(ALL_FILTERS)
     #pagination test(if bad or wrong page)
-    last_page = int(round(len(computer_components) / COMPUTERS_ON_PAGE + 0.49))
+    last_page = int(round(len(computers) / COMPUTERS_ON_PAGE + 0.49))
     try:
         page = int(request.args.get('page', '')) if 'page' in request.args else 1
     except ValueError:
@@ -36,7 +37,7 @@ def second():
     if page > last_page or page < 1:
         abort(404)
 
-    computers_on_page = computers[(page-1) * COMPUTERS_ON_PAGE : min(page * COMPUTERS_ON_PAGE, len(computer_components))]
+    computers_on_page = computers[(page-1) * COMPUTERS_ON_PAGE : min(page * COMPUTERS_ON_PAGE, len(computers))]
 
     return render_template('QandA.html', computers = computers_on_page, filters = ALL_FILTERS,
         current_page = page, pagination_pages = _get_pagination_pages(page, last_page))
@@ -58,8 +59,8 @@ def filtered_computers(filters, form = None):
         for f in (f for f in filters if f.values):
             selected_values = tuple(value for value in f.values if f.name + '_' + value in form)
             f.selected_values = selected_values
-            f.dss_function(selected_values)
-            cut_strings.append(f.cut_function(selected_values))
+            if f.dss_function: f.dss_function(selected_values)
+            if f.cut_function and f.cut_function(selected_values): cut_strings.append(f.cut_function(selected_values))
     filter_string = ' and '.join(cut_strings) if cut_strings else None
     print filter_string
 
@@ -67,13 +68,9 @@ def filtered_computers(filters, form = None):
     computers = query.filter(filter_string).all() if filter_string else query.all() #getting filtered computers
     for comp in computers: comp.dss = dss.dss_weight(comp) #counting theirs dss
     computers.sort(key = lambda comp: comp.dss, reverse = True) #sorting by dss
-
-    for comp in computers:
-        print comp.RAM
+    computers = [pretty_data.small_computer(comp) for comp in computers]      
     controller.close_sql_session()
-    
     return computers
-
 
 #move to comp_db module
 def _norm_all_components(components):
@@ -99,9 +96,10 @@ def _get_pagination_pages(current_page, last_page):
 
  
 if __name__ == '__main__':
-    # app.run(debug = True)
-    controller = SQLController()
-    session = controller.create_sql_session()
-    # print session.query(wc_Computer.name, wc_Computer.weight, wc_Computer.wc_Audio)
-    filtered_computers(ALL_FILTERS)
+    app.run(debug = True)
+    # controller = SQLController()
+    # session = controller.create_sql_session()
+    # components =  wc_RAM, wc_HD, wc_CPU, wc_OS, wc_ODD, wc_Screen, wc_Type, wc_Chipset
+    # query = session.query(wc_Computer).join(*components)
+    # print query.filter('wc_HD.id = 1 and wc_CPU.id > 2').all()
         

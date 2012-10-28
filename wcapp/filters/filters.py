@@ -95,12 +95,20 @@ class Filter(object):
 
 
 
+# class OneCheckboxFilter(Filter):
+	
+# 	def __init__(self, question, name, cut_function = None, dss_function = None, values = None, texts = None,
+# 	 selected = 0):
+# 		super(OneCheckboxFilter, self).__init__('one_checkbox', question, name, values, cut_function, dss_function)
+# 		self._texts = texts
+# 		self._selected = selected
+
+
 class CheckboxFilter(Filter):
 	
 	def __init__(self, question, name, cut_function = None, dss_function = None, values = None, texts = None,
 	 selected = 0):
 		super(CheckboxFilter, self).__init__('checkbox', question, name, values, cut_function, dss_function)
-		self._values = values
 		self._texts = texts
 		self._selected = selected
 
@@ -114,17 +122,6 @@ class CheckboxFilter(Filter):
 	        del self._texts
 	    return locals()
 	texts = property(**texts()) 
-
-	def selected():
-	    doc = "The selected property."
-	    def fget(self):
-	        return self._selected
-	    def fset(self, value):
-	        self._selected = value
-	    def fdel(self):
-	        del self._selected
-	    return locals()
-	selected = property(**selected())
 
 
 class SliderFilter(Filter):
