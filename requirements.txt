@@ -1,0 +1,10 @@
+Flask==0.9
+Flask-SQLAlchemy==0.16
+Jinja2==2.6
+MySQL-python==1.2.3
+Werkzeug==0.8.3
+decorator==3.3.3
+sqlalchemy==0.7.9dev
+sqlalchemy-migrate==0.7.2
+tempita==0.5.1
+xlrd==0.8.0
