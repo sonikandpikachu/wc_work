@@ -59,7 +59,7 @@ def odd_cut_function(selected_values):
 	filters = []
 	for s in selected_values:
 		filters += ['wc_ODD.type = "' + t + '"' for t in s.split(',')]
-	if len(filters) > 1: return ' OR '.join(filters)
+	if len(filters) > 1: return '(' + ' OR '.join(filters) + ')'
 	return filters[0] if filters else ''
 
 oddFilter = filters.CheckboxFilter(u'Дисковод:',
