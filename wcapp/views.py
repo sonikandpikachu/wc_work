@@ -13,7 +13,6 @@ from filters.settings import ALL_FILTERS
 from filters import dss
 import pretty_data
 
-
 #move to html settings
 COMPUTERS_ON_PAGE = 10
 
@@ -30,6 +29,7 @@ def second():
     computers = filtered_computers(ALL_FILTERS, request.form) if request.method == 'POST' else filtered_computers(ALL_FILTERS)
     #pagination test(if bad or wrong page)
     last_page = int(round(len(computers) / COMPUTERS_ON_PAGE + 0.49))
+    #TODO: rewrite
     try:
         page = int(request.args.get('page', '')) if 'page' in request.args else 1
     except ValueError:
@@ -61,25 +61,26 @@ def filtered_computers(filters, form = None):
             f.selected_values = selected_values
             if f.dss_function: f.dss_function(selected_values)
             if f.cut_function and f.cut_function(selected_values): cut_strings.append(f.cut_function(selected_values))
-    filter_string = ' and '.join(cut_strings) if cut_strings else None
-    print filter_string
+    filter_string = ' and '.join(cut_strings) if cut_strings else None #TODO: get filter string from flask session
+    print 'FILTER STRING:', filter_string
 
     query = session.query(wc_Computer).join(*components)
     computers = query.filter(filter_string).all() if filter_string else query.all() #getting filtered computers
-    for comp in computers: comp.dss = dss.dss_weight(comp) #counting theirs dss
-    computers.sort(key = lambda comp: comp.dss, reverse = True) #sorting by dss
+    # for comp in computers: comp.dss = dss.dss_weight(comp) #counting theirs dss
+    # computers.sort(key = lambda comp: comp.dss, reverse = True) #sorting by dss
     computers = [pretty_data.small_computer(comp) for comp in computers]      
     controller.close_sql_session()
+    #TODO: set filter string to flask session
     return computers
 
-#move to comp_db module
+#TODO: move to comp_db module
 def _norm_all_components(components):
     minimum, maximum = min([component['dss'] for component in components]), max([component['dss'] for component in components])
     for component in components:
         component['dss'] = (component['dss'] - minimum) * 100/(maximum - minimum)
     return components
 
-#move to 'pretty html' module
+#TODO: move to pretty_data module
 def _get_pagination_pages(current_page, last_page):
     pages = set((1,2,current_page-1,current_page,current_page+1,last_page-1,last_page))
     if 0 in pages: pages.remove(0)
