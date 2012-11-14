@@ -2,7 +2,27 @@
 <html lang = "ru-RU">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<!-- bin/jquery.slider.min.css -->
+<link rel="stylesheet" href="css/jslider.css" type="text/css">
+<link rel="stylesheet" href="css/jslider.single.css" type="text/css">
 <link rel="stylesheet" type="text/css" href="style.css"/>
+<!-- end -->
+<script type="text/javascript" src="js/jquery-1.7.1.js"></script>	
+<!-- bin/jquery.slider.min.js -->
+<script type="text/javascript" src="js/jshashtable-2.1_src.js"></script>
+<script type="text/javascript" src="js/jquery.numberformatter-1.2.3.js"></script>
+<script type="text/javascript" src="js/tmpl.js"></script>
+<script type="text/javascript" src="js/jquery.dependClass-0.1.js"></script>
+<script type="text/javascript" src="js/draggable-0.1.js"></script>
+<script type="text/javascript" src="js/jquery.slider.js"></script>
+  <!-- end -->
+    <script src="jquery.uniform.min.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" charset="utf-8">
+      $(function(){
+        $("input, textarea, select, button").uniform();
+      });
+    </script>
+ <link rel="stylesheet" href="css/uniform.default.css" type="text/css" media="screen"> 
 <title>What Computer</title>
 </head>
 
@@ -10,22 +30,21 @@
 <div id = "wrapper">
   <div id = "header"> <img src="img/main_header.jpg" alt="What Computer"/> </div>
   <div id = "content">
-    <div id = "question"> <img src="img/tempImg.jpg" alt="tempImgr"/> </div>
-    <div id = "menuBlock">
+  <div id = "menuBlock">
       <div id = "topSeparator"> <img src="img/separator.jpg" /> </div>
       <div id = "menu">
         <ul id = "navigation">
-          <li> <a href = "QandA.html"> <img src="img/greenButtons/wNextButton1.jpg" alt="Далее" 
+          <li> <a href = "#"> <img src="img/greenButtons/wNextButton1.jpg" alt="Далее" 
                                 onMouseOver="this.src='img/greenButtons/wNextButton2.jpg'" 
                                 onMouseOut="this.src='img/greenButtons/wNextButton1.jpg'"
                                 onMouseDown="this.src='img/greenButtons/wNextButton3.jpg'"
                                 /> </a> </li>
-          <li> <a href = "QandA.html"> <img src="img/greenButtons/wFindButton1.jpg" alt="Найти"
+          <li> <a href = "#"> <img src="img/greenButtons/wFindButton1.jpg" alt="Найти"
                                 onMouseOver="this.src='img/greenButtons/wFindButton2.jpg'" 
                                 onMouseOut="this.src='img/greenButtons/wFindButton1.jpg'"
                                 onMouseDown="this.src='img/greenButtons/wFindButton3.jpg'"
                                 /> </a> </li>
-          <li> <a href = "QandA.html"> <img src="img/greenButtons/wHelpButton1.jpg" alt="Помошь"
+          <li> <a href = "#"> <img src="img/greenButtons/wHelpButton1.jpg" alt="Помошь"
                                 onMouseOver="this.src='img/greenButtons/wHelpButton2.jpg'" 
                                 onMouseOut="this.src='img/greenButtons/wHelpButton1.jpg'"
                                 onMouseDown="this.src='img/greenButtons/wHelpButton3.jpg'"
@@ -33,7 +52,53 @@
         </ul>
       </div>
       <div id = "bottomSeparator"> <img src="img/separator.jpg" /> </div>
+       
     </div>
+    <ul class = "questions"> 
+    <li class="question-slider">
+       	<p class = "text">Цена</p>
+        <p class = "slider"><input id="Slider1" type="text" name="area" value="4000;10000" /></p>
+    </li>
+    <li class="question-slider">
+       	<p class = "text">Важность видеокарты</p>
+        <label class = "left">Нормально</label>
+        <label class = "right">Очень важно</label>        
+        <p class = "slider"><input id="Slider2" type="text" name="area" value="1" /></p>
+    </li>
+    <li class="question-checkbox inline">       
+          <p class = "text">Обязательность элементов</p> 
+          <label><input type="checkbox" /> Wifi</label>
+          <label><input type="checkbox" /> Wimaf</label>
+          <label><input type="checkbox" /> BlueRay</label>
+          <label><input type="checkbox" /> BlueTooth</label>
+          <label><input type="checkbox" /> BlueTooth</label>
+          <label><input type="checkbox" /> Веб камера</label>
+          <label><input type="checkbox" /> Карт ридер</label>
+          <label><input type="checkbox" /> BlueTooth</label>
+          <label><input type="checkbox" /> BlueTooth</label>
+          <label><input type="checkbox" /> BlueTooth</label>
+          <label><input type="checkbox" /> Веб камера</label>
+          <label><input type="checkbox" /> Карт ридер</label>
+          <label><input type="checkbox" /> BlueTooth</label>
+      </li>
+      <li class="question-radio rows">
+        <p class = "text">Какой тип компьютера вы хотите?</p>
+        <label><input type="radio" name="radio" /> игровой компьютер</label>
+        <label><input type="radio" name="radio" /> рабочий компьютер</label>
+      </li>    
+    </ul>
+    <a href="#" id="trigger">Show/Hide</a>
+     <script type="text/javascript" charset="utf-8">    
+      jQuery("#Slider1").slider({from_str:1000, to_str:50000, from: 1000, to: 50000, heterogeneity: ['50/10000', '75/20000'], limits: true, step: 50, dimension: '&nbsp;грн'});
+	  jQuery("#Slider2").slider({limits: false,scale: [0, 1, 2, 3, 4, 5], skin: "single", from: 0, to: 5, step: 1});
+	   var layout = $(".questions"),
+      trigger = $("#trigger");	  
+     
+      $(trigger).click( function(){
+        layout.slideToggle("slow");        
+      });
+	 
+    </script>
     <ul id = "answerList">
       <li class="answer">
         <div class = "image"> <img src="img/compImg.jpg" alt = "Рисунок"/></div>

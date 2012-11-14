@@ -192,7 +192,8 @@ body {
 }
 #pagination .select {
 	text-decoration:none;
-	color:#145571;
+	font-size: 16px;
+	color:#3399CC; /*color:#145571;*/
 }
 /* Tabs */
 #tabContainer {
@@ -306,11 +307,80 @@ body {
 	padding-left:10px;
 	font-size:18px;
 	color:#D9742B; /*FFA92B;*/
+	
+	width:50%;
 }
+
 /* Colors */
 .gray {
 	background: #FBFBFB;
 }
 .green {
 	background: #F0F6EF;
+}
+
+/* Questions */
+.questions {
+	margin-top: 10px;
+}
+
+.questions li{
+	margin-bottom: 25px;
+}
+
+.question-slider {
+	width: 50%;
+}
+
+.question-slider .text{
+	padding: 5px 0px 10px 10px;
+	color: #3399CC;
+}
+
+.question-slider label{
+	font-size: 12px;
+	font-family: Myriad Pro, Verdana, Tahoma, Arial, Helvetica, sans-serif; 
+	color: #4CE126;
+}
+
+.question-slider .right {
+	float:right;
+}
+.question-slider .left {
+	float:left;
+	margin-left: 15px;
+}
+.question-slider .slider{;
+	padding: 20px 5px 30px 20px;
+}
+
+.question-checkbox .text, .question-radio .text{
+	padding: 5px 0px 10px 10px;
+	color: #3399CC;
+}
+
+.question-checkbox label, .question-radio label{
+                color: #3399CC;
+}
+
+.inline label{
+	margin-left: 30px;
+
+}
+
+.rows label{
+	display: block;
+	margin-bottom: 3px;
+	margin-left: 30px;
+    clear: both;
+}
+
+
+a {
+	text-decoration:none;
+	color:#4CE126;
+}
+a:hover {
+	text-decoration:underline;
+	color:#4CE126;
 }
