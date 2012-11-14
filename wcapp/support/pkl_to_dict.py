@@ -5,6 +5,27 @@ import re
 
 import save_load as sl
 
+def shops(pkl_folder, shops_key):
+    shops = set()
+    for pkl in [pkl for pkl in os.listdir(pkl_folder) if pkl.endswith('.pkl')]:
+        for shop in sl.pickle_load(os.path.join(pkl_folder, pkl))[shops_key]:
+            shops.add(shop)
+    return shops
+    
+
+def conccomputers(pkl_folder, shops_key, usd_key, grn_key):
+    computers = [sl.pickle_load(os.path.join(pkl_folder, pkl)) 
+            for pkl in [pkl for pkl in os.listdir(pkl_folder) if pkl.endswith('.pkl')]]
+    pairs = []
+    for c in computers[:10]:
+        url = c['Устройство.url']
+        for shop, usd, grn in zip(c[shops_key], c[usd_key], c[grn_key]):
+            pair = {}
+            pair['url'], pair['price_usd'], pair['price_grn'], pair['shop'] = url, usd, grn, shop
+            pairs.append(pair)
+    return pairs
+
+
 def computers(pkl_folder, config):
     '''
     pkl_path - path to folder with .pkl path; config - path to .config file

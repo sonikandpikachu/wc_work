@@ -11,6 +11,7 @@ class wc_Computer(db.Model):
     __tablename__ = "wc_Computer"
 
     id = db.Column(db.Integer, primary_key=True)
+
     chipset = db.Column(db.String(30))
     color = db.Column(db.String(50))
     cpu_frequency = db.Column(db.Float)
@@ -21,7 +22,7 @@ class wc_Computer(db.Model):
     display_diagonal = db.Column(db.Integer)
     display_led_backlight = db.Column(db.Boolean)
     display_sensor = db.Column(db.Boolean)
-    disply_resolution = db.Column(db.String(20))
+    display_resolution = db.Column(db.String(20))
     hdd_capacity = db.Column(db.Integer)
     hdd_cell = db.Column(db.Integer)
     hdd_speed = db.Column(db.Integer)
@@ -128,6 +129,40 @@ class wc_Computer(db.Model):
         if id: self.id = id
 
 
+class wc_ConcComputer(db.Model):
+    __tablename__ = "wc_ConcComputer"
+
+    id = db.Column(db.Integer, primary_key=True)
+    price_grn = db.Column(db.Integer)
+    price_usd = db.Column(db.Integer)
+
+    wc_Computer_id = db.Column(db.Integer, db.ForeignKey('wc_Computer.id'))
+    computer = db.relationship('wc_Computer',
+        backref=db.backref('concretes', lazy='dynamic'))
+
+    wc_Shop_id = db.Column(db.Integer, db.ForeignKey('wc_Shop.id'))
+    shop = db.relationship('wc_Shop',
+        backref=db.backref('concretes', lazy='dynamic'))
+
+    def __init__(self, id = None, price_usd = None, price_grn = None, computer = None, shop = None):
+        self.price_grn = price_grn
+        self.price_usd = price_usd
+        self.shop = shop
+        self.computer = computer
+        if id: self.id = id
+
+
+class wc_Shop(db.Model):
+    __tablename__ = "wc_Shop"
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(300))
+
+    def __init__(self, id = None, name = None):
+        self.name=name
+        if id: self.id = id
+
+
 def add_computers(computers):
     for c in computers:
         comp = wc_Computer(**c)
@@ -135,8 +170,19 @@ def add_computers(computers):
     db.session.commit()
 
 
+def add_conccomputers(pairs):
+    #pair: url + shop + price_grn + price_usd
+    for pair in pairs:
+        computer = wc_Computer.query.filter_by(url = pair['url']).first()
+        shop = wc_Shop.query.filter_by(name = pair['shop']).first()
+        conc = wc_ConcComputer(price_grn = pair['price_grn'], price_usd = pair['price_usd'], shop = shop, 
+            computer = computer)
+        db.session.add(conc)
+    db.session.commit()
+
+
 
 if __name__ == '__main__':
     print db
-    db.drop_all()
+    # db.drop_all()
     db.create_all()
