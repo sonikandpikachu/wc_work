@@ -14,7 +14,8 @@ import filters
 
 #adding checkbox filter for computer type:
 def type_cut_function(selected_values):
-	if 'notebook' and 'desctop' in selected_values: return ''
+	print 'comp selected values', selected_values, 'notebook' in selected_values and 'desctop' in selected_values
+	if 'notebook' in selected_values and 'desctop' in selected_values: return ''
 	if 'notebook' in selected_values: return 'wc_Type.id < 4'
 	if 'desctop' in selected_values: return 'wc_Type.id > 3'
 	return '1 = 2'
@@ -25,8 +26,7 @@ typeFilter.texts = u"Ноутбук", u'Компьютер'
 typeFilter.values =  "notebook", 'desctop'
 typeFilter.selected_values = "notebook", 'desctop'
 
-#adding checkbox filter for computer type:
-
+#all yes/no parameters
 def yesno_cut_function(selected_values):
 	filters = []
 	for s in selected_values:
@@ -40,7 +40,7 @@ yesnoFilter.texts = u"Цена > 0", u'wifi', u'Bluetooth', u'картридер
 yesnoFilter.values =  'price', 'wifi', 'Bluetooth', 'cardreader', 'modem56', 'webcamera', 'G3', 'wimax', 'network_adapter'
 yesnoFilter.selected_values = 'price'
 
-
+#os filter
 def os_cut_function(selected_values):
 	filters = []
 	for s in selected_values:
@@ -54,7 +54,7 @@ osFilter.texts = u"Linux", u'Mac', u'Windows'
 osFilter.values =  'l', 'm', 'w'
 osFilter.selected_values = 'l', 'm', 'w'
 
-
+#off filter
 def odd_cut_function(selected_values):
 	filters = []
 	for s in selected_values:
