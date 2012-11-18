@@ -12,6 +12,7 @@ from flask import Flask, render_template, request, abort, redirect, url_for
 from filters.settings import ALL_FILTERS
 from filters import dss
 import pretty_data
+import db_queries
 
 #move to html settings
 COMPUTERS_ON_PAGE = 10
@@ -26,7 +27,7 @@ def first():
 @app.route('/qa/', methods=['POST', 'GET'])
 def second():
     #getting all computer_components for first query:
-    computers = filtered_computers(ALL_FILTERS, request.form) if request.method == 'POST' else filtered_computers(ALL_FILTERS)
+    computers = db_queries.cutted_computers('')
     #pagination test(if bad or wrong page)
     last_page = int(round(len(computers) / COMPUTERS_ON_PAGE + 0.49))
     #TODO: rewrite

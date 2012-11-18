@@ -28,7 +28,7 @@
             <div class = "name"> {{ comp.name }} </div>
             <div class="classification">
               <div class="cover"></div>
-              <div class="progress" style="width: {{ comp.dss }}%;"></div>
+              <div class="progress" style="width: 0%;"></div>
             </div>
           </div>
           <ul class = "description">
@@ -37,7 +37,7 @@
               <div class="paramValue"> {{ comp.cpu_name }} , {{ comp.cpu_frequency }} Ггц</div>
               <div class="paramStars">
                 <div class="cover"></div>
-                <div class="progress" style="width: {{ comp.cpu_dss }}%;"></div>
+                <div class="progress" style="width: 0%;"></div>
               </div>
             </li>
             <li>
@@ -45,36 +45,36 @@
               <div class="paramValue"> {{ comp.ram_amount }} </div>
               <div class="paramStars">
                 <div class="cover"></div>
-                <div class="progress" style="width: {{ comp.ram_dss }}%;"></div>
+                <div class="progress" style="width: 0%;"></div>
               </div>
             </li>
             <li>
               <div class="paramName">Жесткий диск:</div>
-              <div class="paramValue"> {{ comp.hdd_amount }} , SSD({{ comp.ssd_amount }}) </div>
+              <div class="paramValue"> {{ comp.hdd_capacity }} </div>
               <div class="paramStars">
                 <div class="cover"></div>
-                <div class="progress" style="width: {{ comp.hd_dss }}%;"></div>
+                <div class="progress" style="width: 0%;"></div>
               </div>
             </li>
             <li>
               <div class="paramName">Цена:</div>
-              <div class="paramValue"> {{ comp.norm_price }}  </div>
+              <div class="paramValue"> {{ comp.price }}  </div>
               <div class="paramStars">
                 <div class="cover"></div>
-                <div class="progress" style="width: 100%;"></div>
+                <div class="progress" style="width: 0%;"></div>
               </div>
             </li>
             <li>
               <div class="paramName"> Операционная система </div>
-              <div class="paramValue"> {{ comp.os_name }}</div>
+              <div class="paramValue"> {{ comp.os }}</div>
               <div class="paramStars">
                 <div class="cover"></div>
-                <div class="progress" style="width: {{ comp.os_dss }}%;"></div>
+                <div class="progress" style="width: 0%;"></div>
               </div>
             </li>
             <li>
               <div class="paramName">Тип: </div>
-              <div class="paramValue"> {{ comp.type_name }} </div>
+              <div class="paramValue"> Компьютер </div>
               <div class="paramStars">
                 <div class="cover"></div>
                 <div class="progress" style="width: 0%;"></div>

@@ -63,6 +63,7 @@ class wc_Computer(db.Model):
     vga_type = db.Column(db.String(50))
     weight = db.Column(db.Float)
     width = db.Column(db.Integer)
+    price = db.Column(db.Float)
 
     def __init__(self, id =None, chipset=None, color=None, cpu_frequency=None, cpu_kernel_count=None, cpu_model=None,
         cpu_name=None, display_brightness=None, display_diagonal=None, display_led_backlight=None, display_sensor=None,
@@ -72,7 +73,7 @@ class wc_Computer(db.Model):
         os=None, panel_audio=None, panel_cardreader=None, panel_cell3=None, panel_cell5=None, panel_digital_display=None, 
         panel_drive=None, panel_usb2=None, panel_usb3=None, pb_power=None, ps2=None, 
         ram_amount=None, ram_frequency=None, ram_jacks=None, ram_type=None, thunderbolt=None, type=None, url=None, 
-        vga_amount=None, vga_model=None, vga_type=None, weight=None, width=None):
+        vga_amount=None, vga_model=None, vga_type=None, weight=None, width=None, price = None):
         self.chipset=chipset
         self.color=color
         self.cpu_frequency=cpu_frequency
@@ -126,6 +127,7 @@ class wc_Computer(db.Model):
         self.vga_type=vga_type
         self.weight=weight
         self.width=width
+        self.price = price
         if id: self.id = id
 
 
@@ -162,6 +164,26 @@ class wc_Shop(db.Model):
         self.name=name
         if id: self.id = id
 
+#wc_dss.id == wc_computer.id 
+class wc_DSS(db.Model):
+    __tablename__ = 'wc_DSS'
+
+    id = db.Column(db.Integer, primary_key=True)
+    hdd = db.Column(db.Float)
+    cpu = db.Column(db.Float)
+    display = db.Column(db.Float)
+    ram = db.Column(db.Float)
+    vga = db.Column(db.Float)
+
+    def __init__(self, id = None, hdd = None, cpu = None, display = None, ram = None, vga = None):
+        self.hdd = hdd
+        self.cpu = cpu
+        self.vga = vga
+        self.ram = ram
+        self.display = display
+        if id: self.id = id
+
+
 
 def add_computers(computers):
     for c in computers:
@@ -179,7 +201,6 @@ def add_conccomputers(pairs):
             computer = computer)
         db.session.add(conc)
     db.session.commit()
-
 
 
 if __name__ == '__main__':

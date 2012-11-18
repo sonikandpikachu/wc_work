@@ -1,25 +1,29 @@
-{% macro checkbox(question, name, values, texts, selected_values) -%}
-	<p><h5> {{ question }} </h5>
+<!-- Уникадьный id может совпадать со значением name. Мне приходит словарь с ключями name и значениями - value  -->
+
+{% macro checkbox(description, name, texts, values, selected_values) -%}
+	<p><h5> {{ description }} </h5>
 		{% for i in range(values|length) %}
-    	<input type="checkbox" name="{{ name }}_{{ values[i] }}" value="{{ values[i] }}"
-    	{% if values[i] in selected_values %} checked {% endif %}>
-    	{{ texts[i] }}<Br>
+        	<input type="checkbox" name="{{ name }}_{{ values[i] }}" value="{{ values[i] }}"
+        	{% if values[i] in selected_values %} checked {% endif %}>
+        	{{ texts[i] }}<Br>
     	{% endfor %}
     	<br>
     </p>
 {%- endmacro %}
 
-{% macro slider(question, name, min, max, value) -%}
-	<p><h5> {{ question }} </h5> 
-		{{ min }} <input type="{{ type }}" name="{{ name }}_{{ value }}" value="{{ value }}" size="20"> {{ max }} <br>
+{% macro slider(description, name, min, max, value) -%}
+	<p><h5> {{ description }} </h5> 
+		min:{{ min }} 
+        <input type="text" name="{{ name }}" value="{{ start_value }}" size="20">
+        max:{{ max }} <br>
 	</p>
 {%- endmacro %}
 
 
 {% for filter in filters %}
 	{% if filter.ftype == 'checkbox' %}
-		{{ checkbox(filter.question, filter.name, filter.values, filter.texts, filter.selected_values) }}
+		{{ checkbox(filter.description, filter.name, filter.texts, filter.values, filter.selected_values) }}
 	{% elif filter.ftype == 'slider' %}
-		{{ slider(filter.question, filter.name, filter.slider_min, filter.slider_max, filter.value) }}
+		{{ slider(filter.description, filter.name, filter.min_value, filter.max_value, filter.start_value) }}
 	{% endif %}
 {% endfor %}
