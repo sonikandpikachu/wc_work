@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="css/jslider.single.css" type="text/css">
 <link rel="stylesheet" type="text/css" href="style.css"/>
 <!-- end -->
-<script type="text/javascript" src="js/jquery-1.7.1.js"></script>	
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script> 
 <!-- bin/jquery.slider.min.js -->
 <script type="text/javascript" src="js/jshashtable-2.1_src.js"></script>
 <script type="text/javascript" src="js/jquery.numberformatter-1.2.3.js"></script>
@@ -15,11 +15,30 @@
 <script type="text/javascript" src="js/jquery.dependClass-0.1.js"></script>
 <script type="text/javascript" src="js/draggable-0.1.js"></script>
 <script type="text/javascript" src="js/jquery.slider.js"></script>
+
+
+<link rel="stylesheet" href="jquery.tooltip.css" />
+<script src="jquery.tooltip.js" type="text/javascript"></script>
+
+<link href="css/jquery.selectbox.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="js/jquery.selectbox-0.2.js"></script>
+
   <!-- end -->
     <script src="jquery.uniform.min.js" type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript" charset="utf-8">
       $(function(){
-        $("input, textarea, select, button").uniform();
+        $("input, textarea, button").uniform();
+        $(function() {
+        $( "[title]" ).tooltip({
+  track: true,
+  delay: 0,
+  showURL: false,
+  showBody: " - ",
+  extraClass: "pretty",
+  fixPNG: true,
+  left: -120
+});
+          });
       });
     </script>
  <link rel="stylesheet" href="css/uniform.default.css" type="text/css" media="screen"> 
@@ -54,51 +73,271 @@
       <div id = "bottomSeparator"> <img src="img/separator.jpg" /> </div>
        
     </div>
-    <ul class = "questions"> 
-    <li class="question-slider">
-       	<p class = "text">Цена</p>
-        <p class = "slider"><input id="Slider1" type="text" name="area" value="4000;10000" /></p>
+    <ul id = "questions">
+    <a href = "javascript:void(0)" id="searchButton" >Поиск</a> 
+    <script type="text/javascript" charset="utf-8">
+      $("#searchButton").click( function(){
+        $("#search").slideToggle("middle");        
+      }); 
+    </script>
+    <a href = "javascript:void(0)" id="defaultButton" >Востановить начальные значения</a> 
+    <li class="question-row" id="search" style = "display: none">
+        <div class="question question-input">        
+          <p class = "qText">Искать</p>
+          <input type="text" size="40"/>
+        </div>
+    </li>  
+    <li class="question-row">
+        <div class="question question-slider">        
+         	<p class = "qText">Цена</p>
+          <p class = "slider"><input id="Slider1" type="text" name="area" value="4000;10000"/>
+        </div>
     </li>
-    <li class="question-slider">
-       	<p class = "text">Важность видеокарты</p>
-        <label class = "left">Нормально</label>
-        <label class = "right">Очень важно</label>        
-        <p class = "slider"><input id="Slider2" type="text" name="area" value="1" /></p>
+    <li class="question-row questions-big">
+          <div class="question-content" id = "questions-content">
+          
+          <table class="question-part cPart">
+          <tr>
+          <td class="question-text">
+            <div class="question question-slider" style="width: 80%">   
+              <p class = "qText">Цена</p>
+              <p class = "slider"><input id="Slider3" type="text" name="area" value="4000;10000" />
+            </div>       
+          </td>
+          <td class="arrow">
+          <a class="arrowHref" id = "rArrow" href="javascript:void(0)" onclick="NQuestion1()"> <img src="img/arrow_r_small.png" alt="Нечеткий вопрос"
+                                onMouseOver="this.src='img/arrow_r_big.png'" 
+                                onMouseOut="this.src='img/arrow_r_small.png'"
+                                /> </a>
+          </td>
+          </tr>
+          </table>     
+          <table class="question-part nPart">
+          <tr>
+          <td class="arrow">
+          <a class="arrowHref" id = "lArrow" href="javascript:void(0)" onclick="CQuestion1()"> <img src="img/arrow_l_small.png" alt="Нечеткий вопрос"
+                                onMouseOver="this.src='img/arrow_l_big.png'" 
+                                onMouseOut="this.src='img/arrow_l_small.png'"
+                                /> </a>
+          </td>  
+          <td class="question-text">
+            <div class="question question-slider">
+              <p class = "qText">Цена</p>
+              <p class = "slider"><input id="Slider4" type="text" name="area" value="1" />
+            </div>
+            <div class="question question-select rows">
+            <p class = "qText">Серия видеокарты</p>
+            <select name="video_seriya" id="video_seriya1" tabindex="1">
+              <option value="">-- Всё равно--</option>
+              <option value="1">Radeon HD 3xxx</option>
+              <option value="9">Radeon HD5xxx</option>
+              <option value="4">Radeon HD 7xxx</option>
+              <option value="10">GeForce GT(x) 3xx</option>
+              <option value="10">GeForce GT(x) 5xx</option>
+              <option value="10">GeForce Quadro</option>
+              <option value="10">Radeon HD 4xxx</option>
+            </select>
+            <script type="text/javascript">
+              $(function (){
+                $("#video_seriya1").selectbox();     
+              });
+            </script>
+          </div>  
+          </td>
+                  
+          </tr>
+          </table>
+          
+        </div>
+        
+         <script type="text/javascript">
+             
+            function NQuestion1() {
+            // get the current margin and subtract the slide width
+            var newMargin = parseInt($("#questions-content").css("margin-left")) - 800;
+
+            // slide the wrapper to the right to show the previous panel at the set speed. Then set the nav display on completion of animation.
+            $("#rArrow").hide();
+            $("#lArrow").show();
+            $("#questions-content").animate({ marginLeft: newMargin }, 800);
+        } 
+        function CQuestion1() {
+            // get the current margin and subtract the slide width
+            var newMargin = parseInt($("#questions-content").css("margin-left")) + 800;
+
+            // slide the wrapper to the right to show the previous panel at the set speed. Then set the nav display on completion of animation.
+            $("#lArrow").hide();
+            $("#rArrow").show();
+            $("#questions-content").animate({ marginLeft: newMargin }, 800);
+        } 
+          </script>       
     </li>
-    <li class="question-checkbox inline">       
-          <p class = "text">Обязательность элементов</p> 
-          <label><input type="checkbox" /> Wifi</label>
-          <label><input type="checkbox" /> Wimaf</label>
-          <label><input type="checkbox" /> BlueRay</label>
-          <label><input type="checkbox" /> BlueTooth</label>
-          <label><input type="checkbox" /> BlueTooth</label>
-          <label><input type="checkbox" /> Веб камера</label>
-          <label><input type="checkbox" /> Карт ридер</label>
-          <label><input type="checkbox" /> BlueTooth</label>
-          <label><input type="checkbox" /> BlueTooth</label>
-          <label><input type="checkbox" /> BlueTooth</label>
-          <label><input type="checkbox" /> Веб камера</label>
-          <label><input type="checkbox" /> Карт ридер</label>
-          <label><input type="checkbox" /> BlueTooth</label>
+    <li class="question-row questions-big">
+          <div class="question-content" id = "questions-content1">
+          
+          <table class="question-part cPart">
+          <tr>
+          <td class="question-text">
+          <div class="question question-select rows">
+            <p class = "qText">Серия видеокарты</p>
+            <select name="video_seriya" id="video_seriya" tabindex="1">
+              <option value="">-- Всё равно--</option>
+              <option value="1">Radeon HD 3xxx</option>
+              <option value="9">Radeon HD5xxx</option>
+              <option value="4">Radeon HD 7xxx</option>
+              <option value="10">GeForce GT(x) 3xx</option>
+              <option value="10">GeForce GT(x) 5xx</option>
+              <option value="10">GeForce Quadro</option>
+              <option value="10">Radeon HD 4xxx</option>
+            </select>
+            <script type="text/javascript">
+              $(function (){
+                $("#video_seriya").selectbox();     
+              });
+            </script>
+          </div>
+          <div class="question question-radio rows">
+            <p class = "qText">Какой тип компьютера вы хотите?</p>
+            <label><input type="radio" name="radio" /> игровой компьютер </label>
+            <label><input type="radio" name="radio" /> рабочий компьютер</label>
+            <label><input type="radio" name="radio" /> рабочий компьютер</label>
+            <label><input type="radio" name="radio" /> рабочий компьютер</label>
+          </div>
+          <div class="question question-slider" style="width: 30%; margin-right:5px">   
+              <p class = "qText">Цена</p>
+              <p class = "slider"><input id="Slider5" type="text" name="area" value="4000;10000" />
+            </div>   
+          </td>
+          <td class="arrow">
+          <a class="arrowHref" id = "rArrow1" href="javascript:void(0)" onclick="NQuestion()"> <img src="img/arrow_r_small.png" alt="Нечеткий вопрос"
+                                onMouseOver="this.src='img/arrow_r_big.png'" 
+                                onMouseOut="this.src='img/arrow_r_small.png'"
+                                /> </a>
+          </td>
+          </tr>
+          </table>     
+          <table class="question-part nPart">
+          <tr>
+          <td class="arrow">
+          <a class="arrowHref" id = "lArrow1" href="javascript:void(0)" onclick="CQuestion()"> <img src="img/arrow_l_small.png" alt="Нечеткий вопрос"
+                                onMouseOver="this.src='img/arrow_l_big.png'" 
+                                onMouseOut="this.src='img/arrow_l_small.png'"
+                                /> </a>
+          </td>  
+          <td class="question-text">
+            <div class="question question-slider">
+          <p class = "qText">Важность видеокарты <a href="javascript:void(0)" title="  Значение опредеяет на сколько увеличиться важность видеокарты </br>в подбираемой модели в ущерб остальным параметрам"> ?</a></p>
+          <label class = "left">Нормально</label>
+          <label class = "right">Очень важно</label>        
+          <p class = "slider"><input id="Slider2" type="text" name="area" value="1" /></p> 
+        </div>
+          </td>
+                   
+          </tr>
+          </table>
+          
+        </div>
+        
+         <script type="text/javascript">
+             
+            function NQuestion() {
+            // get the current margin and subtract the slide width
+            var newMargin = parseInt($("#questions-content1").css("margin-left")) - 800;
+
+            // slide the wrapper to the right to show the previous panel at the set speed. Then set the nav display on completion of animation.
+            $("#rArrow1").hide();
+            $("#lArrow1").show();
+            $("#questions-content1").animate({ marginLeft: newMargin }, 800);
+        } 
+        function CQuestion() {
+            // get the current margin and subtract the slide width
+            var newMargin = parseInt($("#questions-content1").css("margin-left")) + 800;
+
+            // slide the wrapper to the right to show the previous panel at the set speed. Then set the nav display on completion of animation.
+            $("#lArrow1").hide();
+            $("#rArrow1").show();
+            $("#questions-content1").animate({ marginLeft: newMargin }, 800);
+        } 
+          </script> 
+        
+    </li>    
+    <li class="question-row">
+          <div class="question question-checkbox rows">       
+            <p class = "qText">Обязательность элементов</p> 
+            <label><input type="checkbox" /> Wifi</label>
+            <label><input type="checkbox" /> Wimaf</label>
+            <label><input type="checkbox" /> BlueRay</label>
+            <label><input type="checkbox" /> BlueTooth</label>
+            <label><input type="checkbox" /> BlueTooth</label>
+            <label><input type="checkbox" /> Веб камера</label>
+            <label><input type="checkbox" /> Карт ридер</label>
+            <label><input type="checkbox" /> BlueTooth</label>
+            <label><input type="checkbox" /> BlueTooth</label>
+            <label><input type="checkbox" /> BlueTooth</label>
+            <label><input type="checkbox" /> Веб камера</label>
+            <label><input type="checkbox" /> Карт ридер</label>
+            <label><input type="checkbox" /> BlueTooth</label>
+          </div>
       </li>
-      <li class="question-radio rows">
-        <p class = "text">Какой тип компьютера вы хотите?</p>
-        <label><input type="radio" name="radio" /> игровой компьютер</label>
-        <label><input type="radio" name="radio" /> рабочий компьютер</label>
-      </li>    
+      <li class="question-row">
+          <div class="question question-checkbox table">       
+            <p class = "qText">Обязательность элементов</p>
+            <table>
+              <tr>
+              <td> 
+                <label><input type="checkbox" /> Wifi</label>
+                <label><input type="checkbox" /> Wimaf</label>
+                <label><input type="checkbox" /> BlueRay</label>
+                <label><input type="checkbox" /> BlueTooth</label>
+              </td>
+              <td>
+                <label><input type="checkbox" /> BlueTooth</label>
+                <label><input type="checkbox" /> Веб камера</label>
+                <label><input type="checkbox" /> Карт ридер</label>
+                <label><input type="checkbox" /> BlueTooth</label>
+              </td>
+              <td>
+                <label><input type="checkbox" /> BlueTooth</label>
+                <label><input type="checkbox" /> BlueTooth</label>
+                <label><input type="checkbox" /> Веб камера</label>
+                <label><input type="checkbox" /> Карт ридер</label>
+              </td>
+              <td>
+                <label><input type="checkbox" /> BlueTooth</label>
+              </td>
+            </table>
+          </div>
+      </li>
+      <li class="question-row">
+        <div class="question-radio rows">
+          <p class = "qText">Какой тип компьютера вы хотите?</p>
+          <label><input type="radio" name="radio" /> игровой компьютер</label>
+          <label><input type="radio" name="radio" /> рабочий компьютер</label>
+        </div>
+      </li>   
+      <a href = "#" id = "goButton"> <img src="img/greenButtons/wGoButton1.jpg" alt="Помошь"
+                                onMouseOver="this.src='img/greenButtons/wGoButton2.jpg'" 
+                                onMouseOut="this.src='img/greenButtons/wGoButton1.jpg'"
+                                onMouseDown="this.src='img/greenButtons/wGoButton3.jpg'"
+                                /> </a> 
     </ul>
-    <a href="#" id="trigger">Show/Hide</a>
+    <a href = "#questions" id="trigger">Show/Hide</a>
+
      <script type="text/javascript" charset="utf-8">    
       jQuery("#Slider1").slider({from_str:1000, to_str:50000, from: 1000, to: 50000, heterogeneity: ['50/10000', '75/20000'], limits: true, step: 50, dimension: '&nbsp;грн'});
-	  jQuery("#Slider2").slider({limits: false,scale: [0, 1, 2, 3, 4, 5], skin: "single", from: 0, to: 5, step: 1});
-	   var layout = $(".questions"),
-      trigger = $("#trigger");	  
-     
+      jQuery("#Slider3").slider({from_str:1000, to_str:50000, from: 1000, to: 50000, heterogeneity: ['50/10000', '75/20000'], limits: true, step: 50, dimension: '&nbsp;грн'});
+      jQuery("#Slider5").slider({from_str:1000, to_str:50000, from: 1000, to: 50000, heterogeneity: ['50/10000', '75/20000'], limits: true, step: 50, dimension: '&nbsp;грн'});
+      jQuery("#Slider4").slider({limits: false,scale: [0, 1, 2, 3, 4, 5], skin: "single", from: 0, to: 5, step: 1});     
+	   jQuery("#Slider2").slider({limits: false,scale: [0, 1, 2, 3, 4, 5], skin: "single", from: 0, to: 5, step: 1});
+
+	   var layout = $("#questions"),
+      trigger = $("#trigger");	
       $(trigger).click( function(){
-        layout.slideToggle("slow");        
-      });
-	 
+        var options = {};
+        layout.slideToggle("middle");        
+      }); 
     </script>
+
     <ul id = "answerList">
       <li class="answer">
         <div class = "image"> <img src="img/compImg.jpg" alt = "Рисунок"/></div>
@@ -163,6 +402,219 @@
         </div>
         <ul class = "answerButtons">
           <li> <div class = "price">3460 грн</div>
+        <div class = "priceRange">3400 - 3700</div></li>
+          <li> <a  href = "QandA.html"> <img src="img/greenButtons/wNextButton1.jpg" alt="Далее" 
+                                onMouseOver="this.src='img/greenButtons/wNextButton2.jpg'" 
+                                onMouseOut="this.src='img/greenButtons/wNextButton1.jpg'"
+                                onMouseDown="this.src='img/greenButtons/wNextButton3.jpg'"
+                                /> </a> </li>
+        </ul>
+      </li>
+      <li class="answer">
+        <div class = "image"> <img src="img/compImg.jpg" alt = "Рисунок"></div>
+        <div class = "descriptionSection">
+          <div class="title">
+            <div class = "name"> Intel Atom D425s </div>
+            <div class="classification">
+              <div class="cover"></div>
+              <div class="progress" style="width: 69%;"></div>
+            </div>
+          </div>
+          <ul class = "description">
+            <li>
+              <div class="paramName">Название процессора:</div>
+              <div class="paramValue"> Intel Atom D425 </div>
+              <div class="paramStars">
+                <div class="cover"></div>
+                <div class="progress" style="width: 74%;"></div>
+              </div>
+            </li>
+            <li>
+              <div class="paramName">Частота процессора:</div>
+              <div class="paramValue"> 1,8 </div>
+              <div class="paramStars">
+                <div class="cover"></div>
+                <div class="progress" style="width: 30%;"></div>
+              </div>
+            </li>
+            <li>
+              <div class="paramName">Количество ядер/потоков:</div>
+              <div class="paramValue"> 1/(2) </div>
+              <div class="paramStars">
+                <div class="cover"></div>
+                <div class="progress" style="width: 54%;"></div>
+              </div>
+            </li>
+            <li>
+              <div class="paramName">Тип памяти:</div>
+              <div class="paramValue"> DDR3-1333 </div>
+              <div class="paramStars">
+                <div class="cover"></div>
+                <div class="progress" style="width: 53%;"></div>
+              </div>
+            </li>
+            <li>
+              <div class="paramName">Общий объем памяти:</div>
+              <div class="paramValue"> 2048 Mb </div>
+              <div class="paramStars">
+                <div class="cover"></div>
+                <div class="progress" style="width: 69%;"></div>
+              </div>
+            </li>
+            <li>
+              <div class="paramName">Чипсет материнской платы:</div>
+              <div class="paramValue"> Intel NM10 </div>
+              <div class="paramStars">
+                <div class="cover"></div>
+                <div class="progress" style="width: 24%;"></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <ul class = "answerButtons" >
+           <li> <div class = "price">3460 грн</div>
+        <div class = "priceRange">3400 - 3700</div></li>
+          <li> <a  href = "QandA.html"> <img src="img/greenButtons/wNextButton1.jpg" alt="Далее" 
+                                onMouseOver="this.src='img/greenButtons/wNextButton2.jpg'" 
+                                onMouseOut="this.src='img/greenButtons/wNextButton1.jpg'"
+                                onMouseDown="this.src='img/greenButtons/wNextButton3.jpg'"
+                                /> </a> </li>
+        </ul>
+      </li>
+      <li class="answer">
+        <div class = "image"> <img src="img/compImg.jpg" alt = "Рисунок"></div>
+        <div class = "descriptionSection">
+          <div class="title">
+            <div class = "name"> Intel Atom D425s </div>
+            <div class="classification">
+              <div class="cover"></div>
+              <div class="progress" style="width: 69%;"></div>
+            </div>
+          </div>
+          <ul class = "description">
+            <li>
+              <div class="paramName">Название процессора:</div>
+              <div class="paramValue"> Intel Atom D425 </div>
+              <div class="paramStars">
+                <div class="cover"></div>
+                <div class="progress" style="width: 74%;"></div>
+              </div>
+            </li>
+            <li>
+              <div class="paramName">Частота процессора:</div>
+              <div class="paramValue"> 1,8 </div>
+              <div class="paramStars">
+                <div class="cover"></div>
+                <div class="progress" style="width: 30%;"></div>
+              </div>
+            </li>
+            <li>
+              <div class="paramName">Количество ядер/потоков:</div>
+              <div class="paramValue"> 1/(2) </div>
+              <div class="paramStars">
+                <div class="cover"></div>
+                <div class="progress" style="width: 54%;"></div>
+              </div>
+            </li>
+            <li>
+              <div class="paramName">Тип памяти:</div>
+              <div class="paramValue"> DDR3-1333 </div>
+              <div class="paramStars">
+                <div class="cover"></div>
+                <div class="progress" style="width: 53%;"></div>
+              </div>
+            </li>
+            <li>
+              <div class="paramName">Общий объем памяти:</div>
+              <div class="paramValue"> 2048 Mb </div>
+              <div class="paramStars">
+                <div class="cover"></div>
+                <div class="progress" style="width: 69%;"></div>
+              </div>
+            </li>
+            <li>
+              <div class="paramName">Чипсет материнской платы:</div>
+              <div class="paramValue"> Intel NM10 </div>
+              <div class="paramStars">
+                <div class="cover"></div>
+                <div class="progress" style="width: 24%;"></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <ul class = "answerButtons" >
+           <li> <div class = "price">3460 грн</div>
+        <div class = "priceRange">3400 - 3700</div></li>
+          <li> <a  href = "QandA.html"> <img src="img/greenButtons/wNextButton1.jpg" alt="Далее" 
+                                onMouseOver="this.src='img/greenButtons/wNextButton2.jpg'" 
+                                onMouseOut="this.src='img/greenButtons/wNextButton1.jpg'"
+                                onMouseDown="this.src='img/greenButtons/wNextButton3.jpg'"
+                                /> </a> </li>
+        </ul>
+      </li>
+      <li class="answer">
+        <div class = "image"> <img src="img/compImg.jpg" alt = "Рисунок"></div>
+        <div class = "descriptionSection">
+          <div class="title">
+            <div class = "name"> Intel Atom D425s </div>
+            <div class="classification">
+              <div class="cover"></div>
+              <div class="progress" style="width: 69%;"></div>
+            </div>
+          </div>
+          <ul class = "description">
+            <li>
+              <div class="paramName">Название процессора:</div>
+              <div class="paramValue"> Intel Atom D425 </div>
+              <div class="paramStars">
+                <div class="cover"></div>
+                <div class="progress" style="width: 74%;"></div>
+              </div>
+            </li>
+            <li>
+              <div class="paramName">Частота процессора:</div>
+              <div class="paramValue"> 1,8 </div>
+              <div class="paramStars">
+                <div class="cover"></div>
+                <div class="progress" style="width: 30%;"></div>
+              </div>
+            </li>
+            <li>
+              <div class="paramName">Количество ядер/потоков:</div>
+              <div class="paramValue"> 1/(2) </div>
+              <div class="paramStars">
+                <div class="cover"></div>
+                <div class="progress" style="width: 54%;"></div>
+              </div>
+            </li>
+            <li>
+              <div class="paramName">Тип памяти:</div>
+              <div class="paramValue"> DDR3-1333 </div>
+              <div class="paramStars">
+                <div class="cover"></div>
+                <div class="progress" style="width: 53%;"></div>
+              </div>
+            </li>
+            <li>
+              <div class="paramName">Общий объем памяти:</div>
+              <div class="paramValue"> 2048 Mb </div>
+              <div class="paramStars">
+                <div class="cover"></div>
+                <div class="progress" style="width: 69%;"></div>
+              </div>
+            </li>
+            <li>
+              <div class="paramName">Чипсет материнской платы:</div>
+              <div class="paramValue"> Intel NM10 </div>
+              <div class="paramStars">
+                <div class="cover"></div>
+                <div class="progress" style="width: 24%;"></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <ul class = "answerButtons" >
+           <li> <div class = "price">3460 грн</div>
         <div class = "priceRange">3400 - 3700</div></li>
           <li> <a  href = "QandA.html"> <img src="img/greenButtons/wNextButton1.jpg" alt="Далее" 
                                 onMouseOver="this.src='img/greenButtons/wNextButton2.jpg'" 

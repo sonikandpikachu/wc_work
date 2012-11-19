@@ -1,0 +1,17 @@
+#tooltip {
+	position: absolute;
+	z-index: 3000;
+	border: 2px solid #808080;
+	background-color: #fff;
+	padding: 20px;
+	opacity: 0.85;
+    border-radius:10px;
+    -moz-border-radius:10px; /* Firefox 3.6 and earlier */
+
+    font-family: Myriad Pro, Verdana, Tahoma, Arial, Helvetica, sans-serif;
+    font-size:14px;
+    line-height: 1.2;
+    color:#145571;
+
+}
+#tooltip h3, #tooltip div { margin: 0; }
