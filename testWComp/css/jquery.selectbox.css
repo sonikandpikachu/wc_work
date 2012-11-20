@@ -61,10 +61,10 @@
 
 .sbHolderDisabled{
 	border: 2px solid #D2F7C9;
-	color: #CCE5F2;
+	color: #145571; /*#CCE5F2*/
 }
 .sbHolderDisabled .sbHolder{
-	color: #CCE5F2;
+	color: #145571;
 	
 }
 .sbHolderDisabled .sbToggle{
@@ -96,7 +96,7 @@
 	padding: 7px 0 7px 3px;
 }
 .sbOptions a:link, .sbOptions a:visited{
-	color: #3399CC;
+	color: #145571;
 	text-decoration: none;
 }
 .sbOptions a:hover,
@@ -104,7 +104,7 @@
 .sbOptions a.sbFocus{
 	font-size: 14px;
 	padding-top: 6px;
-	padding-bottom: 5px;
+	padding-bottom: 6px;
 	/*font-size: 16px;
 	padding-top: 5px;
 	padding-bottom: 6px;*/
@@ -120,7 +120,7 @@
 }
 .sbOptions .sbGroup{
 	border-bottom: dashed 1px #999;
-	color: #3399CC;
+	color: #145571;
 	display: block;
 	font-weight: bold;
 	padding: 7px 0 7px 3px;
