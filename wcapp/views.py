@@ -7,8 +7,9 @@ Created on Sep 18, 2012
 import operator
 
 from sqlorm import *
-from flask import Flask, render_template, request, abort, redirect, url_for
+from flask import Flask, render_template, request, abort, redirect, url_for, session
 
+from wcconfig import app
 from filters.settings import ALL_FILTERS
 from filters import dss
 import pretty_data
@@ -17,8 +18,6 @@ import db_queries
 #move to html settings
 COMPUTERS_ON_PAGE = 10
 
-app = Flask(__name__)
-
 @app.route('/')
 def first():
     return render_template('index.html', name = request.method) 
@@ -26,10 +25,19 @@ def first():
     
 @app.route('/qa/', methods=['POST', 'GET'])
 def second():
-    #getting all computer_components for first query:
-    computers = db_queries.cutted_computers('')
+    #getting computers id:
+    if request.method == 'POST': 
+        computers_id, computers_dss = filtered_computers_id(ALL_FILTERS, request.form)
+        session['computers_id'], session['computers_dss'] = computers_id, computers_dss
+    else:
+        if 'computers_id' in session and 'computers_dss' in session:
+            computers_id, computers_dss = session['computers_id'], session['computers_dss']
+        else:
+            computers_id, computers_dss = db_queries.sorted_computers_id([], [])#list of all sorted computers
+            session['computers_id'], session['computers_dss'] = computers_id, computers_dss
+    print 'COMPUTERS_ID AND DSS:', zip(computers_id, computers_dss)
     #pagination test(if bad or wrong page)
-    last_page = int(round(len(computers) / COMPUTERS_ON_PAGE + 0.49))
+    last_page = int(round(len(computers_id) / COMPUTERS_ON_PAGE + 0.49))
     #TODO: rewrite
     try:
         page = int(request.args.get('page', '')) if 'page' in request.args else 1
@@ -38,48 +46,29 @@ def second():
     if page > last_page or page < 1:
         abort(404)
 
-    computers_on_page = computers[(page-1) * COMPUTERS_ON_PAGE : min(page * COMPUTERS_ON_PAGE, len(computers))]
+    first_comp_index = (page-1)*COMPUTERS_ON_PAGE
+    last_comp_index = min(page*COMPUTERS_ON_PAGE, len(computers_id))
+    computers_id_on_page = computers_id[first_comp_index : last_comp_index]
+    computers_dss_on_page = computers_dss[first_comp_index : last_comp_index]
+    pretty_computers = pretty_data.small_computers(computers_id_on_page, computers_dss_on_page)
 
-    return render_template('QandA.html', computers = computers_on_page, filters = ALL_FILTERS,
+    return render_template('QandA.html', computers = pretty_computers, filters = ALL_FILTERS,
         current_page = page, pagination_pages = _get_pagination_pages(page, last_page))
 
 
-def filtered_computers(filters, form = None):
+def filtered_computers_id(filters, form):
     '''
-    1. Setting new dss values bases on answers
-    2. Getting filters string and executes filtering
-    Returns filtered computers 
+    Gets parameters from request form, executes filters functions and finally returns filtered computers id
     '''
-    controller = SQLController()
-    session = controller.create_sql_session()
+    # print 'FORM:', form
+    dss_values, cut_values = [], []
+    for filt in filters:
+        values = tuple(form[key] for key in form if key.startswith(filt.name))
+        if filt.dss_function and values: dss_values.append(filt.dss_function(values))
+        if filt.cut_function and values: cut_values.append(filt.cut_function(values))
+    # print 'VALUES:', dss_values, cut_values
+    return db_queries.sorted_computers_id(cut_values, dss_values)
 
-    components =  wc_RAM, wc_HD, wc_CPU, wc_OS, wc_ODD, wc_Screen, wc_Type, wc_Chipset#, wc_Battery, wc_Color,  wc_Audio, wc_VGA
-
-    cut_strings = []
-    if form:
-        for f in (f for f in filters if f.values):
-            selected_values = tuple(value for value in f.values if f.name + '_' + value in form)
-            f.selected_values = selected_values
-            if f.dss_function: f.dss_function(selected_values)
-            if f.cut_function and f.cut_function(selected_values): cut_strings.append(f.cut_function(selected_values))
-    filter_string = ' and '.join(cut_strings) if cut_strings else None #TODO: get filter string from flask session
-    print 'FILTER STRING:', filter_string
-
-    query = session.query(wc_Computer).join(*components)
-    computers = query.filter(filter_string).all() if filter_string else query.all() #getting filtered computers
-    # for comp in computers: comp.dss = dss.dss_weight(comp) #counting theirs dss
-    # computers.sort(key = lambda comp: comp.dss, reverse = True) #sorting by dss
-    computers = [pretty_data.small_computer(comp) for comp in computers]      
-    controller.close_sql_session()
-    #TODO: set filter string to flask session
-    return computers
-
-#TODO: move to comp_db module
-def _norm_all_components(components):
-    minimum, maximum = min([component['dss'] for component in components]), max([component['dss'] for component in components])
-    for component in components:
-        component['dss'] = (component['dss'] - minimum) * 100/(maximum - minimum)
-    return components
 
 #TODO: move to pretty_data module
 def _get_pagination_pages(current_page, last_page):

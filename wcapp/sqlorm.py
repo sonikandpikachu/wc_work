@@ -16,7 +16,7 @@ class wc_Computer(db.Model):
     color = db.Column(db.String(50))
     cpu_frequency = db.Column(db.Float)
     cpu_kernel_count = db.Column(db.Integer)
-    cpu_model = db.Column(db.String(10))
+    cpu_model = db.Column(db.String(30))
     cpu_name = db.Column(db.String(50))
     display_brightness = db.Column(db.Integer)
     display_diagonal = db.Column(db.Integer)
@@ -26,7 +26,7 @@ class wc_Computer(db.Model):
     hdd_capacity = db.Column(db.Integer)
     hdd_cell = db.Column(db.Integer)
     hdd_speed = db.Column(db.Integer)
-    hdd_type = db.Column(db.String(10))
+    hdd_type = db.Column(db.String(30))
     height = db.Column(db.Integer)
     jacks = db.Column(db.String(150))
     length = db.Column(db.Integer)
@@ -54,7 +54,7 @@ class wc_Computer(db.Model):
     ram_amount = db.Column(db.Integer)
     ram_frequency = db.Column(db.Integer)
     ram_jacks = db.Column(db.Integer)
-    ram_type = db.Column(db.String(10))
+    ram_type = db.Column(db.String(30))
     thunderbolt = db.Column(db.Integer)
     type = db.Column(db.String(100))
     url = db.Column(db.String(300))
@@ -206,4 +206,4 @@ def add_conccomputers(pairs):
 if __name__ == '__main__':
     print db
     # db.drop_all()
-    db.create_all()
+    # db.create_all()

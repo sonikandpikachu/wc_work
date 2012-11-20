@@ -2,70 +2,83 @@
 '''
 This module gets data from database, cuts it, sorts it
 '''
-import xlwt
-import xlrd
+import operator
 
 from wcconfig import db
 import sqlorm as sql
 
-def cutted_computers (cut_string):
-    return sql.wc_Computer.query.filter(cut_string).all()
+def _cutted_computers_id (cut_values):
+    '''
+    Gets result of filters cut_function as list. Returns ids of filtered computers
+    '''
+    cut_string = ' AND '.join(cut_values)
+    print 'CUT STRING', cut_string
+    computers_id = db.session.query(sql.wc_Computer.id).filter(cut_string).all()
+    return tuple(int(comp[0]) for comp in computers_id)
 
 
-def sorted_computers ():
-    pass
+def sorted_computers_id (cut_values, dss_values):
+    '''
+    Cuts computers and sort them by dss
+    Notice that we can put initial dss values to dss_dict
+    '''
+    dss_dict = {'hdd' : 1, 'cpu' : 1, 'ram' : 1, 'vga' : 1, 'display' : 1}
+    for dss in dss_values: dss_dict.update(dss)
+    computers_id = _cutted_computers_id(cut_values)
+    sqldsses = db.session.query(sql.wc_DSS).filter(sql.wc_DSS.id.in_(computers_id)).all()
+    computers_dss = {}#dict of id and dss for each computers
+    for sqldss in sqldsses:
+        computers_dss[sqldss.id] = sum([sqldss.__dict__[key] * dss_dict[key] for key in dss_dict.iterkeys()])
+    _min, _max = min(computers_dss.values()), max(computers_dss.values())
+    computers_dss = sorted(computers_dss.iteritems(), key=operator.itemgetter(1), reverse = True)#sorting by values, gets list of tuples
+    return tuple(cd[0] for cd in computers_dss), tuple((cd[1] - _min)*100/(_max - _min) for cd in computers_dss)
 
 
 #for development only
 def __values_for_dss ():
+    import xlwt
     wbk = xlwt.Workbook()
     prefixes = 'hdd', 'cpu', 'ram', 'vga'
     for prefix in prefixes:
         all_values = {}
+        id_values = {}
         comp_dict = sql.wc_Computer.query.first().__dict__.keys()
         columns = [name for name in comp_dict if prefix in name]
         for comp in sql.wc_Computer.query.all():
             values = tuple(comp.__dict__[column] for column in columns)
-            if values in all_values: all_values[values].append(comp.url)
-            else: all_values[values] = [comp.url] 
+            if values in all_values: 
+                all_values[values].append(comp.url)
+                id_values[values].append(comp.id)
+            else: 
+                all_values[values] = [comp.url]
+                id_values[values] = [comp.id]
         sheet = wbk.add_sheet(prefix)
-        for i, column in enumerate(columns + ['url']):
+        for i, column in enumerate(columns + ['id', 'url', 'dss']):
             sheet.write(0, i, column)
         for i, values in enumerate(all_values):
             for j, value in enumerate(values):
                 sheet.write(i+1, j, value)
-            sheet.write(i+1, len(values), ', '.join(all_values[values]))
+            sheet.write(i+1, len(values) + 1, ', '.join(all_values[values]))
+            sheet.write(i+1, len(values), ', '.join([str(v) for v in id_values[values]]))
     wbk.save('dss.xls')
 
-#for development only
+#for development only(doesn`t work - rewrite)
 def __dss_values_to_db():
+    import xlrd
     wbk = xlrd.open_workbook('dss.xls')
     sheet_names = wbk.sheet_names()
     for name in sheet_names:
         sheet = wbk.sheet_by_name(name)
-        attributes = sheet.row_values(0)[:-1]
-        dss_values = {}
-        for rownum in xrange(1, sheet.nrows):
-            dss_values[tuple(sheet.row_values(rownum)[:-1])] = sheet.row_values(rownum)[-1]
-        # for value in dss_values:
-        #     print value, ':', dss_values[value]
-        for dbcomp in sql.wc_Computer.query.all():
-            dbcomp_values = [dbcomp.__dict__[attr] for attr in attributes]
-            for index in range(len(dbcomp_values)):
-                if isinstance(dbcomp_values[index], str): dbcomp_values[index] = unicode(value)
-                if not dbcomp_values[index]: dbcomp_values[index] = ''
-                # if isinstance(dbcomp_values[index], long): print dbcomp_values[index]
-            dbcomp_values = tuple(dbcomp_values)
-            print 'id', sql.wc_DSS.query.filter_by(id = dbcomp.id).first().id
-            sql.wc_DSS.query.filter_by(id = dbcomp.id).\
-                update({name:dss_values[dbcomp_values]}, synchronize_session=False) 
-            del dbcomp_values 
-        sql.db.session.commit()
+        column_names = dict( (row_value, i) for i, row_value in enumerate(sheet.row_values(0))) 
+        assert 'url' in column_names and 'dss' in column_names, 'dss or url isn`t defined in sheet ' + name
+        urls = [column_name.strip() for column_name in column_names['url']]
 
-
-
+        
 if __name__ == '__main__':
-    __values_for_dss()
+    print  db.session.query(sql.wc_Computer.id).filter('os like "%mac%"').all()
+    # print sorted_computers_id([], [{'hdd' : 1, 'cpu' : 3}])
+    # __values_for_dss()
+    # __dss_values_to_db()
 
 
 

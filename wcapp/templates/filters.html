@@ -11,7 +11,7 @@
     </p>
 {%- endmacro %}
 
-{% macro slider(description, name, min, max, value) -%}
+{% macro slider(description, name, min, max, start_value) -%}
 	<p><h5> {{ description }} </h5> 
 		min:{{ min }} 
         <input type="text" name="{{ name }}" value="{{ start_value }}" size="20">

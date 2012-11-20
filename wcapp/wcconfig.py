@@ -18,6 +18,8 @@ SQLALCHEMY_DATABASE_URI = DATABASE + USERNAME + ':' + PASSWORD + '@' + HOST + '/
 
 print 'hi!'
 
+#flask configurations:
 app = Flask('wcapp')
+app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'#test
 app.config.from_object(__name__)
 db = SQLAlchemy(app)

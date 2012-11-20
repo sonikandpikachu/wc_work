@@ -34,7 +34,9 @@ def computers(pkl_folder, config):
     computers = []
     config_lines = _config_lines(config)
     for pkl in [pkl for pkl in os.listdir(pkl_folder) if pkl.endswith('.pkl')]:
-        computers.append(_computer(sl.pickle_load(os.path.join(pkl_folder, pkl)), config_lines))
+        computer = _computer(sl.pickle_load(os.path.join(pkl_folder, pkl)), config_lines)
+        computer['id'] = pkl.split('.')[0]
+        computers.append(computer)
     return computers
 
 
@@ -60,7 +62,8 @@ def _parse(parser, value):
     repart = parser.split('$')[0].strip()
     parsed = re.findall(repart, value)
     index = int(parser.split('$')[1].strip()) if '$' in parser else 0
-    return parsed[index]
+    try: return parsed[index]
+    except: return None 
 
 
 def _computer(pkl_computer, config_lines):

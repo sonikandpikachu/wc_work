@@ -6,6 +6,8 @@ Created on Sep 30, 2012
 
 This module contains all types of filters. For realisation examples see settings.py,
 html macroses for this filters situated in templates/filters.html
+
+TODO: make check selected parameters function in filters.
 '''
 
 
@@ -17,11 +19,19 @@ class Filter(object):
 				ftype - deffines filters type for html macros. Usually this parameters defined in subclasses
 				name - unique name of filter
 				question - filter description
-				cut_function - function, which returns string. This string will be in 'where' part of query
-				dss_function - function, which returns dict. Key of dict is name of dss parameter,
-					value of dict - new value of dss parameter
+				cut_function - function, returns string.
+				dss_function - function, returns dict.
 
 				cut_function and dss_function gets selected values as input parameters
+				
+				cut_function have to return 'WHERE' part of query to wc_Computer table. All of returned 
+				strings will be joined by 'AND'
+				
+				dss_functin have to return dictionary, where keys are columns from wc_DSS table and values
+				are weights for this columns
+
+				Notice: dss_function always have to return dictionary, if there is no changes it has to 
+				return empty dictionary, not None. Analogically cut_function has to return empty string
 
 				For examples see settings.py 
 	'''
@@ -29,6 +39,7 @@ class Filter(object):
 		self.ftype = ftype
 		self.cut_function = cut_function
 		self.dss_function = dss_function
+		self.description = description
 		self.name = name
 
 
@@ -60,7 +71,7 @@ class SliderFilter(Filter):
 
 	def __init__(self, name, description, min_value, max_value, start_value, cut_function = None, dss_function = None):
 		super(SliderFilter, self).__init__('slider', name, description, cut_function, dss_function)
-		self.slider_min, self.slider_max = slider_min, slider_max  
+		self.min_value, self.max_value = min_value, max_value  
 		self.start_value = start_value
  	
 
