@@ -320,22 +320,67 @@ body {
 }
 
 /* Questions */
-.questions {
+#questions {
 	margin-top: 10px;
+	margin-bottom: 20px;
+	float: left;
 }
 
-.questions li{
+#trigger{
+	margin-left: 20px;
+	float: left;
+}
+
+#questions .question-row{
 	margin-bottom: 25px;
+	width: 100%;
+	float: left;	
+	overflow: hidden;	
+	
 }
 
+#searchButton{
+	color:#D9742B;
+	margin-left: 50px;
+	margin-bottom: 10px;
+	float: left;
+	font-size: 15px;
+}
+
+#defaultButton{
+	color:#D9742B;
+	margin-right: 50px;
+	margin-bottom: 10px;
+	float: right;
+	font-size: 15px;
+}
+
+.question-select {
+	width: 200px;
+}
+
+.question-select .sbHolder{
+	margin-left: 20px;
+}
+
+.question-content{
+	width: 200%;
+}
+
+.question-part{
+	width: 50%;
+	float: left;	
+	
+}
+
+
+/* V cod*/
 .question-slider {
 	width: 50%;
 }
+/* V cod*/
 
-.question-slider .text{
-	padding: 5px 0px 10px 10px;
-	color: #3399CC;
-}
+
 
 .question-slider label{
 	font-size: 12px;
@@ -354,13 +399,29 @@ body {
 	padding: 20px 5px 30px 20px;
 }
 
-.question-checkbox .text, .question-radio .text{
+#questions .qText{
 	padding: 5px 0px 10px 10px;
-	color: #3399CC;
+	color: #3399CC;	
+}
+
+#questions .qText a{
+	font-size: 10px;
+	color: #FFA92B;	
+	vertical-align: super;
+}
+
+.question{
+	float: left;
+	margin-right: 50px;	
+}
+
+.question-input .text{
+	margin-left: 20px;
 }
 
 .question-checkbox label, .question-radio label{
-                color: #3399CC;
+    color: #145571;    
+    font-family: Myriad Pro, Verdana, Tahoma, Arial, Helvetica, sans-serif; 
 }
 
 .inline label{
@@ -368,14 +429,36 @@ body {
 
 }
 
-.rows label{
+.rows label, .table label{
 	display: block;
 	margin-bottom: 3px;
 	margin-left: 30px;
     clear: both;
 }
 
+.table td{
+	width: 200px;
+}
 
+.cPart .arrow, .nPart .arrow{
+	width: 5%;	
+	vertical-align: middle;
+}
+
+
+.cPart .arrowHref {	
+	float: right;
+	margin-right: 20px;
+}
+.nPart .arrowHref {	
+	float: left;
+	margin-left: 20px;
+}
+
+#goButton{
+	float: left;
+}
+/* Hrefs*/
 a {
 	text-decoration:none;
 	color:#4CE126;
