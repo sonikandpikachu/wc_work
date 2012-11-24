@@ -51,7 +51,7 @@ def table_code(columns, table_name):
     for column in columns:
         for name, type in zip(column['names'], column['types']):
             str_columns.append('\t' + name.strip().lower() + ' = al.Column(al.' + type + ')')
-    str_columns.sort()
+    # str_columns.sort()
     # writing columns deffinition
     code += '\n'.join(str_columns)
     # writing __init__ method:
@@ -69,6 +69,7 @@ def table_columns(config):
     f = open(config)
     columns = []
     for line in f.xreadlines():
+        if len(line.split('|')) < 4: continue
         keys = ['russian_name', 'names', 'parsers', 'types']
         column = {}
         for i, key in enumerate(keys):
@@ -79,14 +80,21 @@ def table_columns(config):
                 'different length for names, parsers, types' 
         columns.append(column)
     return columns
+# ALTER TABLE `wc`.`wc_computer` ADD COLUMN `battery_charging_time` FLOAT NULL  AFTER `price` , ADD COLUMN `battery_work_time` FLOAT NULL  AFTER `battery_charging_time` ;
+
+def alter_query (config):
+    query = 'ALTER TABLE `wc`.`wc_computer`'
+    for column in table_columns(config):
+        query += ',\n ADD COLUMN `' + column['names'][0] + '` ' +  column['types'][0].upper() + ' NULL '
+    return query.replace('STRING', 'VARCHAR').replace('BOOLEAN', 'TINYINT(1)').replace('INTEGER', 'INT(11)')
 
 
 if __name__ == '__main__':
     # rename_usb('../data/computers')
-    save_sqlconf_file(('../data/computers',), 'config/sqltables.config')
+    # save_sqlconf_file(('../data/computers',), 'config/sqltables.config')
     # columns = table_columns('config/computers.config')
     # print table_code(columns, 'Computer')
-    
+    print alter_query('config/notebooks.config')
 
 
 

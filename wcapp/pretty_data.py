@@ -15,6 +15,7 @@ def small_computers(computers_id, computers_dss):
 	pretty_computers = []
 	for index, dss, computer in zip(range(len(dsses)), dsses, computers):
 		pretty_computer = {
+			'id' : str(computer.id),
 			'name' : computer.name,
 			'dss' : computers_dss[index],
 			'cpu_name' : computer.cpu_name,

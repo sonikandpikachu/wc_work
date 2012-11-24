@@ -17,7 +17,7 @@ def conccomputers(pkl_folder, shops_key, usd_key, grn_key):
     computers = [sl.pickle_load(os.path.join(pkl_folder, pkl)) 
             for pkl in [pkl for pkl in os.listdir(pkl_folder) if pkl.endswith('.pkl')]]
     pairs = []
-    for c in computers[:10]:
+    for c in computers:
         url = c['Устройство.url']
         for shop, usd, grn in zip(c[shops_key], c[usd_key], c[grn_key]):
             pair = {}
