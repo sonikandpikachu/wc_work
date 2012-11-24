@@ -6,6 +6,7 @@ import operator
 
 from wcconfig import db
 import sqlorm as sql
+from support import pkl_to_dict as ptd
 
 def _cutted_computers_id (cut_values):
     '''
@@ -73,9 +74,18 @@ def __dss_values_to_db():
         assert 'url' in column_names and 'dss' in column_names, 'dss or url isn`t defined in sheet ' + name
         urls = [column_name.strip() for column_name in column_names['url']]
 
-        
+#for development only
+def __write_prices():
+    for comp in sql.wc_Computer.query.all():
+        prices = [conc.price_usd for conc in comp.concretes]
+        price = sum(prices)/len(prices) if prices else -1
+        db.session.query(sql.wc_Computer).filter_by(id = comp.id).update({'price' : price}, synchronize_session=False)
+    db.session.commit()
+
+
 if __name__ == '__main__':
-    print  db.session.query(sql.wc_Computer.id).filter('os like "%mac%"').all()
+    __write_prices()
+    # print  db.session.query(sql.wc_Computer.id).filter('os like "%mac%"').all()
     # print sorted_computers_id([], [{'hdd' : 1, 'cpu' : 3}])
     # __values_for_dss()
     # __dss_values_to_db()

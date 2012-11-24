@@ -23,7 +23,7 @@
       {% for comp in computers %}
       <li class="answer">
         <div class = "image"> 
-          <img src="{{ url_for('static', filename='img/computers/5_img/main.jpg') }}" alt = "Рисунок"/>
+          <img src="{{ url_for('static', filename='img/computers/'+ comp.id +'_img/main.jpg') }}" alt = "Рисунок"/>
         </div>
         <div class = "descriptionSection">
           <div class="title">
