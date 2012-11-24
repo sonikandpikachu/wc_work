@@ -81,19 +81,19 @@
       }); 
     </script>
     <a href = "javascript:void(0)" id="defaultButton" >Востановить начальные значения</a> 
-    <li class="question-row" id="search" style = "display: none">
+    <li id="search" style = "display: none">
         <div class="question question-input">        
           <p class = "qText">Искать</p>
           <input type="text" size="40"/>
         </div>
     </li>  
-    <li class="question-row">
+    <li>
         <div class="question question-slider">        
          	<p class = "qText">Цена</p>
           <p class = "slider"><input id="Slider1" type="text" name="area" value="4000;10000"/>
         </div>
     </li>
-    <li class="question-row questions-big">
+    <li class="questions-big">
           <div class="question-content" id = "questions-content">
           
           <table class="question-part cPart">
@@ -121,10 +121,6 @@
                                 /> </a>
           </td>  
           <td class="question-text">
-            <div class="question question-slider">
-              <p class = "qText">Цена</p>
-              <p class = "slider"><input id="Slider4" type="text" name="area" value="1" />
-            </div>
             <div class="question question-select rows">
             <p class = "qText">Серия видеокарты</p>
             <select name="video_seriya" id="video_seriya1" tabindex="1">
@@ -172,13 +168,13 @@
         } 
           </script>       
     </li>
-    <li class="question-row questions-big">
+    <li class="questions-big">
           <div class="question-content" id = "questions-content1">
           
           <table class="question-part cPart">
           <tr>
           <td class="question-text">
-          <div class="question question-select rows">
+          <div class="question question-select">
             <p class = "qText">Серия видеокарты</p>
             <select name="video_seriya" id="video_seriya" tabindex="1">
               <option value="">-- Всё равно--</option>
@@ -198,8 +194,8 @@
           </div>
           <div class="question question-radio rows">
             <p class = "qText">Какой тип компьютера вы хотите?</p>
-            <label><input type="radio" name="radio" /> игровой компьютер </label>
-            <label><input type="radio" name="radio" /> рабочий компьютер</label>
+            <label><input type="radio" name="radio" checked/> игровой компьютер </label>
+            <label><input type="radio" name="radio" checked/> рабочий компьютер</label>
             <label><input type="radio" name="radio" /> рабочий компьютер</label>
             <label><input type="radio" name="radio" /> рабочий компьютер</label>
           </div>
@@ -261,10 +257,10 @@
           </script> 
         
     </li>    
-    <li class="question-row">
+    <li>
           <div class="question question-checkbox rows">       
             <p class = "qText">Обязательность элементов</p> 
-            <label><input type="checkbox" /> Wifi</label>
+            <label><input type="checkbox" checked/> Wifi</label>
             <label><input type="checkbox" /> Wimaf</label>
             <label><input type="checkbox" /> BlueRay</label>
             <label><input type="checkbox" /> BlueTooth</label>
@@ -279,7 +275,7 @@
             <label><input type="checkbox" /> BlueTooth</label>
           </div>
       </li>
-      <li class="question-row">
+      <li>
           <div class="question question-checkbox table">       
             <p class = "qText">Обязательность элементов</p>
             <table>
@@ -308,12 +304,32 @@
             </table>
           </div>
       </li>
-      <li class="question-row">
+      <li>
         <div class="question-radio rows">
           <p class = "qText">Какой тип компьютера вы хотите?</p>
           <label><input type="radio" name="radio" /> игровой компьютер</label>
           <label><input type="radio" name="radio" /> рабочий компьютер</label>
         </div>
+      </li>
+      <li>
+        <div class="question question-select">
+            <p class = "qText">Серия видеокарты</p>
+            <select name="video_seriya" id="video_seriya2" tabindex="1">
+              <option value="">-- Всё равно--</option>
+              <option value="1">Radeon HD 3xxx</option>
+              <option value="9">Radeon HD5xxx</option>
+              <option value="4">Radeon HD 7xxx</option>
+              <option value="10">GeForce GT(x) 3xx</option>
+              <option value="10">GeForce GT(x) 5xx</option>
+              <option value="10">GeForce Quadro</option>
+              <option value="10">Radeon HD 4xxx</option>
+            </select>
+            <script type="text/javascript">
+              $(function (){
+                $("#video_seriya2").selectbox();     
+              });
+            </script>
+          </div>
       </li>   
       <a href = "#" id = "goButton"> <img src="img/greenButtons/wGoButton1.jpg" alt="Помошь"
                                 onMouseOver="this.src='img/greenButtons/wGoButton2.jpg'" 
@@ -324,8 +340,8 @@
     <a href = "#questions" id="trigger">Show/Hide</a>
 
      <script type="text/javascript" charset="utf-8">    
-      jQuery("#Slider1").slider({from_str:1000, to_str:50000, from: 1000, to: 50000, heterogeneity: ['50/10000', '75/20000'], limits: true, step: 50, dimension: '&nbsp;грн'});
-      jQuery("#Slider3").slider({from_str:1000, to_str:50000, from: 1000, to: 50000, heterogeneity: ['50/10000', '75/20000'], limits: true, step: 50, dimension: '&nbsp;грн'});
+      jQuery("#Slider1").slider({from: 1000, to: 50000, heterogeneity: ['50/10000', '75/20000'], limits: true, step: 50, dimension: '&nbsp;грн'});
+      jQuery("#Slider3").slider({from: 500, to: 50000, heterogeneity: ['50/10000', '75/20000'], limits: true, step: 50, dimension: '&nbsp;грн'});
       jQuery("#Slider5").slider({from_str:1000, to_str:50000, from: 1000, to: 50000, heterogeneity: ['50/10000', '75/20000'], limits: true, step: 50, dimension: '&nbsp;грн'});
       jQuery("#Slider4").slider({limits: false,scale: [0, 1, 2, 3, 4, 5], skin: "single", from: 0, to: 5, step: 1});     
 	   jQuery("#Slider2").slider({limits: false,scale: [0, 1, 2, 3, 4, 5], skin: "single", from: 0, to: 5, step: 1});

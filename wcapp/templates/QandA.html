@@ -2,7 +2,40 @@
 <html lang = "ru-RU">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}"/>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/jslider.css') }}"/>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/jslider.single.css') }}"/>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/jquery.tooltip.css') }}"/>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/jquery.selectbox.css') }}"/>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/uniform.default.css') }}"/>
+
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery-1.7.2.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/jshashtable-2.1_src.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.numberformatter-1.2.3.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/tmpl.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.dependClass-0.1.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/draggable-0.1.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.slider.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.tooltip.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.selectbox-0.2.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.uniform.min.js') }}"></script>
+    <script type="text/javascript" charset="utf-8">
+      $(function(){
+        $("input, textarea, button").uniform();
+        $(function() {
+          $( "[title]" ).tooltip({
+            track: true,
+            delay: 0,
+            showURL: false,
+            showBody: " - ",
+            extraClass: "pretty",
+            fixPNG: true,
+            left: -120
+          });
+        });
+      });
+    </script>
 <title>What Computer</title>
 </head>
 
@@ -10,17 +43,25 @@
 <div id = "wrapper">
   <div id = "header"> <img src="{{ url_for('static', filename='img/main_header.jpg') }}" alt="What Computer"/> </div>
   <div id = "content">
-    <div id = "question"> 
-      <!-- <img src="{{ url_for('static', filename='img/tempImg.jpg') }}" alt="tempImgr"/> --> 
-       <form method = 'post' action = '/qa/'>
-          {% include 'filters.html' %}
-          <p><input type="submit"></p>
-       </form>  
-    </div>
-
-    {% include 'menu.html' %}
+    {% include 'menu.html' %}       
+    <form method = 'post' action = '/qa/'>
+      <ul id = "questions">
+        {% include 'filters.html' %}
+        <a href = "" id = "goButton" onclick="document.forms[0].submit();return false;"> <img src="{{ url_for('static', filename='img/greenButtons/wGoButton1.jpg') }}" alt="Далее" 
+                              onMouseOver="this.src='{{ url_for('static', filename='img/greenButtons/wGoButton2.jpg') }}'" 
+                              onMouseOut="this.src='{{ url_for('static', filename='img/greenButtons/wGoButton1.jpg') }}'"
+                              onMouseDown="this.src='{{ url_for('static', filename='img/greenButtons/wGoButton3.jpg') }}'"
+                              />  </a>
+      </ul> 
+    </form>
+    <a href = "#questions" id="trigger">Show/Hide</a>
+    <script type="text/javascript" charset="utf-8"> 
+      $("#trigger").click( function(){        
+        $("#questions").slideToggle("middle");        
+      }); 
+    </script>                          
     <ul id = "answerList">
-      {% for comp in computers %}
+     {% for comp in computers %}      
       <li class="answer">
         <div class = "image"> 
           <img src="{{ url_for('static', filename='img/computers/5_img/main.jpg') }}" alt = "Рисунок"/>

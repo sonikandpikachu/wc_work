@@ -11,6 +11,7 @@ def _cutted_computers_id (cut_values):
     '''
     Gets result of filters cut_function as list. Returns ids of filtered computers
     '''
+    print cut_values
     cut_string = ' AND '.join(cut_values)
     print 'CUT STRING', cut_string
     computers_id = db.session.query(sql.wc_Computer.id).filter(cut_string).all()
@@ -23,7 +24,10 @@ def sorted_computers_id (cut_values, dss_values):
     Notice that we can put initial dss values to dss_dict
     '''
     dss_dict = {'hdd' : 1, 'cpu' : 1, 'ram' : 1, 'vga' : 1, 'display' : 1}
-    for dss in dss_values: dss_dict.update(dss)
+    for dss in dss_values: 
+        for key in dss:
+            dss_dict[key] += dss[key]
+    print dss_dict
     computers_id = _cutted_computers_id(cut_values)
     sqldsses = db.session.query(sql.wc_DSS).filter(sql.wc_DSS.id.in_(computers_id)).all()
     computers_dss = {}#dict of id and dss for each computers

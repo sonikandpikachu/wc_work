@@ -1,29 +1,189 @@
-<!-- Уникадьный id может совпадать со значением name. Мне приходит словарь с ключями name и значениями - value  -->
-
-{% macro checkbox(description, name, texts, values, selected_values) -%}
-	<p><h5> {{ description }} </h5>
-		{% for i in range(values|length) %}
-        	<input type="checkbox" name="{{ name }}_{{ values[i] }}" value="{{ values[i] }}"
-        	{% if values[i] in selected_values %} checked {% endif %}>
-        	{{ texts[i] }}<Br>
-    	{% endfor %}
-    	<br>
-    </p>
+{% macro titlePart(title, description) -%}
+   <p class = "qText">{{ title }} {% if description %}<a href="javascript:void(0)" title="{{ description|e }}"> ?</a> {% endif %}</p>
 {%- endmacro %}
 
-{% macro slider(description, name, min, max, start_value) -%}
-	<p><h5> {{ description }} </h5> 
-		min:{{ min }} 
-        <input type="text" name="{{ name }}" value="{{ start_value }}" size="20">
-        max:{{ max }} <br>
-	</p>
+{% macro checkbox(title, name, texts, values, selected_values, description, style, type) -%}
+          <div class="question question-checkbox {{ type }}" style = "{{ style }}">       
+            {{ titlePart(title, description) }}
+            {% if type != 'table' %}  
+                {% for i in range(values|length) %}
+                <label>
+                    <input type="checkbox" name="{{ name }}_{{ values[i] }}" value="{{ values[i] }}"
+                    {% if selected_values %} {% if i in selected_values %} checked {% endif %} {% endif %}> 
+                    {{ texts[i] }}   
+                </label>    
+                {% endfor %}
+            {% else %}
+                <table>
+                <tr>
+                {%- for col in values|batch(4) -%}
+                   <td>
+                   {% set colloop = loop %} 
+                    {%- for post in col -%}                    
+                        <label>
+                            <input type="checkbox" name="{{ name }}" value="{{ post }}"
+                            {% if i == selected_value %} checked {% endif %}>
+                            {{ texts[colloop.index0*4 + loop.index0] }}
+                        </label>                    
+                    {%- endfor -%}
+                    </td>
+                {%- endfor -%}
+                </tr>
+                </table>
+            {% endif %}    
+          </div>
+{%- endmacro %}
+
+{% macro radio(title, name, texts, values, selected_value, description, style, type) -%}
+          <div class="question question-radio {{ type }}" style = "{{ style }}">       
+            {{ titlePart(title, description) }}
+            {% if type != 'table' %}            
+                {% for i in range(values|length) %}
+                <label>
+                    <input type="radio" name="{{ name }}" value="{{ values[i] }}"
+                    {% if selected_value %} {% if i == selected_value %} checked {% endif %} {% endif %}>
+                    {{ texts[i] }}   
+                </label> 
+                {% endfor %}
+            {% else %}
+                <table>
+                <tr>
+                {%- for col in values|batch(4) -%}
+                   <td>
+                   {% set colloop = loop %}  
+                    {%- for post in col -%}                    
+                        <label>
+                            <input type="radio" name="{{ name }}" value="{{ post }}"
+                            {% if i == selected_value %} checked {% endif %}>
+                            {{ texts[colloop.index0*4 + loop.index0] }}  
+                        </label>                    
+                    {%- endfor -%}
+                    </td>
+                {%- endfor -%}
+                </tr>
+                </table>
+            {% endif %}
+
+          </div>
+{%- endmacro %}
+
+{% macro select(title, name, texts, values, description, style) -%}
+        <div class="question question-select" style = "{{ style }}">
+            {{ titlePart(title, description) }}
+            <select name="{{ name }}" id="{{ name }}">
+                {% for i in range(values|length) %}
+                    <option value="{{ values[i] }}">{{ texts[i] }}</option>            
+                {% endfor %}
+            </select>
+        </div>    
+        <script type="text/javascript">
+                $(function (){
+                    $("#{{ name }}").selectbox();     
+                  });
+        </script>
+{%- endmacro %}
+
+{% macro sliderDouble(title, name, min, max, start_values, description, heterogeneity, dimension, step, style) -%}
+        <div class="question question-slider" style = "{{ style }}">        
+            {{ titlePart(title, description) }}
+            <p class = "slider"><input id="{{ name }}" type="text" name="{{ name }}" value="{{ start_values[0] }};{{ start_values[1] }}"/></p>
+        </div>    
+        <script type="text/javascript" charset="utf-8">    
+            jQuery("#{{ name }}").slider({from: {{ min }}, to: {{ max }}, {% if heterogeneity %} heterogeneity: ['50/{{ heterogeneity[0] }}', '75/{{ heterogeneity[1] }}'], {% endif %}limits: true, step: {{ step }}, dimension: '{{ dimension }}'});
+        </script> 
+{%- endmacro %}
+
+{% macro sliderSingle(title, name, min, max, start_value, description, labels, scale, dimension, step, style) -%}
+        <div class="question question-slider" style = "{{ style }}">
+            {{ titlePart(title, description) }}
+            {% if labels %}
+            <label class = "left">{{ labels[0] }}</label>
+            <label class = "right">{{ labels[1] }}</label>
+            {% endif %}
+            <p class = "slider"><input id="{{ name }}" type="text" name="{{ name }}" value="{{ start_value }}"/></p>
+        </div>    
+        <script type="text/javascript" charset="utf-8">
+            jQuery("#{{ name }}").slider({limits: false, scale: {{ scale }}, skin: "single", from: {{ min }}, to: {{ max }}, step: {{ step }}, dimension: '{{ dimension }}'}); 
+        </script> 
+{%- endmacro %}
+
+{% macro container(children) -%}
+    {% for child in children %}
+        {{ getContent(child) }}
+    {% endfor %}
+{%- endmacro %}
+
+{% macro twoPart(name, cPart, nPart, defPart) -%}
+    <div class="question-content" id = "{{ name }}">
+          
+          <table class="question-part cPart">
+          <tr>
+          <td class="question-text">
+                {{ getContent(cPart) }}
+          </td>
+          <td class="arrow">
+          <a class="arrowHref" id = "rArrow{{ name }}" href="javascript:void(0)"> <img src="{{ url_for('static', filename='img/arrow_r_small.png') }}" alt="Нечеткий вопрос"
+                                onMouseOver="this.src='{{ url_for('static', filename='img/arrow_r_big.png') }}'" 
+                                onMouseOut="this.src='{{ url_for('static', filename='img/arrow_r_small.png') }}'"
+                                /> </a>
+          </td>
+          </tr>
+          </table>     
+          <table class="question-part nPart">
+          <tr>
+          <td class="arrow">
+          <a class="arrowHref" id = "lArrow{{ name }}" href="javascript:void(0)"> <img src="{{ url_for('static', filename='img/arrow_l_small.png') }}" alt="Четкий вопрос"
+                                onMouseOver="this.src='{{ url_for('static', filename='img/arrow_l_big.png') }}'" 
+                                onMouseOut="this.src='{{ url_for('static', filename='img/arrow_l_small.png') }}'"
+                                /> </a>
+          </td>  
+          <td class="question-text">
+                {{ getContent(nPart) }}
+          </td>  
+          </tr>
+          </table>          
+        </div>        
+         <script type="text/javascript">
+            {% if defPart == 1%}                 
+                $("#{{ name }}").css('marginLeft','-800px');                                              
+              {% endif %} 
+             $("#rArrow{{ name }}").click( function(){
+                 var newMargin = parseInt($("#{{ name }}").css("margin-left")) - 800;
+                $("#rArrow{{ name }}").hide();
+                $("#lArrow{{ name }}").show();
+                $("#{{ name }}").animate({ marginLeft: newMargin }, 800);       
+                });
+            $("#lArrow{{ name }}").click( function(){
+                var newMargin = parseInt($("#{{ name }}").css("margin-left")) + 800;
+                $("#lArrow{{ name }}").hide();
+                $("#rArrow{{ name }}").show();
+                $("#{{ name }}").animate({ marginLeft: newMargin }, 800);
+                });     
+        </script> 
+
+{%- endmacro %}
+
+{% macro getContent(filter) -%}
+        {% if filter.ftype == 'container' %}
+            {{ container(filter.children) }}
+        {% elif filter.ftype == 'twoPart' %}
+            {{ twoPart(filter.name, filter.cPart, filter.nPart, filter.defPart) }}
+        {% elif filter.ftype == 'checkbox' %}
+            {{ checkbox(filter.title, filter.name, filter.texts, filter.values, filter.selected_values, filter.description, filter.style, filter.type) }}
+        {% elif filter.ftype == 'select' %}
+            {{ select(filter.title, filter.name, filter.texts, filter.values, filter.description, filter.style) }}
+        {% elif filter.ftype == 'radio' %}
+            {{ radio(filter.title, filter.name, filter.texts, filter.values, filter.selected_value, filter.description, filter.style, filter.type) }}        
+        {% elif filter.ftype == 'sliderDouble' %}
+            {{ sliderDouble(filter.title, filter.name, filter.min_value, filter.max_value, filter.start_values, filter.description, filter.heterogeneity, filter.dimension, filter.step, filter.style) }}
+        {% elif filter.ftype == 'sliderSingle' %}
+            {{ sliderSingle(filter.title, filter.name, filter.min_value, filter.max_value, filter.start_value, filter.description, filter.labels, filter.scale, filter.dimension, filter.step, filter.style) }}
+        {% endif %}
 {%- endmacro %}
 
 
 {% for filter in filters %}
-	{% if filter.ftype == 'checkbox' %}
-		{{ checkbox(filter.description, filter.name, filter.texts, filter.values, filter.selected_values) }}
-	{% elif filter.ftype == 'slider' %}
-		{{ slider(filter.description, filter.name, filter.min_value, filter.max_value, filter.start_value) }}
-	{% endif %}
+    {% if filter.ftype == 'twoPart' %} <li class="questions-big"> {% else %} <li> {% endif %}
+    {{ getContent(filter) }}
+    </li>
 {% endfor %}
