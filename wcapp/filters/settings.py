@@ -145,7 +145,7 @@ priceFilter = filters.TwoPartFilter('price', cPart =  priceCFilter, nPart =  pri
 #Performance:
 def performanceN_dss_function(selected_values):
 	print 'selected_values', selected_values
-	return {'cpu' : int(selected_values[0]), 'ram' : int(selected_values[0])}
+	return {'cpu' : int(selected_values[0]),'ram' : int(selected_values[0])}
 # def performanceN_cut_function(selected_values):
 # 	'''!!!!!!!!!!!!!!!!!!Menya netu!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! '''
 # 	return {'price' : int(selected_values[0])}

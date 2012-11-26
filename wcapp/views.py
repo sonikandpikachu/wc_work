@@ -27,16 +27,17 @@ def first():
 def second():
     #getting computers id:
     if request.method == 'POST': 
-        computers_id, computers_dss = filtered_computers_id(ALL_FILTERS, request.form)
+        computers_id, computers_dss, dss_dict = filtered_computers_id(ALL_FILTERS, request.form)
         session['computers_id'], session['computers_dss'] = computers_id, computers_dss
     else:
         if 'computers_id' in session and 'computers_dss' in session:
             computers_id, computers_dss = session['computers_id'], session['computers_dss']
         else:
-            computers_id, computers_dss = db_queries.sorted_computers_id([], [])#list of all sorted computers
+            computers_id, computers_dss, dss_dict  = db_queries.sorted_computers_id([], [])#list of all sorted computers
             session['computers_id'], session['computers_dss'] = computers_id, computers_dss
-    # print 'COMPUTERS_ID AND DSS:', zip(computers_id, computers_dss)
+    #print 'COMPUTERS_ID AND DSS:', zip(computers_id, computers_dss)
     #pagination test(if bad or wrong page)
+    #print 'dss_dict', dss_dict
     last_page = int(round(len(computers_id) / COMPUTERS_ON_PAGE + 0.49))
     #TODO: rewrite
     try:
@@ -45,15 +46,17 @@ def second():
         abort(404)
     if page > last_page or page < 1:
         abort(404)
-
+ 
     first_comp_index = (page-1)*COMPUTERS_ON_PAGE
     last_comp_index = min(page*COMPUTERS_ON_PAGE, len(computers_id))
-    computers_id_on_page = computers_id[first_comp_index : last_comp_index]
+    computers_id_on_page = computers_id[first_comp_index : last_comp_index]    
     computers_dss_on_page = computers_dss[first_comp_index : last_comp_index]
+    print computers_id_on_page
+    print computers_dss_on_page
     pretty_computers = pretty_data.small_computers(computers_id_on_page, computers_dss_on_page)
 
     return render_template('QandA.html', computers = pretty_computers, filters = ALL_FILTERS,
-        current_page = page, pagination_pages = _get_pagination_pages(page, last_page))
+        current_page = page, pagination_pages = _get_pagination_pages(page, last_page), dss_dict = dss_dict)
 
 
 def filtered_computers_id(filters, form):
@@ -90,8 +93,8 @@ def _get_pagination_pages(current_page, last_page):
 
  
 if __name__ == '__main__':
-    app.run(debug = True, host = '192.168.1.100', port = 80)
-    #app.run(debug = True)
+    #app.run(debug = True, host = '192.168.1.100', port = 80)
+    app.run(debug = True)
     # controller = SQLController()
     # session = controller.create_sql_session()
     # components =  wc_RAM, wc_HD, wc_CPU, wc_OS, wc_ODD, wc_Screen, wc_Type, wc_Chipset

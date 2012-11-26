@@ -47,7 +47,7 @@
     <form method = 'post' action = '/qa/'>
       <ul id = "questions">
         {% include 'filters.html' %}
-        <a href = "" id = "goButton" onclick="document.forms[0].submit();return false;"> <img src="{{ url_for('static', filename='img/greenButtons/wGoButton1.jpg') }}" alt="Далее" 
+        <a href = "javascript:void(0)" id = "goButton" onclick="document.forms[0].submit();return false;"> <img src="{{ url_for('static', filename='img/greenButtons/wGoButton1.jpg') }}" alt="Далее" 
                               onMouseOver="this.src='{{ url_for('static', filename='img/greenButtons/wGoButton2.jpg') }}'" 
                               onMouseOut="this.src='{{ url_for('static', filename='img/greenButtons/wGoButton1.jpg') }}'"
                               onMouseDown="this.src='{{ url_for('static', filename='img/greenButtons/wGoButton3.jpg') }}'"
@@ -55,11 +55,41 @@
       </ul> 
     </form>
     <a href = "#questions" id="trigger">Show/Hide</a>
+    <a href = "javascript:void(0)" id="ctrigger" style="
+    position: fixed;
+    left: 1px;
+    padding: 10px;
+    background:#fff;
+ 
+  border-radius:10px;
+  border-top: solid 2px #79E95D;  
+  border-bottom: solid 2px #79E95D;
+  border-right: solid 2px #79E95D;
+  -webkit-border-radius: 0 10px 10px 0;
+  -moz-border-radius: 0 10px 10px 0;
+  border-radius: 0 10px 10px 0;
+">C</a>
     <script type="text/javascript" charset="utf-8"> 
       $("#trigger").click( function(){        
         $("#questions").slideToggle("middle");        
+      });
+       $("#ctrigger").click( function(){        
+        $(".console").slideToggle();        
       }); 
-    </script>                          
+    </script>
+    <table  class = "console" style = "width: 100%">
+      
+                {% for col in dss_dict.iteritems()|slice(4) %}
+                   <tr style = "width: 100%">                    
+                    {%- for k , v in col -%}                    
+                        <td style = "padding-left: 20px;">
+                            {{ k }}&emsp;{{ v }}
+                        </td>                   
+                    {%- endfor -%}
+                    </tr>
+                {%- endfor -%}
+      
+    </table>    
     <ul id = "answerList">
      {% for comp in computers %}      
       <li class="answer">
@@ -100,11 +130,11 @@
               </div>
             </li>
             <li>
-              <div class="paramName">Цена:</div>
-              <div class="paramValue"> {{ comp.price }}  </div>
+              <div class="paramName">Видеокарта:</div>
+              <div class="paramValue"> {{ comp.vga }}  </div>
               <div class="paramStars">
                 <div class="cover"></div>
-                <div class="progress" style="width: 0%;"></div>
+                <div class="progress" style="width: {{ comp.vga_dss }}%;"></div>
               </div>
             </li>
             <li>
@@ -128,6 +158,32 @@
                                 onMouseDown="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton3.jpg') }}'"
                                 /> </a> </li>
         </ul>
+        <table class = "console" style = "width: 100%">   
+                   <tr style = "width: 100%"> 
+                        <td style = "padding-left: 20px;">
+                          price&emsp;{{ comp.price_dss }}
+                        </td>
+                        <td style = "padding-left: 20px;">
+                          cpu&emsp;{{ comp.cpu_dss }}
+                        </td> 
+                        <td style = "padding-left: 20px;">
+                          vga&emsp;{{ comp.vga_dss }}
+                        </td>   
+                    </tr>
+                    <tr style = "width: 100%"> 
+                        <td style = "padding-left: 20px;">
+                          ram&emsp;{{ comp.ram_dss }}
+                        </td>
+                        <td style = "padding-left: 20px;">
+                          hdd&emsp;{{ comp.hdd_dss }}
+                        </td>   
+                        <td style = "padding-left: 20px;">
+                          <b>comp&emsp;{{ comp.id }}</b>
+                        </td>                         
+                    </tr>
+                
+      
+    </table>
       </li>
       {% endfor %} 
     </ul>

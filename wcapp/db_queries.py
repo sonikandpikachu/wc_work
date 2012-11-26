@@ -24,20 +24,21 @@ def sorted_computers_id (cut_values, dss_values):
     Cuts computers and sort them by dss
     Notice that we can put initial dss values to dss_dict
     '''
-    dss_dict = {'hdd' : 0.5, 'cpu' : 4, 'ram' : 3, 'vga' : 2, 'display' : 1, 'price' : -8}
-    print dss_values
+    dss_dict = {'hdd' : 0.5, 'cpu' : 7, 'ram' : 7, 'vga' : 1, 'price' : -8}   
     for dss in dss_values: 
         for key in dss:
             dss_dict[key] += dss[key]
-    print dss_dict
+    #print dss_dict
     computers_id = _cutted_computers_id(cut_values)
     sqldsses = db.session.query(sql.wc_DSS).filter(sql.wc_DSS.id.in_(computers_id)).all()
     computers_dss = {}#dict of id and dss for each computers
     for sqldss in sqldsses:
         computers_dss[sqldss.id] = sum([sqldss.__dict__[key] * dss_dict[key] for key in dss_dict.iterkeys()])
+        if sqldss.id == 97: print computers_dss[sqldss.id],sqldss.id
+        if sqldss.id == 98: print computers_dss[sqldss.id],sqldss.id
     _min, _max = min(computers_dss.values()), max(computers_dss.values())
     computers_dss = sorted(computers_dss.iteritems(), key=operator.itemgetter(1), reverse = True)#sorting by values, gets list of tuples
-    return tuple(cd[0] for cd in computers_dss), tuple((cd[1] - _min)*100/(_max - _min) for cd in computers_dss)
+    return tuple(cd[0] for cd in computers_dss), tuple((cd[1] - _min)*100/(_max - _min) for cd in computers_dss), dss_dict
 
 
 #for development only
