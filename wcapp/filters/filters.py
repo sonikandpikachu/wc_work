@@ -47,12 +47,38 @@ class Filter(object):
 		self.name = name
 		self.style = style
 
+	def get_answers(self, values): 
+		print 'VALUES sss', values   	
+		return self.dss_function(values.values()), self.cut_function(values.values())
+
+	def get_names(self):
+		return [self.name]
+
+
 class ContainerFilter(Filter):
 	"""Container for multifilter question"""
 
 	def __init__(self, children):
 		super(ContainerFilter, self).__init__('container')
 		self.children = children
+
+	def get_answers(self, values):
+		dss = {}
+		cut = []
+		for child in self.children:
+			values = dict( (key,values[key]) for key in values if key.split('_')[0] in child.get_names() )
+			dss.update(child.dss_function(values.values()))
+			cut.appand(child.cut_function(values.values()))
+			cutString = 'AND '.join(cut)
+		return dss, cutString
+
+	def get_names(self):
+		names = []
+		for child in children:
+			names += [child.get_names]
+		return names		
+
+
 
 class TwoPartFilter(Filter):
 	"""
@@ -66,9 +92,27 @@ class TwoPartFilter(Filter):
 	def __init__(self, name, cPart, nPart, defPart = 0):
 		super(TwoPartFilter, self).__init__('twoPart', name)
 		self.cPart = cPart
-		self.nPart = nPart
-		self.defPart = defPart			
-		
+		self.nPart = nPart			
+		self.defPart = defPart
+	
+	def get_answers(self, values):
+		part = self.cPart if values[self.name + '_hi'] == u'0' else self.nPart
+		newvalues = {}
+		for key in values:
+			print 'VALUESSSSSSS', part.get_names(), key, key.split('_')[0] in part.get_names()
+			if key.split('_')[0] in part.get_names():
+				newvalues[key] = values[key]
+				print 'NEWVALUES', newvalues
+				dss = part.dss_function(newvalues.values()) if part.dss_function else {}
+				cut = part.cut_function(newvalues.values()) if part.cut_function else ''
+		return dss, cut
+
+
+	def get_names(self):
+		names = self.cPart.get_names()
+		names += self.nPart.get_names()
+		return names					
+
 
 class RadioFilter(Filter):
 	'''

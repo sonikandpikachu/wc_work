@@ -21,7 +21,7 @@
                    {% set colloop = loop %} 
                     {%- for post in col -%}                    
                         <label>
-                            <input type="checkbox" name="{{ name }}" value="{{ post }}"
+                            <input type="checkbox" name="{{ name }}_{{ values[colloop.index0*4 + loop.index0] }}" value="{{ post }}"
                             {% if i == selected_value %} checked {% endif %}>
                             {{ texts[colloop.index0*4 + loop.index0] }}
                         </label>                    
@@ -40,7 +40,7 @@
             {% if type != 'table' %}            
                 {% for i in range(values|length) %}
                 <label>
-                    <input type="radio" name="{{ name }}" value="{{ values[i] }}"
+                    <input type="radio" name="{{ name }}_{{ values[i] }}" value="{{ values[i] }}"
                     {% if selected_value %} {% if i == selected_value %} checked {% endif %} {% endif %}>
                     {{ texts[i] }}   
                 </label> 
@@ -53,7 +53,7 @@
                    {% set colloop = loop %}  
                     {%- for post in col -%}                    
                         <label>
-                            <input type="radio" name="{{ name }}" value="{{ post }}"
+                            <input type="radio" name="{{ name }}_{{ values[colloop.index0*4 + loop.index0] }}" value="{{ post }}"
                             {% if i == selected_value %} checked {% endif %}>
                             {{ texts[colloop.index0*4 + loop.index0] }}  
                         </label>                    
@@ -115,7 +115,7 @@
 
 {% macro twoPart(name, cPart, nPart, defPart) -%}
     <div class="question-content" id = "{{ name }}">
-          
+          <input type = "hidden" name = "{{ name }}_hi" id = "{{ name }}_hi" value = "{{ defPart }}">
           <table class="question-part cPart">
           <tr>
           <td class="question-text">
@@ -145,18 +145,21 @@
         </div>        
          <script type="text/javascript">
             {% if defPart == 1%}                 
-                $("#{{ name }}").css('marginLeft','-800px');                                              
+                $("#{{ name }}").css('marginLeft','-800px');
+                $("#{{ name }}_hi").val(1);                                              
               {% endif %} 
              $("#rArrow{{ name }}").click( function(){
                  var newMargin = parseInt($("#{{ name }}").css("margin-left")) - 800;
                 $("#rArrow{{ name }}").hide();
                 $("#lArrow{{ name }}").show();
+                $("#{{ name }}_hi").val(1);
                 $("#{{ name }}").animate({ marginLeft: newMargin }, 800);       
                 });
             $("#lArrow{{ name }}").click( function(){
                 var newMargin = parseInt($("#{{ name }}").css("margin-left")) + 800;
                 $("#lArrow{{ name }}").hide();
                 $("#rArrow{{ name }}").show();
+                $("#{{ name }}_hi").val(0);
                 $("#{{ name }}").animate({ marginLeft: newMargin }, 800);
                 });     
         </script> 

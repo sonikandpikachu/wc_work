@@ -35,7 +35,7 @@ def second():
         else:
             computers_id, computers_dss = db_queries.sorted_computers_id([], [])#list of all sorted computers
             session['computers_id'], session['computers_dss'] = computers_id, computers_dss
-    print 'COMPUTERS_ID AND DSS:', zip(computers_id, computers_dss)
+    # print 'COMPUTERS_ID AND DSS:', zip(computers_id, computers_dss)
     #pagination test(if bad or wrong page)
     last_page = int(round(len(computers_id) / COMPUTERS_ON_PAGE + 0.49))
     #TODO: rewrite
@@ -60,13 +60,16 @@ def filtered_computers_id(filters, form):
     '''
     Gets parameters from request form, executes filters functions and finally returns filtered computers id
     '''
-    # print 'FORM:', form
+    print 'FORM:', form
     dss_values, cut_values = [], []
     for filt in filters:
-        values = tuple(form[key] for key in form if key.startswith(filt.name))
-        if filt.dss_function and values: dss_values.append(filt.dss_function(values))
-        if filt.cut_function and values: cut_values.append(filt.cut_function(values))
-    # print 'VALUES:', dss_values, cut_values
+        values_dict = dict((key,form[key]) for key in form if key.startswith(filt.name))
+        print 'NAME: ', filt.name, "values_dict", values_dict
+        if values_dict:
+            dss, cut = filt.get_answers(values_dict)
+            if dss: dss_values.append(dss)
+            if cut: cut_values.append(cut)
+    print 'VALUES:', dss_values, cut_values
     return db_queries.sorted_computers_id(cut_values, dss_values)
 
 
@@ -87,7 +90,8 @@ def _get_pagination_pages(current_page, last_page):
 
  
 if __name__ == '__main__':
-    app.run(debug = True)
+    app.run(debug = True, host = '192.168.1.100', port = 80)
+    #app.run(debug = True)
     # controller = SQLController()
     # session = controller.create_sql_session()
     # components =  wc_RAM, wc_HD, wc_CPU, wc_OS, wc_ODD, wc_Screen, wc_Type, wc_Chipset

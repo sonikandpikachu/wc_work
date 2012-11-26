@@ -122,16 +122,16 @@ deviceType = filters.RadioFilter('required_parameters', u'Я хочу ...',
 #Price:
 
 def priceC_cut_function(selected_values):
-	return 'price > ' + selected_values[0]  + ' AND ' + 'price < ' + selected_values[1]
+	return 'price > ' + selected_values[0].split(';')[0]  + ' AND ' + 'price < ' + selected_values[0].split(';')[1]
 priceCFilter = filters.SliderDoubleFilter('priceC', u'Цена:',1000, 50000, [4000, 10000], style = "width: 80%",
 											cut_function = priceC_cut_function, heterogeneity = [10000, 20000], 
 											dimension = u' грн', step = 50)
 
 def priceN_dss_function(selected_values):
 	return {'price' : int(selected_values[0])}
-def priceN_cut_function(selected_values):
-	'''!!!!!!!!!!!!!!!!!!Menya netu!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! '''
-	return {'price' : int(selected_values[0])}
+# def priceN_cut_function(selected_values):
+# 	'''!!!!!!!!!!!!!!!!!!Menya netu!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! '''
+# 	return {'price' : int(selected_values[0])}
 
 priceDescription = u'<p style = "text-indent: 10px;">Значение определяет на сколько увеличиться важность цены </br>\
 в подбираемой модели в ущерб остальным параметрам. </br>  В точке 0 &mdash; &Prime;разумная цена&Prime;</p>'
@@ -144,20 +144,22 @@ priceFilter = filters.TwoPartFilter('price', cPart =  priceCFilter, nPart =  pri
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
 #Performance:
 def performanceN_dss_function(selected_values):
+	print 'selected_values', selected_values
 	return {'cpu' : int(selected_values[0]), 'ram' : int(selected_values[0])}
-def performanceN_cut_function(selected_values):
-	'''!!!!!!!!!!!!!!!!!!Menya netu!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! '''
-	return {'price' : int(selected_values[0])}
+# def performanceN_cut_function(selected_values):
+# 	'''!!!!!!!!!!!!!!!!!!Menya netu!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! '''
+# 	return {'price' : int(selected_values[0])}
 
 descriptionPerformanceN = u'<p style = "text-indent: 10px;">Значение определяет на сколько увеличиться важность производительности </br>\
 в подбираемой модели в ущерб остальным параметрам</p>'
 performanceNFilter = filters.SliderSingleFilter('performanceN', u'Производительность:', 1, 5, 1,
 									labels = [u'Нормальная', u'Очень высокая'], description = descriptionPerformanceN, dss_function = performanceN_dss_function)
 
-def performanceN_cut_function(selected_values):
-	return 'cpu_frequency > ' + selected_values[0]  + ' AND ' + 'cpu_frequency < ' + selected_values[1]
+def performanceC_cut_function(selected_values):
+	print 'performance', selected_values[0]
+	return 'cpu_frequency > ' + selected_values[0].split(';')[0]  + ' AND ' + 'cpu_frequency < ' + selected_values[0].split(';')[1]
 performanceCFilter = filters.SliderDoubleFilter('performanceC', u'Частота процессора:',1, 4, [2, 3], 
-											cut_function = performanceN_cut_function, 
+											cut_function = performanceC_cut_function, 
 											dimension = u' ГГц', step = 0.1)
 
 performanceFilter = filters.TwoPartFilter('performance', cPart =  performanceCFilter, nPart =  performanceNFilter, defPart = 1)
