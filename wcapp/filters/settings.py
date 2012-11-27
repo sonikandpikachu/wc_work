@@ -63,12 +63,125 @@ def ram_dss_function(selected_values):
 def ram_cut_function(selected_values):
 	return 'ram_amount > ' + selected_values[0]
 
-min_value, max_value = 2, 8
-start_value = 2
 
-ramFilter = filters.SliderFilter('ramFilter', u'Объем оперативной памяти:',
-									min_value, max_value, start_value,
-									dss_function = ram_dss_function, cut_function = ram_cut_function)
+descriptionPerformanceN = u'<p style = "text-indent: 10px;">Значение определяет на сколько увеличиться важность видеокарты </br>\
+в подбираемой модели в ущерб остальным параметрам</p>'
+
+moneyCFilter = filters.SliderDoubleFilter('moneyCFilter', u'Цена:',
+									1000, 50000, [4000, 10000],
+									dss_function = ram_dss_function, cut_function = ram_cut_function, 
+									heterogeneity = [10000, 20000], dimension = u' грн', step = 50)
+
+performanceNFilter = filters.SliderSingleFilter('performanceNFilter', u'Производительность:', 1, 5, 1,
+									labels = [u'Нормальная', u'Очень высокая'], description = descriptionPerformanceN, 
+									style = "width: 80%", dss_function = ram_dss_function, cut_function = ram_cut_function)
+performanceNFilter1 = filters.SliderSingleFilter('performanceNFilter1', u'Производительность:', 1, 5, 1,
+									labels = [u'Нормальная', u'Очень высокая'], description = descriptionPerformanceN, 
+									style = "width: 80%", dss_function = ram_dss_function, cut_function = ram_cut_function)
+texts = "Linux", 'Mac', 'Windows', 
+values =  'linux', 'mac', 'windows'
+selected_values = 1, 2
+
+osFilterC = filters.CheckboxFilter('osFilterC', u'Операционная система:', 
+									texts, values, selected_values, description = descriptionPerformanceN,
+									cut_function = os_cut_function)
+osFilterR = filters.RadioFilter('osFilterR', u'Операционная система:', 
+									texts, values, cut_function = os_cut_function)
+osFilterS = filters.SelectFilter('osFilterS', u'Операционная система:', 
+									texts, values, description = descriptionPerformanceN,
+									cut_function = os_cut_function)
+
+containerTestFilter = filters.ContainerFilter([osFilterS, moneyCFilter])
+TwoPartTestFilter = filters.TwoPartFilter('TwoPartTest', cPart =  containerTestFilter, nPart =  performanceNFilter1)
+
+#----------------------------------------------------------------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+#----------------------------------------------------------------------------------------------------------------------------------------------------------
+#Type:
+texts = u"Компьютер", u'Ноутбук', u'Планшет', u'еще не знаю'
+values =  'computer', 'notebook', 'tablet', "all"
+def type_cut_function(selected_values):	
+	acceptTypes = []
+	for s in selected_values:
+		if s == 'computer' : acceptTypes.extend([u"неттоп", u"моноблок", u"игровой", u"настольный" , u"настольный / с монитором /"])
+		if s == 'notebook': acceptTypes.extend([u"ноутбук"])
+		if s == 'tablet': acceptTypes.extend([u"планшет"])
+		if s == 'all': acceptTypes.extend([u"неттоп", u"моноблок", u"игровой", u"настольный" , u"настольный / с монитором /", u"ноутбук", \
+									u"планшет"])
+	filters = []	
+	for aT in acceptTypes:		 
+			filters.append('os LIKE "%' + aT + '%"')
+	if len(filters) > 1: return '(' + ' OR '.join(filters) + ')'
+	return filters[0] if filters else '' 
+deviceType = filters.RadioFilter('required_parameters', u'Я хочу ...', 
+									texts, values, cut_function = type_cut_function)
+
+
+#----------------------------------------------------------------------------------------------------------------------------------------------------------
+#Price:
+
+def priceC_cut_function(selected_values):
+	return 'price > ' + selected_values[0].split(';')[0]  + ' AND ' + 'price < ' + selected_values[0].split(';')[1]
+priceCFilter = filters.SliderDoubleFilter('priceC', u'Цена:',1000, 50000, [4000, 10000], style = "width: 80%",
+											cut_function = priceC_cut_function, heterogeneity = [10000, 20000], 
+											dimension = u' грн', step = 50)
+
+def priceN_dss_function(selected_values):
+	return {'price' : int(selected_values[0])}
+# def priceN_cut_function(selected_values):
+# 	'''!!!!!!!!!!!!!!!!!!Menya netu!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! '''
+# 	return {'price' : int(selected_values[0])}
+
+priceDescription = u'<p style = "text-indent: 10px;">Значение определяет на сколько увеличиться важность цены </br>\
+в подбираемой модели в ущерб остальным параметрам. </br>  В точке 0 &mdash; &Prime;разумная цена&Prime;</p>'
+priceNFilter = filters.SliderSingleFilter('priceN', u'Важность цены:', -3, 3, 0, scale = '[-3,-2,-1, 0, 1, 2, 3]',
+									labels = [u'Не имеет значения', u'Максимальная економия'], description = priceDescription, 
+									dss_function = priceN_dss_function)
+
+priceFilter = filters.TwoPartFilter('price', cPart =  priceCFilter, nPart =  priceNFilter)
+
+#----------------------------------------------------------------------------------------------------------------------------------------------------------
+#Performance:
+def performanceN_dss_function(selected_values):
+	print 'selected_values', selected_values
+	return {'cpu' : int(selected_values[0]),'ram' : int(selected_values[0])}
+# def performanceN_cut_function(selected_values):
+# 	'''!!!!!!!!!!!!!!!!!!Menya netu!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! '''
+# 	return {'price' : int(selected_values[0])}
+
+descriptionPerformanceN = u'<p style = "text-indent: 10px;">Значение определяет на сколько увеличиться важность производительности </br>\
+в подбираемой модели в ущерб остальным параметрам</p>'
+performanceNFilter = filters.SliderSingleFilter('performanceN', u'Производительность:', 1, 5, 1,
+									labels = [u'Нормальная', u'Очень высокая'], description = descriptionPerformanceN, dss_function = performanceN_dss_function)
+
+def performanceC_cut_function(selected_values):
+	print 'performance', selected_values[0]
+	return 'cpu_frequency > ' + selected_values[0].split(';')[0]  + ' AND ' + 'cpu_frequency < ' + selected_values[0].split(';')[1]
+performanceCFilter = filters.SliderDoubleFilter('performanceC', u'Частота процессора:',1, 4, [2, 3], 
+											cut_function = performanceC_cut_function, 
+											dimension = u' ГГц', step = 0.1)
+
+performanceFilter = filters.TwoPartFilter('performance', cPart =  performanceCFilter, nPart =  performanceNFilter, defPart = 1)
+
+
+#----------------------------------------------------------------------------------------------------------------------------------------------------------
+#Required Parameters:
+texts = u"Wi-Fi модуль", u'Bluetooth', u'кардридер', u'ТВ-тюнер', u'звук 5.1', u'звук 7.1'
+values =  'wifi', 'bluetooth', 'media_web_camera', 'media_tv_tunner', 'media_sound_5', 'media_sound_7'
+def required_parameters_cut_function(selected_values):
+	filters = []
+	for s in selected_values:
+		filters.append('os LIKE "%' + s + '%"')
+	if len(filters) > 1: return '(' + ' OR '.join(filters) + ')'
+	return filters[0] if filters else '' 
+required_parameters = filters.CheckboxFilter('required_parameters', u'Я хочу чтоб обязательно был:', 
+									texts, values, type = "table",	cut_function = required_parameters_cut_function)
+
+
+#----------------------------------------------------------------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------------------------------------------------------
 
 #all filters to use at page:
-ALL_FILTERS = yesnoFilter, osFilter, ramFilter
+#ALL_FILTERS = TwoPartTestFilter, performanceNFilter, osFilterC, osFilterR, required_parameters
+ALL_FILTERS = deviceType, priceFilter, performanceFilter, required_parameters

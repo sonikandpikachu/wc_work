@@ -2,7 +2,40 @@
 <html lang = "ru-RU">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}"/>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/jslider.css') }}"/>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/jslider.single.css') }}"/>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/jquery.tooltip.css') }}"/>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/jquery.selectbox.css') }}"/>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/uniform.default.css') }}"/>
+
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery-1.7.2.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/jshashtable-2.1_src.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.numberformatter-1.2.3.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/tmpl.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.dependClass-0.1.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/draggable-0.1.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.slider.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.tooltip.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.selectbox-0.2.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.uniform.min.js') }}"></script>
+    <script type="text/javascript" charset="utf-8">
+      $(function(){
+        $("input, textarea, button").uniform();
+        $(function() {
+          $( "[title]" ).tooltip({
+            track: true,
+            delay: 0,
+            showURL: false,
+            showBody: " - ",
+            extraClass: "pretty",
+            fixPNG: true,
+            left: -120
+          });
+        });
+      });
+    </script>
 <title>What Computer</title>
 </head>
 
@@ -10,17 +43,55 @@
 <div id = "wrapper">
   <div id = "header"> <img src="{{ url_for('static', filename='img/main_header.jpg') }}" alt="What Computer"/> </div>
   <div id = "content">
-    <div id = "question"> 
-      <!-- <img src="{{ url_for('static', filename='img/tempImg.jpg') }}" alt="tempImgr"/> --> 
-       <form method = 'post' action = '/qa/'>
-          {% include 'filters.html' %}
-          <p><input type="submit"></p>
-       </form>  
-    </div>
-
-    {% include 'menu.html' %}
+    {% include 'menu.html' %}       
+    <form method = 'post' action = '/qa/'>
+      <ul id = "questions">
+        {% include 'filters.html' %}
+        <a href = "javascript:void(0)" id = "goButton" onclick="document.forms[0].submit();return false;"> <img src="{{ url_for('static', filename='img/greenButtons/wGoButton1.jpg') }}" alt="Далее" 
+                              onMouseOver="this.src='{{ url_for('static', filename='img/greenButtons/wGoButton2.jpg') }}'" 
+                              onMouseOut="this.src='{{ url_for('static', filename='img/greenButtons/wGoButton1.jpg') }}'"
+                              onMouseDown="this.src='{{ url_for('static', filename='img/greenButtons/wGoButton3.jpg') }}'"
+                              />  </a>
+      </ul> 
+    </form>
+    <a href = "#questions" id="trigger">Show/Hide</a>
+    <a href = "javascript:void(0)" id="ctrigger" style="
+    position: fixed;
+    left: 1px;
+    padding: 10px;
+    background:#fff;
+ 
+  border-radius:10px;
+  border-top: solid 2px #79E95D;  
+  border-bottom: solid 2px #79E95D;
+  border-right: solid 2px #79E95D;
+  -webkit-border-radius: 0 10px 10px 0;
+  -moz-border-radius: 0 10px 10px 0;
+  border-radius: 0 10px 10px 0;
+">C</a>
+    <script type="text/javascript" charset="utf-8"> 
+      $("#trigger").click( function(){        
+        $("#questions").slideToggle("middle");        
+      });
+       $("#ctrigger").click( function(){        
+        $(".console").slideToggle();        
+      }); 
+    </script>
+    <table  class = "console" style = "width: 100%">
+      
+                {% for col in dss_dict.iteritems()|slice(4) %}
+                   <tr style = "width: 100%">                    
+                    {%- for k , v in col -%}                    
+                        <td style = "padding-left: 20px;">
+                            {{ k }}&emsp;{{ v }}
+                        </td>                   
+                    {%- endfor -%}
+                    </tr>
+                {%- endfor -%}
+      
+    </table>    
     <ul id = "answerList">
-      {% for comp in computers %}
+     {% for comp in computers %}      
       <li class="answer">
         <div class = "image"> 
           <img src="{{ url_for('static', filename='img/computers/'+ comp.id +'_img/main.jpg') }}" alt = "Рисунок"/>
@@ -59,11 +130,11 @@
               </div>
             </li>
             <li>
-              <div class="paramName">Цена:</div>
-              <div class="paramValue"> {{ comp.price }}  </div>
+              <div class="paramName">Видеокарта:</div>
+              <div class="paramValue"> {{ comp.vga }}  </div>
               <div class="paramStars">
                 <div class="cover"></div>
-                <div class="progress" style="width: 0%;"></div>
+                <div class="progress" style="width: {{ comp.vga_dss }}%;"></div>
               </div>
             </li>
             <li>
@@ -87,6 +158,32 @@
                                 onMouseDown="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton3.jpg') }}'"
                                 /> </a> </li>
         </ul>
+        <table class = "console" style = "width: 100%">   
+                   <tr style = "width: 100%"> 
+                        <td style = "padding-left: 20px;">
+                          price&emsp;{{ comp.price_dss }}
+                        </td>
+                        <td style = "padding-left: 20px;">
+                          cpu&emsp;{{ comp.cpu_dss }}
+                        </td> 
+                        <td style = "padding-left: 20px;">
+                          vga&emsp;{{ comp.vga_dss }}
+                        </td>   
+                    </tr>
+                    <tr style = "width: 100%"> 
+                        <td style = "padding-left: 20px;">
+                          ram&emsp;{{ comp.ram_dss }}
+                        </td>
+                        <td style = "padding-left: 20px;">
+                          hdd&emsp;{{ comp.hdd_dss }}
+                        </td>   
+                        <td style = "padding-left: 20px;">
+                          <b>comp&emsp;{{ comp.id }}</b>
+                        </td>                         
+                    </tr>
+                
+      
+    </table>
       </li>
       {% endfor %} 
     </ul>

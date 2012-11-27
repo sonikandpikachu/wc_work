@@ -18,7 +18,9 @@ class Filter(object):
 	Parameters: 
 				ftype - deffines filters type for html macros. Usually this parameters defined in subclasses
 				name - unique name of filter
-				question - filter description
+				title - question title
+				description - question description (available like tooltip)
+				question - filter title
 				cut_function - function, returns string.
 				dss_function - function, returns dict.
 
@@ -35,13 +37,99 @@ class Filter(object):
 
 				For examples see settings.py 
 	'''
-	def __init__(self, ftype, name, description, cut_function = None, dss_function = None):
+	def __init__(self, ftype, name = "", title = "", style = "", description = None, cut_function = None,
+	    dss_function = None):
 		self.ftype = ftype
 		self.cut_function = cut_function
 		self.dss_function = dss_function
+		self.title = title
 		self.description = description
 		self.name = name
+		self.style = style
 
+	def get_answers(self, values): 
+		print 'VALUES sss', values   	
+		return self.dss_function(values.values()), self.cut_function(values.values())
+
+	def get_names(self):
+		return [self.name]
+
+
+class ContainerFilter(Filter):
+	"""Container for multifilter question"""
+
+	def __init__(self, children):
+		super(ContainerFilter, self).__init__('container')
+		self.children = children
+
+	def get_answers(self, values):
+		dss = {}
+		cut = []
+		for child in self.children:
+			values = dict( (key,values[key]) for key in values if key.split('_')[0] in child.get_names() )
+			dss.update(child.dss_function(values.values()))
+			cut.appand(child.cut_function(values.values()))
+			cutString = 'AND '.join(cut)
+		return dss, cutString
+
+	def get_names(self):
+		names = []
+		for child in children:
+			names += [child.get_names]
+		return names		
+
+
+
+class TwoPartFilter(Filter):
+	"""
+	TwoPart question
+
+	cPart - left
+	nPart - right
+
+	"""
+
+	def __init__(self, name, cPart, nPart, defPart = 0):
+		super(TwoPartFilter, self).__init__('twoPart', name)
+		self.cPart = cPart
+		self.nPart = nPart			
+		self.defPart = defPart
+	
+	def get_answers(self, values):
+		part = self.cPart if values[self.name + '_hi'] == u'0' else self.nPart
+		newvalues = {}
+		for key in values:
+			print 'VALUESSSSSSS', part.get_names(), key, key.split('_')[0] in part.get_names()
+			if key.split('_')[0] in part.get_names():
+				newvalues[key] = values[key]
+				print 'NEWVALUES', newvalues
+				dss = part.dss_function(newvalues.values()) if part.dss_function else {}
+				cut = part.cut_function(newvalues.values()) if part.cut_function else ''
+		return dss, cut
+
+
+	def get_names(self):
+		names = self.cPart.get_names()
+		names += self.nPart.get_names()
+		return names					
+
+
+class RadioFilter(Filter):
+	'''
+	Filter for radiobuttons. 
+	Parameters:
+		name, cut_function, dss_function - look class Filter
+		values - list or tuple of values which will be in html input 'values'. 
+		texts - list or tuple of text near checkbox(user see this text)
+		selected_value - list of selected values
+	'''
+	
+	def __init__(self, name, title, texts, values, selected_value = 0, description = None, style = "", type = "rows", cut_function = None, dss_function = None):
+		super(RadioFilter, self).__init__('radio', name, title, style, description, cut_function, dss_function)
+		self.texts = texts
+		self.values = values
+		self.selected_value = selected_value
+		self.type = type	
 
 class CheckboxFilter(Filter):
 	'''
@@ -53,29 +141,67 @@ class CheckboxFilter(Filter):
 		selected_values - list of selected values
 	'''
 	
-	def __init__(self, name, description, texts, values, selected_values, cut_function = None, dss_function = None):
-		super(CheckboxFilter, self).__init__('checkbox', name, description, cut_function, dss_function)
+	def __init__(self, name, title, texts, values, selected_values = None, description = None, style = "", type = "rows", cut_function = None, dss_function = None):
+		super(CheckboxFilter, self).__init__('checkbox', name, title, style, description, cut_function, dss_function)
 		self.texts = texts
 		self.values = values
 		self.selected_values = selected_values
+		self.type = type
 
-
-class SliderFilter(Filter):
+class SelectFilter(Filter):
 	'''
-	Filter for slider
+	Filter for select. (Default - select first value) 
+	Parameters:
+		name, cut_function, dss_function - look class Filter
+		values - list or tuple of values which will be in html input 'values'. 
+		texts - list or tuple of text near checkbox(user see this text)
+		selected_values - list of selected values
+	'''
+	
+	def __init__(self, name, title, texts, values, description = None, style = "", cut_function = None, dss_function = None):
+		super(SelectFilter, self).__init__('select', name, title, style, description, cut_function, dss_function)
+		self.texts = texts
+		self.values = values	
+
+class SliderDoubleFilter(Filter):
+	'''
+	Filter for double slider with heterogeneity (nonlinear scale)
+	Parameters:
+		name, cut_function, dss_function - look class Filter
+		min_value, max_value - minimum and maximum on the scale
+		start_values- initial values
+
+	'''
+
+	def __init__(self, name, title, min_value, max_value, start_values, 
+		description = None, style = "", cut_function = None, dss_function = None, 
+		heterogeneity = False, dimension = ' ', step = 1):
+		super(SliderDoubleFilter, self).__init__('sliderDouble', name, title, style, description, cut_function, dss_function)
+		self.min_value, self.max_value = min_value, max_value  
+		self.start_values = start_values
+		self.heterogeneity = heterogeneity
+		self.dimension = dimension
+		self.step = step	
+
+class SliderSingleFilter(Filter):
+	'''
+	Filter for single slider with ruled scale and labels
 	Parameters:
 		name, cut_function, dss_function - look class Filter
 		min_value, max_value - minimum and maximum on the scale
 		start_value - initial value
 	'''
 
-	def __init__(self, name, description, min_value, max_value, start_value, cut_function = None, dss_function = None):
-		super(SliderFilter, self).__init__('slider', name, description, cut_function, dss_function)
+	def __init__(self, name, title, min_value, max_value, start_value, 
+		labels = None, description = None, style = "", cut_function = None, 
+		dss_function = None, scale = '[0, 1, 2, 3, 4, 5]', dimension = ' ', step = 1):
+		super(SliderSingleFilter, self).__init__('sliderSingle', name, title, style, description, cut_function, dss_function)
 		self.min_value, self.max_value = min_value, max_value  
 		self.start_value = start_value
- 	
-
- 	
+		self.scale = scale
+		self.dimension = dimension
+		self.step = step
+		self.labels = labels			
 
 
 
