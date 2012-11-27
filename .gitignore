@@ -3,4 +3,6 @@ DB
 libs
 Comp elements
 venv
+data
+wcapp/static/img/computers/
 *.pyc
