@@ -12,7 +12,7 @@ def small_computers(computers_id, computers_dss):
 	prepare computer for QandA page
 	'''
 	dsses = db.session.query(sql.wc_DSS).filter(sql.wc_DSS.id.in_(computers_id)).all()
-	computers = db.session.query(sql.wc_Computer).filter(sql.wc_Computer.id.in_(computers_id)).all()
+	computers = [db.session.query(sql.wc_Computer).filter_by(id = cid).one() for cid in computers_id]
 	# Tut nado sdelat pravilnuy sortirovku (poka v computers_id - pravilno, a v computers - ne pravilno)
 	pretty_computers = []
 	for index, dss, computer in zip(range(len(dsses)), dsses, computers):
