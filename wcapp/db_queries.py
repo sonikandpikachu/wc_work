@@ -24,7 +24,7 @@ def sorted_computers_id (cut_values, dss_values):
     Cuts computers and sort them by dss
     Notice that we can put initial dss values to dss_dict
     '''
-    dss_dict = {'hdd' : 0.5, 'cpu' : 7, 'ram' : 7, 'vga' : 1, 'price' : -8}   
+    dss_dict = {'hdd' : 0.5, 'cpu' : 4, 'ram' : 3, 'vga' : 1, 'price' : -8}   
     for dss in dss_values: 
         for key in dss:
             dss_dict[key] += dss[key]

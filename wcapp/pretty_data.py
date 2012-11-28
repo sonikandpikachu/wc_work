@@ -11,17 +11,11 @@ def small_computers(computers_id, computers_dss):
 	'''
 	prepare computer for QandA page
 	'''
-	dsses = db.session.query(sql.wc_DSS).filter(sql.wc_DSS.id.in_(computers_id)).all()
+	dsses = [db.session.query(sql.wc_DSS).filter_by(id = cid).one() for cid in computers_id]
 	computers = [db.session.query(sql.wc_Computer).filter_by(id = cid).one() for cid in computers_id]
-	# Tut nado sdelat pravilnuy sortirovku (poka v computers_id - pravilno, a v computers - ne pravilno)
 	pretty_computers = []
-	for index, dss, computer in zip(range(len(dsses)), dsses, computers):
-		print str(computer.id), str(dss.id)
-		pretty_computer = {
-		#
-		#   A mozno mne peredat otdelno vse dostupnie dss vmeste spiskop
-		#	Toest chtob bilo i 'price_dss',vga_dss',... i  prosto spisok - dsses
- 		#
+	for index, dss, computer in zip(range(len(dsses)), dsses, computers):		
+		pretty_computer = {		
 			'id' : str(computer.id),
 			'name' : computer.name,
 			'dss' : computers_dss[index],
