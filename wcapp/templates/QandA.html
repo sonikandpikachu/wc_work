@@ -20,8 +20,9 @@
 <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.tooltip.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.selectbox-0.2.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.uniform.min.js') }}"></script>
-    <script type="text/javascript" charset="utf-8">
-      $(function(){
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.cookie.js') }}"></script>
+<script type="text/javascript" charset="utf-8">
+    $(function(){        
         $("input, textarea, button").uniform();
         $(function() {
           $( "[title]" ).tooltip({
@@ -35,6 +36,76 @@
           });
         });
       });
+      var qParams = new Array();      
+      function setValues(params, type)
+      {
+          var sliders = new Array();
+          var inputs = document.qForm.getElementsByTagName("input");
+               for (i = 0; i < inputs.length;i++){
+                if((inputs[i].type == "radio") || (inputs[i].type == "checkbox"))
+                                inputs[i].checked = false; 
+                            }          
+          for(key in params)
+            {              
+               var sKey = "#"+key;
+               if (params[key] == "checked") {
+                  $(sKey).attr("checked", true);                                                     
+               }else{               
+                 if (key.split('_')[1] == "hi")
+                 {
+                    if(params[key] == 1){                
+                      if (type == 'first') {$("#" + key.split('_')[0]).css('marginLeft','-800px');}
+                      else {$("#" + key.split('_')[0]).animate({ marginLeft: '-800px' }, 800);}
+                      $(sKey).val(1);
+                      $("#rArrow"+ key.split('_')[0]).hide();
+                      $("#lArrow"+ key.split('_')[0]).show();
+                    }
+                    else{
+                      if (type == 'first') {$("#" + key.split('_')[0]).css('marginLeft','0');}
+                      else {$("#" + key.split('_')[0]).animate({ marginLeft: '0' }, 800);}
+                      $(sKey).val(0);
+                      $("#lArrow"+ key.split('_')[0]).hide();
+                      $("#rArrow"+ key.split('_')[0]).show();
+                    } 
+                 }else{               
+                   var param = params[key].split(';');                   
+                   if (param.length > 1)
+                       $(sKey).slider("value", param[0], param[1]);
+                    else     
+                      $(sKey).slider("value", param[0]);                   
+                   sliders.push(sKey);
+                   }
+               }                      
+            }
+            $.uniform.update();
+            for (i = 0; i < sliders.length;i++){
+              $(sliders[i]).slider().update();
+            }            
+      }
+      function saveValues()
+      {         
+          var MyQParams = {};
+          var inputs = document.qForm.getElementsByTagName("input");
+          for (i = 0; i < inputs.length;i++){
+              if((inputs[i].type == "radio") || (inputs[i].type == "checkbox")){
+                if (inputs[i].checked == true)
+                    MyQParams[inputs[i].id]  = "checked";
+                }
+              else{
+                MyQParams[inputs[i].id] = inputs[i].value
+              }
+          }     
+          $.cookie('MyQParams', JSON.stringify(MyQParams));
+      }
+      function restoreValues(type)
+      {  
+          setValues(JSON.parse($.cookie('MyQParams')), type);          
+      }
+      function restoreDefValues()
+      {  
+          $.removeCookie('MyQParams');
+          setValues(qParams);          
+      }       
     </script>
 <title>What Computer</title>
 </head>
@@ -43,18 +114,19 @@
 <div id = "wrapper">
   <div id = "header"> <img src="{{ url_for('static', filename='img/main_header.jpg') }}" alt="What Computer"/> </div>
   <div id = "content">
-    {% include 'menu.html' %}       
-    <form method = 'post' action = '/qa/'>
+    {% include 'menu.html' %}         
+    <form method = 'post' action = '/qa/' name = "qForm">
       <ul id = "questions">
+        <a href = "javascript:void(0)" onclick="restoreDefValues()" id="defaultButton" >Востановить начальные значения</a>
         {% include 'filters.html' %}
-        <a href = "javascript:void(0)" id = "goButton" onclick="document.forms[0].submit();return false;"> <img src="{{ url_for('static', filename='img/greenButtons/wGoButton1.jpg') }}" alt="Далее" 
+        <a href = "javascript:void(0)" id = "goButton" onclick="saveValues();document.qForm.submit();return false;"> <img src="{{ url_for('static', filename='img/greenButtons/wGoButton1.jpg') }}" alt="Далее" 
                               onMouseOver="this.src='{{ url_for('static', filename='img/greenButtons/wGoButton2.jpg') }}'" 
                               onMouseOut="this.src='{{ url_for('static', filename='img/greenButtons/wGoButton1.jpg') }}'"
                               onMouseDown="this.src='{{ url_for('static', filename='img/greenButtons/wGoButton3.jpg') }}'"
                               />  </a>
       </ul> 
     </form>
-    <a href = "#questions" id="trigger">Show/Hide</a>
+    <a href = "#questions" id="trigger">Show/Hide</a>    
     <a href = "javascript:void(0)" id="ctrigger" style="
     position: fixed;
     left: 1px;
@@ -75,7 +147,12 @@
       });
        $("#ctrigger").click( function(){        
         $(".console").slideToggle();        
-      }); 
+      });
+      if ($.cookie('MyQParams') == null){
+        setValues(qParams, 'first');
+      }else{
+        restoreValues('first');
+      } 
     </script>
     <table  class = "console" style = "width: 100%">
       
@@ -107,7 +184,7 @@
           <ul class = "description">
             <li>
               <div class="paramName">Процессор:</div>
-              <div class="paramValue"> {{ comp.cpu_name }} , {{ comp.cpu_frequency }} Ггц</div>
+              <div class="paramValue"> {{ comp.cpu_name }} {{ comp.cpu_model }}, {{ comp.cpu_frequency }} Ггц</div>
               <div class="paramStars">
                 <div class="cover"></div>
                 <div class="progress" style="width: {{ comp.cpu_dss }}%;"></div>
@@ -131,7 +208,7 @@
             </li>
             <li>
               <div class="paramName">Видеокарта:</div>
-              <div class="paramValue"> {{ comp.vga }}  </div>
+              <div class="paramValue"> {{ comp.vga }} {{ comp.vga_amount }} </div>
               <div class="paramStars">
                 <div class="cover"></div>
                 <div class="progress" style="width: {{ comp.vga_dss }}%;"></div>

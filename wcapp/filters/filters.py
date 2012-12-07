@@ -48,8 +48,10 @@ class Filter(object):
 		self.style = style
 
 	def get_answers(self, values): 
-		print 'VALUES sss', values   	
-		return self.dss_function(values.values()), self.cut_function(values.values())
+		print 'VALUES sss', values
+		dss = self.dss_function(values.values()) if self.dss_function else {}
+		cut = self.cut_function(values.values()) if self.cut_function else ''   	
+		return dss, cut
 
 	def get_names(self):
 		return [self.name]
@@ -67,8 +69,8 @@ class ContainerFilter(Filter):
 		cut = []
 		for child in self.children:
 			values = dict( (key,values[key]) for key in values if key.split('_')[0] in child.get_names() )
-			dss.update(child.dss_function(values.values()))
-			cut.appand(child.cut_function(values.values()))
+			if child.dss_function: dss.update(child.dss_function(values.values())) 
+			if child.cut_function: cut.appand(child.cut_function(values.values()))	
 			cutString = 'AND '.join(cut)
 		return dss, cutString
 
@@ -98,11 +100,9 @@ class TwoPartFilter(Filter):
 	def get_answers(self, values):
 		part = self.cPart if values[self.name + '_hi'] == u'0' else self.nPart
 		newvalues = {}
-		for key in values:
-			print 'VALUESSSSSSS', part.get_names(), key, key.split('_')[0] in part.get_names()
+		for key in values:			
 			if key.split('_')[0] in part.get_names():
-				newvalues[key] = values[key]
-				print 'NEWVALUES', newvalues
+				newvalues[key] = values[key]				
 				dss = part.dss_function(newvalues.values()) if part.dss_function else {}
 				cut = part.cut_function(newvalues.values()) if part.cut_function else ''
 		return dss, cut

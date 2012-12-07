@@ -101,21 +101,21 @@ TwoPartTestFilter = filters.TwoPartFilter('TwoPartTest', cPart =  containerTestF
 #Type:
 texts = u"Компьютер", u'Ноутбук', u'Планшет', u'еще не знаю'
 values =  'computer', 'notebook', 'tablet', "all"
-def type_cut_function(selected_values):	
+def type_cut_function(selected_values):		
 	acceptTypes = []
 	for s in selected_values:
 		if s == 'computer' : acceptTypes.extend([u"неттоп", u"моноблок", u"игровой", u"настольный" , u"настольный / с монитором /"])
-		if s == 'notebook': acceptTypes.extend([u"ноутбук"])
-		if s == 'tablet': acceptTypes.extend([u"планшет"])
+		if s == 'notebook': acceptTypes.extend([u"ноутбук", u"нетбук", u"ультрабук", u"трансформер"])
+		if s == 'tablet': acceptTypes.extend([u"ноутбук"])
 		if s == 'all': acceptTypes.extend([u"неттоп", u"моноблок", u"игровой", u"настольный" , u"настольный / с монитором /", u"ноутбук", \
-									u"планшет"])
+									u"нетбук", u"ультрабук", u"трансформер"])
 	filters = []	
 	for aT in acceptTypes:		 
-			filters.append('os LIKE "%' + aT + '%"')
-	if len(filters) > 1: return '(' + ' OR '.join(filters) + ')'
+			filters.append('type LIKE "%' + aT + '%"')
+	if len(filters) > 1: return '(' + ' OR '.join(filters) + ')'	
 	return filters[0] if filters else '' 
-deviceType = filters.RadioFilter('required_parameters', u'Я хочу ...', 
-									texts, values, cut_function = type_cut_function)
+deviceType = filters.RadioFilter('type', u'Я хочу ...', 
+									texts, values, selected_value = 3,cut_function = type_cut_function)
 
 
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -167,16 +167,21 @@ performanceFilter = filters.TwoPartFilter('performance', cPart =  performanceCFi
 
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
 #Required Parameters:
-texts = u"Wi-Fi модуль", u'Bluetooth', u'кардридер', u'ТВ-тюнер', u'звук 5.1', u'звук 7.1'
+texts = u"Wi-Fi", u'Bluetooth', u'кардридер', u'ТВ-тюнер', u'звук 5.1', u'звук 7.1'
 values =  'wifi', 'bluetooth', 'media_web_camera', 'media_tv_tunner', 'media_sound_5', 'media_sound_7'
 def required_parameters_cut_function(selected_values):
 	filters = []
 	for s in selected_values:
-		filters.append('os LIKE "%' + s + '%"')
-	if len(filters) > 1: return '(' + ' OR '.join(filters) + ')'
+		if s == 'media_sound_5': filters.append('media_sound = 5.1')
+		if s == 'media_sound_7': filters.append('media_sound = 7.1')
+		if s == 'wifi': filters.append('network LIKE "%' + 'Wi-Fi'+ '%"')
+		if s == 'bluetooth': filters.append('network LIKE "%' + 'Bluetooth' + '%"')
+		if s == 'media_tv_tunner': filters.append('media_tv_tunner = 1')
+		if s == 'media_web_camera': filters.append('media_web_camera = 1')
+	if len(filters) > 1: return ' AND '.join(filters)
 	return filters[0] if filters else '' 
 required_parameters = filters.CheckboxFilter('required_parameters', u'Я хочу чтоб обязательно был:', 
-									texts, values, type = "table",	cut_function = required_parameters_cut_function)
+									texts, values, type = "table", selected_values = [0, 1, 2], cut_function = required_parameters_cut_function)
 
 
 #----------------------------------------------------------------------------------------------------------------------------------------------------------

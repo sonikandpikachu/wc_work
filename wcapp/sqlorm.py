@@ -110,7 +110,7 @@ class wc_Computer(db.Model):
 
     def __init__(self, id =None, chipset=None, color=None, cpu_frequency=None, cpu_kernel_count=None, cpu_model=None,
         cpu_name=None, display_brightness=None, display_diagonal=None, display_led_backlight=None, display_sensor=None,
-        disply_resolution=None, hdd_capacity=None, hdd_cell=None, hdd_speed=None, hdd_type=None, height=None,
+        display_resolution=None, hdd_capacity=None, hdd_cell=None, hdd_speed=None, hdd_type=None, height=None,
         jacks=None, length=None, material=None, media_builtin_dinamics=None, media_jacks3=None, media_microphone=None, 
         media_remote=None, media_sound=None, media_tv_tunner=None, media_web_camera=None, name=None, network=None, 
         os=None, panel_audio=None, panel_cardreader=None, panel_cell3=None, panel_cell5=None, panel_digital_display=None, 
@@ -139,7 +139,7 @@ class wc_Computer(db.Model):
         self.display_diagonal=display_diagonal
         self.display_led_backlight=display_led_backlight
         self.display_sensor=display_sensor
-        self.disply_resolution=disply_resolution
+        self.display_resolution=display_resolution
         self.hdd_capacity=hdd_capacity
         self.hdd_cell=hdd_cell
         self.hdd_speed=hdd_speed

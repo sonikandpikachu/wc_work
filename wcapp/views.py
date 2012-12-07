@@ -16,7 +16,7 @@ import pretty_data
 import db_queries
 
 #move to html settings
-COMPUTERS_ON_PAGE = 10
+COMPUTERS_ON_PAGE = 3
 
 @app.route('/')
 def first():
@@ -28,13 +28,13 @@ def second():
     #getting computers id:
     if request.method == 'POST': 
         computers_id, computers_dss, dss_dict = filtered_computers_id(ALL_FILTERS, request.form)
-        session['computers_id'], session['computers_dss'] = computers_id, computers_dss
-    else:
-        if 'computers_id' in session and 'computers_dss' in session:
-            computers_id, computers_dss = session['computers_id'], session['computers_dss']
+        session['computers_id'], session['computers_dss'], session['dss_dict'] = computers_id, computers_dss, dss_dict
+    else:        
+        if 'computers_id' in session and 'computers_dss' in session and 'dss_dict' in session:
+            computers_id, computers_dss, dss_dict = session['computers_id'], session['computers_dss'], session['dss_dict']
         else:
             computers_id, computers_dss, dss_dict  = db_queries.sorted_computers_id([], [])#list of all sorted computers
-            session['computers_id'], session['computers_dss'] = computers_id, computers_dss
+            session['computers_id'], session['computers_dss'], session['dss_dict'] = computers_id, computers_dss, dss_dict
     #print 'COMPUTERS_ID AND DSS:', zip(computers_id, computers_dss)
     #pagination test(if bad or wrong page)
     #print 'dss_dict', dss_dict
