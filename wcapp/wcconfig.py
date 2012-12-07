@@ -12,7 +12,7 @@ from flask.ext.sqlalchemy import SQLAlchemy
 DATABASE = 'mysql://'
 USERNAME = 'root'
 PASSWORD = 'wcomp'
-HOST = '127.0.0.1:3307'
+HOST = '127.0.0.1:3306'
 DB_SCHEME = 'wc'
 SQLALCHEMY_DATABASE_URI = DATABASE + USERNAME + ':' + PASSWORD + '@' + HOST + '/' + DB_SCHEME + '?charset=utf8'
 

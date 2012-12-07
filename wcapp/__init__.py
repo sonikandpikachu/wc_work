@@ -12,6 +12,8 @@ import support.utf8_converter
 
 support.utf8_converter.setup_console()
 
+
+
 # #inserting dss values:
 # computers = sqlorm.wc_Computer.query.all()
 
@@ -44,13 +46,15 @@ support.utf8_converter.setup_console()
 
 # print len(sqlorm.wc_Computer.query.all())
 
-#inserting computers:
+# #updating computers:
 pkl_notebooks = ptd.computers("../data/computers", 'support/config/computers.config')
 for c in pkl_notebooks:
-    print c['url'], c['network']
-#     sqlcomp = sqlorm.wc_Computer(**c)
-#     db.session.add(sqlcomp)
-# db.session.commit()
+    id = c['id']
+
+    if id == '147': print c['name'], c['cpu_frequency'], c['vga_model']
+    # del c['id']
+    # db.session.query(sqlorm.wc_Computer).filter_by(id = id).update(c)
+db.session.commit()
 
 # #inserting shops:
 # pkl_shops = ptd.shops("../data/notebooks", "Устройство.магазины")

@@ -47,8 +47,7 @@ class Filter(object):
 		self.name = name
 		self.style = style
 
-	def get_answers(self, values): 
-		print 'VALUES sss', values   	
+	def get_answers(self, values):   	
 		return self.dss_function(values.values()), self.cut_function(values.values())
 
 	def get_names(self):
@@ -99,10 +98,8 @@ class TwoPartFilter(Filter):
 		part = self.cPart if values[self.name + '_hi'] == u'0' else self.nPart
 		newvalues = {}
 		for key in values:
-			print 'VALUESSSSSSS', part.get_names(), key, key.split('_')[0] in part.get_names()
 			if key.split('_')[0] in part.get_names():
 				newvalues[key] = values[key]
-				print 'NEWVALUES', newvalues
 				dss = part.dss_function(newvalues.values()) if part.dss_function else {}
 				cut = part.cut_function(newvalues.values()) if part.cut_function else ''
 		return dss, cut

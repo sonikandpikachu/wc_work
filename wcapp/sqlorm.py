@@ -23,7 +23,7 @@ class wc_Computer(db.Model):
     display_led_backlight = db.Column(db.Boolean)
     display_sensor = db.Column(db.Boolean)
     display_resolution = db.Column(db.String(20))
-    hdd_capacity = db.Column(db.Integer)
+    hdd_capacity = db.Column(db.String(100))
     hdd_cell = db.Column(db.Integer)
     hdd_speed = db.Column(db.Integer)
     hdd_type = db.Column(db.String(30))

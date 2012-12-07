@@ -16,7 +16,7 @@ def small_computers(computers_id, computers_dss):
 	# Tut nado sdelat pravilnuy sortirovku (poka v computers_id - pravilno, a v computers - ne pravilno)
 	pretty_computers = []
 	for index, dss, computer in zip(range(len(dsses)), dsses, computers):
-		print str(computer.id), str(dss.id)
+		# print str(computer.id), str(dss.id)
 		pretty_computer = {
 		#
 		#   A mozno mne peredat otdelno vse dostupnie dss vmeste spiskop

@@ -12,9 +12,9 @@ def _cutted_computers_id (cut_values):
     '''
     Gets result of filters cut_function as list. Returns ids of filtered computers
     '''
-    print cut_values
+    # print cut_values
     cut_string = ' AND '.join(cut_values)
-    print 'CUT STRING', cut_string
+    # print 'CUT STRING', cut_string
     computers_id = db.session.query(sql.wc_Computer.id).filter(cut_string).all()
     return tuple(int(comp[0]) for comp in computers_id)
 
@@ -34,8 +34,8 @@ def sorted_computers_id (cut_values, dss_values):
     computers_dss = {}#dict of id and dss for each computers
     for sqldss in sqldsses:
         computers_dss[sqldss.id] = sum([sqldss.__dict__[key] * dss_dict[key] for key in dss_dict.iterkeys()])
-        if sqldss.id == 97: print computers_dss[sqldss.id],sqldss.id
-        if sqldss.id == 98: print computers_dss[sqldss.id],sqldss.id
+        # if sqldss.id == 97: print computers_dss[sqldss.id],sqldss.id
+        # if sqldss.id == 98: print computers_dss[sqldss.id],sqldss.id
     _min, _max = min(computers_dss.values()), max(computers_dss.values())
     computers_dss = sorted(computers_dss.iteritems(), key=operator.itemgetter(1), reverse = True)#sorting by values, gets list of tuples
     return tuple(cd[0] for cd in computers_dss), tuple((cd[1] - _min)*100/(_max - _min) for cd in computers_dss), dss_dict
@@ -76,9 +76,19 @@ def __dss_values_to_db():
     sheet_names = wbk.sheet_names()
     for name in sheet_names:
         sheet = wbk.sheet_by_name(name)
-        column_names = dict( (row_value, i) for i, row_value in enumerate(sheet.row_values(0))) 
-        assert 'url' in column_names and 'dss' in column_names, 'dss or url isn`t defined in sheet ' + name
-        urls = [column_name.strip() for column_name in column_names['url']]
+        column_names = dict((row_value,i) for i, row_value in enumerate(sheet.row_values(0)))
+        # print 'column_names', column_names
+        assert 'id' in column_names,'dss or url isn`t defined in sheet ' + name
+        for nrow in range(1, sheet.nrows):
+            row_values = sheet.row_values(nrow)
+            ids = [int(rv.strip()) for rv in row_values[column_names['id']].split(',')]
+            for id in ids:
+                xlscomp = dict((cn, row_values[column_names[cn]]) for cn in column_names if not cn in ('Passmark G3D Mark', 'id'))
+                if 'vga_amount' in xlscomp and not xlscomp['vga_amount']: del xlscomp['vga_amount']
+                db.session.query(sql.wc_Computer).filter_by(id = id).update(xlscomp)
+            db.session.commit()
+            print nrow
+
 
 #for development only
 def __write_prices():
@@ -90,7 +100,7 @@ def __write_prices():
 
 
 if __name__ == '__main__':
-    __write_prices()
+    __dss_values_to_db()
     # print  db.session.query(sql.wc_Computer.id).filter('os like "%mac%"').all()
     # print sorted_computers_id([], [{'hdd' : 1, 'cpu' : 3}])
     # __values_for_dss()
