@@ -7,12 +7,12 @@ import operator
 import sqlorm as sql
 from wcconfig import db
 
-def small_computers(computers_id, computers_dss):
+def small_computers(computers_id, computers_dss, dbwrapper):
 	'''
 	prepare computer for QandA page
 	'''
-	dsses = [db.session.query(sql.wc_DSS).filter_by(id = cid).one() for cid in computers_id]
-	computers = [db.session.query(sql.wc_Computer).filter_by(id = cid).one() for cid in computers_id]
+	dsses = dbwrapper.dss_by_id(computers_id)
+	computers = dbwrapper.parameters_by_id(computers_id)
 	pretty_computers = []
 	for index, dss, computer in zip(range(len(dsses)), dsses, computers):		
 		pretty_computer = {
@@ -38,4 +38,19 @@ def small_computers(computers_id, computers_dss):
 		}
 		pretty_computers.append(pretty_computer)
 	return pretty_computers 
+
+#I think this function code is bad, but no ideas how to make it better :( 
+def pagination_pages(current_page, last_page):
+    pages = set((1,2,current_page-1,current_page,current_page+1,last_page-1,last_page))
+    if 0 in pages: pages.remove(0)
+    if last_page+1 in pages: pages.remove(last_page+1)
+    pages = list(pages)
+    pages.sort()
+    pagination_pages = []
+    for i in range(len(pages)-1):
+        pagination_pages.append(pages[i])
+        if pages[i]+1 != pages[i+1]:
+            pagination_pages.append('...')
+    pagination_pages.append(pages[-1])
+    return pagination_pages
 

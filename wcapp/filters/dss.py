@@ -3,7 +3,8 @@
 Created on Sep 30, 2012
 
 @author: Pavel
-This module works with dss weights and values.  
+This module works with dss weights and values.
+DEPRECATED!!!  
 '''
 
 DSS_WEIGHTS = {'CPU' : 1, 'RAM' : 0.8, 'VGA' : 0.9, 'Battery' : 0.5, 'HD' : 0.7, 'ODD' : 0.1, 'OS' : 0.2}
