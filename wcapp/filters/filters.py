@@ -47,6 +47,7 @@ class Filter(object):
 		self.name = name
 		self.style = style
 
+
 	def get_answers(self, values): 
 		print 'VALUES sss', values
 		dss = self.dss_function(values.values()) if self.dss_function else {}

@@ -5,6 +5,7 @@ Created on Sep 18, 2012
 @author: Pavel
 '''
 import operator
+import sys
 
 from sqlorm import *
 from flask import Flask, render_template, request, abort, redirect, url_for, session
@@ -20,76 +21,62 @@ COMPUTERS_ON_PAGE = 3
 
 @app.route('/')
 def first():
-    return render_template('index.html', name = request.method) 
+    return render_template('index.html') 
     
     
 @app.route('/qa/', methods=['POST', 'GET'])
 def second():
+    #need to set this parameter bases on users choose
+    dbwrapper = db_queries.DBWrapper('computer')
     #getting computers id:
     if request.method == 'POST': 
-        computers_id, computers_dss, dss_dict = filtered_computers_id(ALL_FILTERS, request.form)
-        session['computers_id'], session['computers_dss'], session['dss_dict'] = computers_id, computers_dss, dss_dict
-    else:        
-        if 'computers_id' in session and 'computers_dss' in session and 'dss_dict' in session:
-            computers_id, computers_dss, dss_dict = session['computers_id'], session['computers_dss'], session['dss_dict']
+        computers_id, computers_dss, dss_dict = filtered_computers_id(ALL_FILTERS, request.form, dbwrapper)
+        if 'user_id' in session: 
+            dbwrapper.delete_user(session['user_id'])
+            del session['user_id']
+        user_id = dbwrapper.add_user(computers_id, computers_dss)
+        session['user_id'] = user_id
+    else:
+        if 'user_id' in session:
+            user = dbwrapper.get_user(session['user_id'])
+            computers_id, computers_dss = user.computers_id, user.computers_dss
+            dss_dict = {}#????
         else:
-            computers_id, computers_dss, dss_dict  = db_queries.sorted_computers_id([], [])#list of all sorted computers
-            session['computers_id'], session['computers_dss'], session['dss_dict'] = computers_id, computers_dss, dss_dict
-    #print 'COMPUTERS_ID AND DSS:', zip(computers_id, computers_dss)
-    #pagination test(if bad or wrong page)
-    #print 'dss_dict', dss_dict
+            computers_id, computers_dss, dss_dict  = [], [], {}#nothing to return 
+    
+    #pagination test(if bad or wrong page) - REWRITE!!!
     last_page = int(round(len(computers_id) / COMPUTERS_ON_PAGE + 0.49))
-    #TODO: rewrite
     try:
         page = int(request.args.get('page', '')) if 'page' in request.args else 1
     except ValueError:
         abort(404)
-    if page > last_page or page < 1:
-        abort(404)
- 
+    # if page > last_page or page < 1:
+    #     abort(404)
+
     first_comp_index = (page-1)*COMPUTERS_ON_PAGE
     last_comp_index = min(page*COMPUTERS_ON_PAGE, len(computers_id))
     computers_id_on_page = computers_id[first_comp_index : last_comp_index]    
     computers_dss_on_page = computers_dss[first_comp_index : last_comp_index]
-    print computers_id_on_page
-    print computers_dss_on_page
-    pretty_computers = pretty_data.small_computers(computers_id_on_page, computers_dss_on_page)
+
+    pretty_computers = pretty_data.small_computers(computers_id_on_page, computers_dss_on_page, dbwrapper)
 
     return render_template('QandA.html', computers = pretty_computers, filters = ALL_FILTERS,
-        current_page = page, pagination_pages = _get_pagination_pages(page, last_page), dss_dict = dss_dict)
+        current_page = page, pagination_pages = pretty_data.pagination_pages(page, last_page), dss_dict = dss_dict)
 
 
-def filtered_computers_id(filters, form):
+def filtered_computers_id(filters, form, dbwrapper):
     '''
     Gets parameters from request form, executes filters functions and finally returns filtered computers id
     '''
-    print 'FORM:', form
+    #choosing with what device we are working
     dss_values, cut_values = [], []
     for filt in filters:
         values_dict = dict((key,form[key]) for key in form if key.startswith(filt.name))
-        print 'NAME: ', filt.name, "values_dict", values_dict
         if values_dict:
             dss, cut = filt.get_answers(values_dict)
             if dss: dss_values.append(dss)
             if cut: cut_values.append(cut)
-    print 'VALUES:', dss_values, cut_values
-    return db_queries.sorted_computers_id(cut_values, dss_values)
-
-
-#TODO: move to pretty_data module
-def _get_pagination_pages(current_page, last_page):
-    pages = set((1,2,current_page-1,current_page,current_page+1,last_page-1,last_page))
-    if 0 in pages: pages.remove(0)
-    if last_page+1 in pages: pages.remove(last_page+1)
-    pages = list(pages)
-    pages.sort()
-    pagination_pages = []
-    for i in range(len(pages)-1):
-        pagination_pages.append(pages[i])
-        if pages[i]+1 != pages[i+1]:
-            pagination_pages.append('...')
-    pagination_pages.append(pages[-1])
-    return pagination_pages
+    return dbwrapper.sorted_computers_id(cut_values, dss_values)
 
  
 if __name__ == '__main__':

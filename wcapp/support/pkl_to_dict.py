@@ -62,8 +62,10 @@ def _parse(parser, value):
     repart = parser.split('$')[0].strip()
     parsed = re.findall(repart, value)
     index = int(parser.split('$')[1].strip()) if '$' in parser else 0
-    try: return parsed[index]
-    except: return None 
+    try: 
+        return parsed[index]
+    except:
+        return None 
 
 
 def _computer(pkl_computer, config_lines):

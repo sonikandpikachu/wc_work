@@ -23,7 +23,7 @@ class wc_Computer(db.Model):
     display_led_backlight = db.Column(db.Boolean)
     display_sensor = db.Column(db.Boolean)
     display_resolution = db.Column(db.String(20))
-    hdd_capacity = db.Column(db.Integer)
+    hdd_capacity = db.Column(db.String(100))
     hdd_cell = db.Column(db.Integer)
     hdd_speed = db.Column(db.Integer)
     hdd_type = db.Column(db.String(30))
@@ -64,49 +64,9 @@ class wc_Computer(db.Model):
     weight = db.Column(db.Float)
     width = db.Column(db.Float)
     price = db.Column(db.Float)
-    battery_charging_time = db.Column(db.Float)
-    battery_work_time = db.Column(db.Float)
-    battery_capacity = db.Column(db.Float)
-    battery_cells = db.Column(db.Float)
-    battery_voltage = db.Column(db.Float)
-    system_bus = db.Column(db.Float)
-    vga_number = db.Column(db.String(150))
-    vga_memory_type = db.Column(db.String(50))
-    display_light_sensor = db.Column(db.Boolean)
-    display_contrast = db.Column(db.String(50))
-    display_rotation = db.Column(db.Boolean)
-    display_multitouch = db.Column(db.Boolean)
-    display_cover = db.Column(db.String(150))
-    display_gorilla_glass = db.Column(db.Boolean)
-    display_matrix = db.Column(db.String(50))
-    com_g3 = db.Column(db.Boolean)
-    com_bluetooth = db.Column(db.Boolean)
-    com_dialup = db.Column(db.Boolean)
-    com_nfs = db.Column(db.Boolean)
-    com_widi = db.Column(db.Boolean)
-    com_wifi = db.Column(db.String(150))
-    com_wimax = db.Column(db.Boolean)
-    com_slot = db.Column(db.Boolean)
-    com_slot_type = db.Column(db.String(100))
-    hdd_raid = db.Column(db.Boolean)
-    hdd_free_fall = db.Column(db.Boolean)
-    hdd_capacity2 = db.Column(db.String(150))
-    waterproof = db.Column(db.String(150))
-    shell = db.Column(db.String(150))
-    completeness = db.Column(db.String(100))
-    doc_station_connection = db.Column(db.Boolean)
-    shockproof = db.Column(db.String(150))
-    ram_max = db.Column(db.Integer)
-    ram_standart = db.Column(db.String(150))
-    panel_bluraydrive = db.Column(db.Boolean)
-    cpu_cash2 = db.Column(db.Integer)
-    cpu_cash3 = db.Column(db.Integer)
-    testvga_3dmark = db.Column(db.Integer)
-    testvga_3dmark06 = db.Column(db.Integer)
-    testcpu_3dmark06 = db.Column(db.Integer)
-    testcpu_passmark = db.Column(db.Integer)
-    testcpu_super = db.Column(db.Float)
-    web_camera = db.Column(db.String(100))
+    testcpu_passmark = db.Column(db.Float)
+    testvga_3dmark06 = db.Column(db.Float)
+
 
     def __init__(self, id =None, chipset=None, color=None, cpu_frequency=None, cpu_kernel_count=None, cpu_model=None,
         cpu_name=None, display_brightness=None, display_diagonal=None, display_led_backlight=None, display_sensor=None,
@@ -117,18 +77,7 @@ class wc_Computer(db.Model):
         panel_drive=None, panel_usb2=None, panel_usb3=None, pb_power=None, ps2=None, 
         ram_amount=None, ram_frequency=None, ram_jacks=None, ram_type=None, thunderbolt=None, type=None, url=None, 
         vga_amount=None, vga_model=None, vga_type=None, weight=None, width=None, price = None,
-        battery_charging_time=None, battery_work_time=None, battery_capacity=None, battery_cells=None,
-        battery_voltage=None,
-        system_bus=None, vga_number=None, vga_memory_type=None, display_light_sensor=None,
-        display_contrast=None, display_rotation=None, display_multitouch=None,
-        display_cover=None, display_gorilla_glass=None, display_matrix=None,
-        com_g3=None, com_bluetooth=None, com_dialup=None, com_nfs=None, com_widi=None,
-        com_wifi=None, com_wimax=None, com_slot=None, com_slot_type=None, hdd_raid=None,
-        hdd_free_fall=None, hdd_capacity2=None, waterproof=None, shell=None, completeness=None,
-        doc_station_connection=None, shockproof=None, ram_max=None, ram_standart=None,
-        panel_bluraydrive=None, cpu_cash2=None, cpu_cash3=None,
-        testvga_3dmark=None, testvga_3dmark06=None, testcpu_3dmark06=None, testcpu_passmark=None, 
-        testcpu_super=None, web_camera=None):
+        testcpu_passmark = None, testvga_3dmark06=None):
         self.chipset=chipset
         self.color=color
         self.cpu_frequency=cpu_frequency
@@ -165,8 +114,6 @@ class wc_Computer(db.Model):
         self.panel_digital_display=panel_digital_display
         self.panel_drive=panel_drive
         self.panel_usb2=panel_usb2
-        self.panel_usb2=panel_usb2
-        self.panel_usb3=panel_usb3
         self.panel_usb3=panel_usb3
         self.pb_power=pb_power
         self.ps2=ps2
@@ -183,49 +130,8 @@ class wc_Computer(db.Model):
         self.weight=weight
         self.width=width
         self.price = price
-        self.battery_charging_time=battery_charging_time
-        self.battery_capacity=battery_capacity
-        self.battery_cells=battery_cells
-        self.battery_work_time=battery_work_time
-        self.battery_voltage=battery_voltage
-        self.system_bus=system_bus
-        self.vga_number=vga_number
-        self.vga_memory_type=vga_memory_type
-        self.display_light_sensor=display_light_sensor
-        self.display_contrast=display_contrast
-        self.display_rotation=display_rotation
-        self.display_multitouch=display_multitouch
-        self.display_cover=display_cover
-        self.display_gorilla_glass=display_gorilla_glass
-        self.display_matrix=display_matrix
-        self.com_g3=com_g3
-        self.com_bluetooth=com_bluetooth
-        self.com_dialup=com_dialup
-        self.com_nfs=com_nfs
-        self.com_widi=com_widi
-        self.com_wifi=com_wifi
-        self.com_wimax=com_wimax
-        self.com_slot=com_slot
-        self.com_slot_type=com_slot_type
-        self.hdd_raid=hdd_raid
-        self.hdd_free_fall=hdd_free_fall
-        self.hdd_capacity2=hdd_capacity2
-        self.waterproof=waterproof
-        self.shell=shell
-        self.completeness=completeness
-        self.doc_station_connection=doc_station_connection
-        self.shockproof=shockproof
-        self.ram_max=ram_max
-        self.ram_standart=ram_standart
-        self.panel_bluraydrive=panel_bluraydrive
-        self.cpu_cash2=cpu_cash2
-        self.cpu_cash3=cpu_cash3
-        self.testvga_3dmark=testvga_3dmark
-        self.testvga_3dmark06=testvga_3dmark06
-        self.testcpu_3dmark06=testcpu_3dmark06
-        self.testcpu_passmark=testcpu_passmark
-        self.testcpu_super=testcpu_super
-        self.web_camera=web_camera
+        self.testcpu_passmark = testcpu_passmark
+        self.testvga_3dmark06 = testvga_3dmark06
         if id: self.id = id
 
 
@@ -263,8 +169,8 @@ class wc_Shop(db.Model):
         if id: self.id = id
 
 #wc_dss.id == wc_computer.id 
-class wc_DSS(db.Model):
-    __tablename__ = 'wc_DSS'
+class wc_ComputerDSS(db.Model):
+    __tablename__ = 'wc_CompDSS'
 
     id = db.Column(db.Integer, primary_key=True)
     hdd = db.Column(db.Float)
@@ -297,8 +203,18 @@ class wc_DSS(db.Model):
         self.network = network
         self.material = material
         self.price = price
-        if id: self.id = id
+        
 
+class wc_User(db.Model):
+    __tablename__ = 'wc_User'
+    id = db.Column(db.Integer, primary_key=True)
+    computers_id = db.Column(db.PickleType)
+    computers_dss = db.Column(db.PickleType)
+
+    def __init__(self, id = None, computers_id = None, computers_dss = None):
+        self.computers_dss = computers_dss
+        self.computers_id = computers_id
+        if id: self.id = id
 
 
 def add_computers(computers):
