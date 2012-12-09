@@ -142,8 +142,8 @@ def __update_auto_dss():
     allprices = [comp.price for comp in computers if comp.price > 0]
     allrams = [comp.ram_amount for comp in computers if comp.ram_amount]
     allhdd = [comp.hdd_capacity for comp in computers if comp.hdd_capacity]
-    allcpu = [comp.testcpu_passmark for comp in computers if comp.testcpu_passmark]
-    allvga = [comp.testvga_3dmark06 for comp in computers if comp.vga_amount] 
+    allcpu = [comp.testcpu_passmark**0.25 for comp in computers if comp.testcpu_passmark]
+    allvga = [comp.testvga_3dmark06**0.25 for comp in computers if comp.vga_amount] 
 
     pricemin, pricemax = min(allprices), max(allprices)
     rammin, rammax = min(allrams), max(allrams)
@@ -156,15 +156,15 @@ def __update_auto_dss():
             'ram' : 100*(comp.ram_amount - rammin) / (rammax - rammin) if comp.ram_amount else 0,
             'price' : 100*(comp.price - pricemin) / (pricemax - pricemin) if comp.price > 0 else 0,
             # 'hdd' : 100*(comp.hdd_capacity - hddmin)  / (hddmax - hddmin) if comp.hdd_capacity.replace('-','') else 0,
-            'cpu' : round(100*(comp.testcpu_passmark - cpumin) / (cpumax - cpumin)) if comp.testcpu_passmark else 0,
-            'vga' : round(100*(comp.testvga_3dmark06 - vgamin) / (vgamax - vgamin)) if comp.testvga_3dmark06 else 0
+            'cpu' : round(80*(comp.testcpu_passmark**0.25 - cpumin) / (cpumax - cpumin) + 20) if comp.testcpu_passmark else 0,
+            'vga' : round(80*(comp.testvga_3dmark06**0.25 - vgamin) / (vgamax - vgamin) + 20) if comp.testvga_3dmark06 else 0
         }
         db.session.query(workdss).filter_by(id = comp.id).update(values)
     db.session.commit()
 
 
-# if __name__ == '__main__':
-#     __update_auto_dss()
+if __name__ == '__main__':
+    __update_auto_dss()
     # __insert_prices()
     # __insert_shops()
     # __insert_concdevices()

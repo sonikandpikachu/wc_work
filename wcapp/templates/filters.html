@@ -2,16 +2,20 @@
    <p class = "qText">{{ title }} {% if description %}<a href="javascript:void(0)" title="{{ description|e }}"> ?</a> {% endif %}</p>
 {%- endmacro %}
 
-{% macro checkbox(title, name, texts, values, selected_values, description, style, type) -%}
+{% macro checkbox(title, name, texts, values, selected_values, description, style, type) -%}          
           <div class="question question-checkbox {{ type }}" style = "{{ style }}">       
             {{ titlePart(title, description) }}
             {% if type != 'table' %}  
                 {% for i in range(values|length) %}
                 <label>
-                    <input type="checkbox" name="{{ name }}_{{ values[i] }}" value="{{ values[i] }}"
-                    {% if selected_values %} {% if i in selected_values %} checked {% endif %} {% endif %}> 
+                    <input type="checkbox" name="{{ name }}_{{ values[i] }}" id="{{ name }}_{{ values[i] }}" value="{{ values[i] }}"> 
                     {{ texts[i] }}   
-                </label>    
+                </label> 
+                 {% if selected_values %} {% if i in selected_values %}
+                              <script type="text/javascript">
+                                  qParams["{{ name }}_{{ values[i] }}"] = "checked";
+                                </script>                  
+                {% endif %} {% endif %}   
                 {% endfor %}
             {% else %}
                 <table>
@@ -19,12 +23,16 @@
                 {%- for col in values|batch(4) -%}
                    <td>
                    {% set colloop = loop %} 
-                    {%- for post in col -%}                    
+                    {%- for post in col -%}                                        
                         <label>
-                            <input type="checkbox" name="{{ name }}_{{ values[colloop.index0*4 + loop.index0] }}" value="{{ post }}"
-                            {% if i == selected_value %} checked {% endif %}>
+                            <input type="checkbox" name="{{ name }}_{{ values[colloop.index0*4 + loop.index0] }}" id="{{ name }}_{{ values[colloop.index0*4 + loop.index0] }}" value="{{ values[colloop.index0*4 + loop.index0] }}">
                             {{ texts[colloop.index0*4 + loop.index0] }}
-                        </label>                    
+                        </label>                                                 
+                        {% if selected_values %} {% if colloop.index0*4 + loop.index0 in selected_values %}                         
+                              <script type="text/javascript">
+                                  qParams["{{ name }}_{{ values[colloop.index0*4 + loop.index0] }}"] = "checked";
+                                </script>                  
+                        {% endif %} {% endif %}                    
                     {%- endfor -%}
                     </td>
                 {%- endfor -%}
@@ -40,31 +48,39 @@
             {% if type != 'table' %}            
                 {% for i in range(values|length) %}
                 <label>
-                    <input type="radio" name="{{ name }}_{{ values[i] }}" value="{{ values[i] }}"
-                    {% if selected_value %} {% if i == selected_value %} checked {% endif %} {% endif %}>
+                    <input type="radio" name="{{ name }}" value="{{ values[i] }}" id="{{ name }}_{{ values[i] }}">
                     {{ texts[i] }}   
-                </label> 
-                {% endfor %}
+                </label>
+                {% if selected_value %} {% if i == selected_value %}
+                              <script type="text/javascript">
+                                  qParams["{{ name }}_{{ values[i] }}"] = "checked";
+                                </script>                  
+                {% endif %}{% endif %}
+                {% endfor %}                               
             {% else %}
                 <table>
                 <tr>
                 {%- for col in values|batch(4) -%}
                    <td>
                    {% set colloop = loop %}  
-                    {%- for post in col -%}                    
+                    {%- for post in col -%}                   
                         <label>
-                            <input type="radio" name="{{ name }}_{{ values[colloop.index0*4 + loop.index0] }}" value="{{ post }}"
-                            {% if i == selected_value %} checked {% endif %}>
-                            {{ texts[colloop.index0*4 + loop.index0] }}  
-                        </label>                    
+                            <input type="radio" name="{{ name }}" value="{{ values[colloop.index0*4 + loop.index0] }}" id="{{ name }}_{{ values[colloop.index0*4 + loop.index0] }}">
+                            {{ texts[colloop.index0*4 + loop.index0] }}
+                        </label>
+                        {% if selected_value %} {% if i == selected_value %}
+                              <script type="text/javascript">
+                                  qParams["{{ name }}_{{ values[colloop.index0*4 + loop.index0] }}"] = "checked";
+                                </script>                  
+                       {% endif %}{% endif %}                    
                     {%- endfor -%}
                     </td>
                 {%- endfor -%}
                 </tr>
-                </table>
+                </table>                
             {% endif %}
-
           </div>
+          
 {%- endmacro %}
 
 {% macro select(title, name, texts, values, description, style) -%}
@@ -85,11 +101,13 @@
 
 {% macro sliderDouble(title, name, min, max, start_values, description, heterogeneity, dimension, step, style) -%}
         <div class="question question-slider" style = "{{ style }}">        
-            {{ titlePart(title, description) }}
-            <p class = "slider"><input id="{{ name }}" type="text" name="{{ name }}" value="{{ start_values[0] }};{{ start_values[1] }}"/></p>
+            {{ titlePart(title, description) }}            
+            <p class = "slider"><input id="{{ name }}" type="text" name="{{ name }}" value="start_values[0];start_values[1]"/></p>
         </div>    
-        <script type="text/javascript" charset="utf-8">    
+        <script type="text/javascript" charset="utf-8">            
             jQuery("#{{ name }}").slider({from: {{ min }}, to: {{ max }}, {% if heterogeneity %} heterogeneity: ['50/{{ heterogeneity[0] }}', '75/{{ heterogeneity[1] }}'], {% endif %}limits: true, step: {{ step }}, dimension: '{{ dimension }}'});
+            qParams["{{ name }}"] = "{{ start_values[0] }};{{ start_values[1] }}";
+
         </script> 
 {%- endmacro %}
 
@@ -100,10 +118,11 @@
             <label class = "left">{{ labels[0] }}</label>
             <label class = "right">{{ labels[1] }}</label>
             {% endif %}
-            <p class = "slider"><input id="{{ name }}" type="text" name="{{ name }}" value="{{ start_value }}"/></p>
+            <p class = "slider"><input id="{{ name }}" type="text" name="{{ name }}" value="start_value"/></p>
         </div>    
-        <script type="text/javascript" charset="utf-8">
+        <script type="text/javascript" charset="utf-8">            
             jQuery("#{{ name }}").slider({limits: false, scale: {{ scale }}, skin: "single", from: {{ min }}, to: {{ max }}, step: {{ step }}, dimension: '{{ dimension }}'}); 
+            qParams["{{ name }}"] = "{{ start_value }}";
         </script> 
 {%- endmacro %}
 
@@ -143,11 +162,7 @@
           </tr>
           </table>          
         </div>        
-         <script type="text/javascript">
-            {% if defPart == 1%}                 
-                $("#{{ name }}").css('marginLeft','-800px');
-                $("#{{ name }}_hi").val(1);                                              
-              {% endif %} 
+         <script type="text/javascript">             
              $("#rArrow{{ name }}").click( function(){
                  var newMargin = parseInt($("#{{ name }}").css("margin-left")) - 800;
                 $("#rArrow{{ name }}").hide();
@@ -161,7 +176,8 @@
                 $("#rArrow{{ name }}").show();
                 $("#{{ name }}_hi").val(0);
                 $("#{{ name }}").animate({ marginLeft: newMargin }, 800);
-                });     
+                });
+            qParams["{{ name }}_hi"] = "{{ defPart }}";     
         </script> 
 
 {%- endmacro %}
