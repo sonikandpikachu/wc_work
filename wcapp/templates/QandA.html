@@ -44,7 +44,8 @@
                for (i = 0; i < inputs.length;i++){
                 if((inputs[i].type == "radio") || (inputs[i].type == "checkbox"))
                                 inputs[i].checked = false; 
-                            }          
+                            }
+          $('select').val('Atom');
           for(key in params)
             {              
                var sKey = "#"+key;
@@ -67,16 +68,20 @@
                       $("#lArrow"+ key.split('_')[0]).hide();
                       $("#rArrow"+ key.split('_')[0]).show();
                     } 
-                 }else{               
-                   var param = params[key].split(';');                   
-                   if (param.length > 1)
-                       $(sKey).slider("value", param[0], param[1]);
-                    else     
-                      $(sKey).slider("value", param[0]);                   
-                   sliders.push(sKey);
+                 }else{ 
+                  if (key.split('_')[1] == "select"){                                                         
+                      document.getElementById(key.split('_')[0]).value = params[key];                     
+                  } else{              
+                     var param = params[key].split(';');                   
+                     if (param.length > 1)
+                        $(sKey).slider("value", param[0], param[1]);
+                      else     
+                        $(sKey).slider("value", param[0]);                   
+                     sliders.push(sKey);
                    }
+                 }
                }                      
-            }
+            }                                 
             $.uniform.update();
             for (i = 0; i < sliders.length;i++){
               $(sliders[i]).slider().update();
@@ -94,7 +99,12 @@
               else{
                 MyQParams[inputs[i].id] = inputs[i].value
               }
-          }     
+          }
+          var selects = document.qForm.getElementsByTagName("select");
+          for (i = 0; i < selects.length;i++){ 
+            var selectValue = selects[i].options[selects[i].selectedIndex].value;
+            MyQParams[selects[i].id+"_select"]  = selectValue;
+          }    
           $.cookie('MyQParams', JSON.stringify(MyQParams));
       }
       function restoreValues(type)

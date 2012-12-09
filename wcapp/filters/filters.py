@@ -54,7 +54,7 @@ class Filter(object):
 		return dss, cut
 
 	def get_names(self):
-		return [self.name]
+		return self.name
 
 
 class ContainerFilter(Filter):
@@ -76,8 +76,8 @@ class ContainerFilter(Filter):
 
 	def get_names(self):
 		names = []
-		for child in children:
-			names += [child.get_names]
+		for child in self.children:
+			names += [child.get_names()]
 		return names		
 
 
@@ -100,11 +100,11 @@ class TwoPartFilter(Filter):
 	def get_answers(self, values):
 		part = self.cPart if values[self.name + '_hi'] == u'0' else self.nPart
 		newvalues = {}
-		for key in values:			
-			if key.split('_')[0] in part.get_names():
+		for key in values:						
+			if key.split('_')[0] in part.get_names():				
 				newvalues[key] = values[key]				
 				dss = part.dss_function(newvalues.values()) if part.dss_function else {}
-				cut = part.cut_function(newvalues.values()) if part.cut_function else ''
+				cut = part.cut_function(newvalues.values()) if part.cut_function else ''				
 		return dss, cut
 
 

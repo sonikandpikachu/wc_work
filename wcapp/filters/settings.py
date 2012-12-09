@@ -8,6 +8,7 @@ This class describes all filters for answers. Every filter has to realise class 
 For more details look filters.py 
 '''
 from sqlorm import wc_Computer
+from wcconfig import db
 from dss import DSS_WEIGHTS
 import filters
 
@@ -155,12 +156,20 @@ descriptionPerformanceN = u'<p style = "text-indent: 10px;">Значение о�
 performanceNFilter = filters.SliderSingleFilter('performanceN', u'Производительность:', 1, 5, 1,
 									labels = [u'Нормальная', u'Очень высокая'], description = descriptionPerformanceN, dss_function = performanceN_dss_function)
 
+
+texts = [comp.cpu_name for comp in db.session.query(wc_Computer).group_by(wc_Computer.cpu_name)]
+values = texts[:]
+performanceSeriyaFilter  = filters.SelectFilter('performanceSeriya', u'Процессор:', 
+									texts, values)
+
 def performanceC_cut_function(selected_values):
 	print 'performance', selected_values[0]
 	return 'cpu_frequency > ' + selected_values[0].split(';')[0]  + ' AND ' + 'cpu_frequency < ' + selected_values[0].split(';')[1]
-performanceCFilter = filters.SliderDoubleFilter('performanceC', u'Частота процессора:',1, 4, [2, 3], 
+performanceFreqFilter = filters.SliderDoubleFilter('performanceFreq', u'Частота процессора:',1, 4, [2, 3], 
 											cut_function = performanceC_cut_function, 
 											dimension = u' ГГц', step = 0.1)
+
+performanceCFilter = filters.ContainerFilter([performanceSeriyaFilter, performanceFreqFilter])
 
 performanceFilter = filters.TwoPartFilter('performance', cPart =  performanceCFilter, nPart =  performanceNFilter, defPart = 1)
 
