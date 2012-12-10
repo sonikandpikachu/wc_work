@@ -4,12 +4,12 @@
     </div>
     <div id = "menu">
     <ul id = "navigation">
-    {% for name in ('wNextButton', 'qa'), ('wFindButton', '1.html'), ('wHelpButton', '1.html') %}
+    {% for name in ('wV1Button', 'qa'), ('wV2Button', 'qa'), ('wHelpButton', '1.html') %}
         <li>
-            <a id = "button" href = {{ name[1] }}> <img src="{{ url_for('static', filename='img/greenButtons/' + name[0] + '1.jpg') }}" alt="Найти"
-                onMouseOver="this.src='{{ url_for('static', filename='img/greenButtons/' + name[0] + '2.jpg') }}'" 
-                onMouseOut="this.src='{{ url_for('static', filename='img/greenButtons/' + name[0] + '1.jpg') }}'"
-                onMouseDown="this.src='{{ url_for('static', filename='img/greenButtons/' + name[0] + '3.jpg') }}'"
+            <a id = "button" href = {{ name[1] }}> <img src="{{ url_for('static', filename='img/greenButtons/' + name[0] + '1.png') }}" alt="Найти"
+                onMouseOver="this.src='{{ url_for('static', filename='img/greenButtons/' + name[0] + '2.png') }}'" 
+                onMouseOut="this.src='{{ url_for('static', filename='img/greenButtons/' + name[0] + '1.png') }}'"
+                onMouseDown="this.src='{{ url_for('static', filename='img/greenButtons/' + name[0] + '3.png') }}'"
                 /> </a>
         </li>
     {% endfor %}

@@ -122,7 +122,7 @@
 
 <body>
 <div id = "wrapper">
-  <div id = "header"> <img src="{{ url_for('static', filename='img/main_header.jpg') }}" alt="What Computer"/> </div>
+  <div id = "header"> <img src="{{ url_for('static', filename='img/main_header.png') }}" alt="What Computer"/> </div>
   <div id = "content">
     {% include 'menu.html' %}         
     <form method = 'post' action = '/qa/' name = "qForm">
@@ -239,10 +239,10 @@
             <div class = "price">{{ comp.price }} грн</div> 
             <div class = "priceRange">3400 - 3700</div>
           </li>
-          <li> <a  href = "Comp.html"> <img src="{{ url_for('static', filename='img/greenButtons/wNextButton1.jpg') }}" alt="Далее" 
-                                onMouseOver="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton2.jpg') }}'" 
-                                onMouseOut="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton1.jpg') }}'"
-                                onMouseDown="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton3.jpg') }}'"
+          <li> <a  href = "Comp.html"> <img src="{{ url_for('static', filename='img/greenButtons/wNextButton1.png') }}" alt="Далее" 
+                                onMouseOver="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton2.png') }}'" 
+                                onMouseOut="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton1.png') }}'"
+                                onMouseDown="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton3.png') }}'"
                                 /> </a> </li>
         </ul>
         <table class = "console" style = "width: 100%">   
