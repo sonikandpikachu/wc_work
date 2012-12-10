@@ -146,14 +146,14 @@ priceFilter = filters.TwoPartFilter('price', cPart =  priceCFilter, nPart =  pri
 #Performance:
 def performanceN_dss_function(selected_values):
 	print 'selected_values', selected_values
-	return {'cpu' : int(selected_values[0]),'ram' : int(selected_values[0])}
+	return {'cpu' : int(selected_values[0])*1.5,'ram' : int(selected_values[0])}
 # def performanceN_cut_function(selected_values):
 # 	'''!!!!!!!!!!!!!!!!!!Menya netu!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! '''
 # 	return {'price' : int(selected_values[0])}
 
 descriptionPerformanceN = u'<p style = "text-indent: 10px;">Значение определяет на сколько увеличиться важность производительности </br>\
 в подбираемой модели в ущерб остальным параметрам</p>'
-performanceNFilter = filters.SliderSingleFilter('performanceN', u'Производительность:', 1, 5, 1,
+performanceNFilter = filters.SliderSingleFilter('performanceN', u'Производительность:', 0, 5, 0,
 									labels = [u'Нормальная', u'Очень высокая'], description = descriptionPerformanceN, dss_function = performanceN_dss_function)
 
 

@@ -229,7 +229,7 @@
               <div class="paramValue"> {{ comp.os }}</div>
               <div class="paramStars">
                 <div class="cover"></div>
-                <div class="progress" style="width: 0%;"></div>
+                <div class="progress" style="width: {{ comp.os_dss }}%;"></div>
               </div>
             </li>
           </ul>
@@ -262,10 +262,10 @@
                           ram&emsp;{{ comp.ram_dss }}
                         </td>
                         <td style = "padding-left: 20px;">
-                          hdd&emsp;{{ comp.hdd_dss }}
+                          os&emsp;{{ comp.os_dss }}
                         </td>   
-                        <td style = "padding-left: 20px;">
-                          <b>comp&emsp;{{ comp.id }}</b>
+                        <td style = "padding-left: 20px;">                         
+                          <b>comp&emsp;{{ comp.id }}&emsp;{{ comp.price_dss * dss_dict['price'] + comp.cpu_dss * dss_dict['cpu'] + comp.vga_dss * dss_dict['vga'] + comp.ram_dss * dss_dict['ram'] + comp.os_dss * dss_dict['os']}}</b>
                         </td>                         
                     </tr>
                 

@@ -32,6 +32,7 @@ def small_computers(computers_id, computers_dss, dbwrapper):
 			'hdd_capacity' : computer.hdd_capacity,
 			'hdd_dss' : dss.hdd,
 			'os' : computer.os,
+            'os_dss' : dss.os,
 			'price' : computer.price,
 			'vga' : computer.vga_model,
 			'vga_amount' : computer.vga_amount,

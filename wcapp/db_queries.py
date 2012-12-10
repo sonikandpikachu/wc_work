@@ -58,6 +58,7 @@ class DBWrapper (object):
                         'cpu' : 4, 
                         'ram' : 3, 
                         'vga' : 1, 
+                        'os' : 1, 
                         'price' : -8
                     }   
         for dss in dss_values: 
@@ -73,7 +74,8 @@ class DBWrapper (object):
         _min, _max = min(computers_dss.values()), max(computers_dss.values())
         #sorting by dsses, gets list of tuples:
         computers_dss = sorted(computers_dss.iteritems(), key=operator.itemgetter(1), reverse = True)
-        
+        for cd in computers_dss:
+            print cd[0], cd[1]
         return (tuple(cd[0] for cd in computers_dss), 
                 tuple((cd[1] - _min)*100/(_max - _min) for cd in computers_dss),
                 dss_dict)

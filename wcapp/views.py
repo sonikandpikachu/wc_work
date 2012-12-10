@@ -17,7 +17,7 @@ import pretty_data
 import db_queries
 
 #move to html settings
-COMPUTERS_ON_PAGE = 3
+COMPUTERS_ON_PAGE = 10
 
 @app.route('/')
 def first():

@@ -138,26 +138,32 @@ def __update_auto_dss():
     '''inserting dss values, wich is autocalculated, based on deffault parameters. Works only for computers and 
     notebooks'''
     computers = workdevice.query.all()
-
-    allprices = [comp.price for comp in computers if comp.price > 0]
-    allrams = [comp.ram_amount for comp in computers if comp.ram_amount]
+    # Don't change!!!    
     allhdd = [comp.hdd_capacity for comp in computers if comp.hdd_capacity]
     allcpu = [comp.testcpu_passmark**0.25 for comp in computers if comp.testcpu_passmark]
     allvga = [comp.testvga_3dmark06**0.25 for comp in computers if comp.vga_amount] 
-
-    pricemin, pricemax = min(allprices), max(allprices)
-    rammin, rammax = min(allrams), max(allrams)
+  
     hddmin, hddmax = min(allhdd), max(allhdd)
     cpumin, cpumax = min(allcpu), max(allcpu)
     vgamin, vgamax = min(allvga), max(allvga)
 
+    ram_dss = {'1':20,'2':40,'3':50,'4':60,'6':70,'8':80,'12':90,'16':100}
+    
+    def oss_dss_calc(os_name):
+        os_dss_dict = {'FreeDOS':0,'Linux':20,'Windows 7 Starter':30,'Windows 8':80,'Windows 7 Professional':100}
+        os_dss = 50
+        for key in os_dss_dict:
+            if key in os_name: os_dss = os_dss_dict[key] 
+        return os_dss
+
     for comp in computers:
         values = {
-            'ram' : 100*(comp.ram_amount - rammin) / (rammax - rammin) if comp.ram_amount else 0,
-            'price' : 100*(comp.price - pricemin) / (pricemax - pricemin) if comp.price > 0 else 0,
+            'ram' : ram_dss[str(comp.ram_amount)] if comp.ram_amount else 0,
+            'price' : comp.price / 500 if comp.price > 0 else 0,
+            'os': oss_dss_calc(comp.os),
             # 'hdd' : 100*(comp.hdd_capacity - hddmin)  / (hddmax - hddmin) if comp.hdd_capacity.replace('-','') else 0,
-            'cpu' : round(80*(comp.testcpu_passmark**0.25 - cpumin) / (cpumax - cpumin) + 20) if comp.testcpu_passmark else 0,
-            'vga' : round(80*(comp.testvga_3dmark06**0.25 - vgamin) / (vgamax - vgamin) + 20) if comp.testvga_3dmark06 else 0
+            'cpu' : round(90*(comp.testcpu_passmark**0.25 - cpumin) / (cpumax - cpumin) + 10) if comp.testcpu_passmark else 0,
+            'vga' : round(90*(comp.testvga_3dmark06**0.25 - vgamin) / (vgamax - vgamin) + 10) if comp.testvga_3dmark06 else 0
         }
         db.session.query(workdss).filter_by(id = comp.id).update(values)
     db.session.commit()
