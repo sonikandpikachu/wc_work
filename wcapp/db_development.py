@@ -54,20 +54,18 @@ def __dss_values_to_db():
     import xlrd
     wbk = xlrd.open_workbook('dss.xls')
     sheet_names = wbk.sheet_names()
-    print '111'
     for name in sheet_names:
         sheet = wbk.sheet_by_name(name)
         column_names = dict((row_value,i) for i, row_value in enumerate(sheet.row_values(0)))
         # print 'column_names', column_names
         assert 'id' in column_names,'dss or url isn`t defined in sheet ' + name
-        print 'ssss'
         for nrow in range(1, sheet.nrows):
             row_values = sheet.row_values(nrow)
             ids = [int(rv.strip()) for rv in row_values[column_names['id']].split(',')]
             for id in ids:
                 xlscomp = dict((cn, row_values[column_names[cn]]) for cn in column_names if not cn in ('Passmark G3D Mark', 'id'))
                 if 'vga_amount' in xlscomp and not xlscomp['vga_amount']: del xlscomp['vga_amount']
-                db.session.query(workdevice).filter_by(id = id).update(xlscomp)
+                db.session.query(workdevice).filter_by(id = id + 1).update(xlscomp)
             db.session.commit()
             print nrow
 
@@ -175,3 +173,4 @@ if __name__ == '__main__':
     # __insert_shops()
     # __insert_concdevices()
     # __dss_values_to_db()
+    # __insert_empty_dss()

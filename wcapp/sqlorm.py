@@ -170,7 +170,7 @@ class wc_Shop(db.Model):
 
 #wc_dss.id == wc_computer.id 
 class wc_ComputerDSS(db.Model):
-    __tablename__ = 'wc_CompDSS'
+    __tablename__ = 'wc_ComputerDSS'
 
     id = db.Column(db.Integer, primary_key=True)
     hdd = db.Column(db.Float)
@@ -178,31 +178,29 @@ class wc_ComputerDSS(db.Model):
     display = db.Column(db.Float)
     ram = db.Column(db.Float)
     vga = db.Column(db.Float)
-    dinamics = db.Column(db.Float)
-    web_camera = db.Column(db.Float)
     os = db.Column(db.Float)
-    weight = db.Column(db.Float)
-    microphone  = db.Column(db.Float)
-    network = db.Column(db.Float)
-    material = db.Column(db.Float)
     price = db.Column(db.Float)
+    size = db.Column(db.Float)
+    panel = db.Column(db.Float)
+    media = db.Column(db.Float)
+    thunderbolt = db.Column(db.Float)
+    network = db.Column(db.Float)
 
     def __init__(self, id = None, hdd = None, cpu = None, display = None, ram = None, vga = None,
-        dinamics = None, web_camera = None, os = None, weight = None, microphone = None, network = None,
-        material = None, price = None):
+        os = None, size = None, panel = None, media= None, thunderbolt = None, network = None, price = None):
         self.hdd = hdd
         self.cpu = cpu
         self.vga = vga
         self.ram = ram
         self.display = display
-        self.dinamics = dinamics
-        self.web_camera = web_camera
         self.os = os
-        self.weight = weight
-        self.microphone = microphone
-        self.network = network
-        self.material = material
         self.price = price
+        self.size = size
+        self.panel = panel
+        self.media = media
+        self.thunderbolt = thunderbolt
+        self.network = network
+
         
 
 class wc_User(db.Model):
