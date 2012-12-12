@@ -14,7 +14,8 @@ def small_computers(computers_id, computers_dss, dbwrapper):
 	dsses = dbwrapper.dss_by_id(computers_id)
 	computers = dbwrapper.parameters_by_id(computers_id)
 	pretty_computers = []
-	for index, dss, computer in zip(range(len(dsses)), dsses, computers):		
+	for index, dss, computer in zip(range(len(dsses)), dsses, computers):
+		max_price, min_price = dbwrapper.max_and_min_price(computer)		
 		pretty_computer = {
 		#
 		#   A mozno mne peredat otdelno vse dostupnie dss vmeste spiskop
@@ -22,6 +23,7 @@ def small_computers(computers_id, computers_dss, dbwrapper):
 		#	
 			'id' : str(computer.id),
 			'name' : computer.name,
+			'model' : computer.model,
 			'dss' : computers_dss[index],
 			'cpu_name' : computer.cpu_name,
 			'cpu_model' : computer.cpu_model,
@@ -37,7 +39,9 @@ def small_computers(computers_id, computers_dss, dbwrapper):
 			'vga' : computer.vga_model,
 			'vga_amount' : computer.vga_amount,
 			'vga_dss' : dss.vga,
-			'price_dss' : dss.price
+			'price_dss' : dss.price,
+			'min_price': min_price,
+			'max_price' : max_price,
 		}
 		pretty_computers.append(pretty_computer)
 	return pretty_computers 

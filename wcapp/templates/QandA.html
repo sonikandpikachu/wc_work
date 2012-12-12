@@ -185,7 +185,7 @@
         </div>
         <div class = "descriptionSection">
           <div class="title">
-            <div class = "name"> {{ comp.name }} </div>
+            <div class = "name"> {{ comp.name }} &nbsp; {{ comp.model }} </div>
             <div class="classification">
               <div class="cover"></div>
               <div class="progress" style="width: {{ comp.dss }}%;"></div>
@@ -237,7 +237,7 @@
         <ul class = "answerButtons">
           <li> 
             <div class = "price">{{ comp.price }} грн</div> 
-            <div class = "priceRange">3400 - 3700</div>
+            <div class = "priceRange">{{ comp.max_price }} - {{ comp.min_price }} </div>
           </li>
           <li> <a  href = "Comp.html"> <img src="{{ url_for('static', filename='img/greenButtons/wNextButton1.png') }}" alt="Далее" 
                                 onMouseOver="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton2.png') }}'" 
@@ -264,8 +264,11 @@
                         <td style = "padding-left: 20px;">
                           os&emsp;{{ comp.os_dss }}
                         </td>   
-                        <td style = "padding-left: 20px;">                         
+                        <td style = "padding-left: 20px;"> 
+                        {% if dss_dict %} 
+                        <!-- вот это вот передаеться как comp.dss (уже сложенная вся сумма) -->
                           <b>comp&emsp;{{ comp.id }}&emsp;{{ comp.price_dss * dss_dict['price'] + comp.cpu_dss * dss_dict['cpu'] + comp.vga_dss * dss_dict['vga'] + comp.ram_dss * dss_dict['ram'] + comp.os_dss * dss_dict['os']}}</b>
+                        {% endif %}
                         </td>                         
                     </tr>
                 

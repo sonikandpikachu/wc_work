@@ -39,8 +39,12 @@ def second():
     else:
         if 'user_id' in session:
             user = dbwrapper.get_user(session['user_id'])
-            computers_id, computers_dss = user.computers_id, user.computers_dss
-            dss_dict = {}#????
+            if user:
+                computers_id, computers_dss = user.computers_id, user.computers_dss
+                dss_dict = {}#????
+            else:#there is no such user in our db
+                del session['user_id']
+                computers_id, computers_dss, dss_dict  = [], [], {}#nothing to return 
         else:
             computers_id, computers_dss, dss_dict  = [], [], {}#nothing to return 
     
