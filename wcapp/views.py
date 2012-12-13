@@ -62,6 +62,9 @@ def second():
     computers_id_on_page = computers_id[first_comp_index : last_comp_index]    
     computers_dss_on_page = computers_dss[first_comp_index : last_comp_index]
 
+    print 'page', page, 'last_page', last_page
+    print 'pagination_pages', pretty_data.pagination_pages(page, last_page)
+
     pretty_computers = pretty_data.small_computers(computers_id_on_page, computers_dss_on_page, dbwrapper)
 
     return render_template('QandA.html', computers = pretty_computers, filters = ALL_FILTERS,

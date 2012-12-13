@@ -272,6 +272,7 @@ class wc_Notebook(db.Model):
     material = db.Column(db.String(150))
     multimedia = db.Column(db.String(150))
     name = db.Column(db.String(300))
+    model = db.Column(db.String(300))
     os = db.Column(db.String(150))
     panel_bluraydrive = db.Column(db.Boolean)
     ram_max = db.Column(db.Integer)
@@ -317,7 +318,7 @@ class wc_Notebook(db.Model):
             input_keyboard_backlight=None, input_keyboard_keycolors=None, 
             input_keys_constraction=None, input_manipulator=None, 
             input_multitouch=None, input_numblock=None, lan=None, material=None, 
-            multimedia=None, name=None, os=None, panel_bluraydrive=None, ram_max=None, 
+            multimedia=None, name=None, model = None, os=None, panel_bluraydrive=None, ram_max=None, 
             ram_standart=None, ram_type=None, shell=None, shockproof=None, 
             testcpu_3dmark06=None, testcpu_passmark=None, testcpu_super=None, testvga_3dmark=None, 
             testvga_3dmark06=None, thunderbolt=None, type=None, url=None, vga_memory_type=None, 
@@ -387,6 +388,7 @@ class wc_Notebook(db.Model):
         self.material=material
         self.multimedia=multimedia
         self.name=name
+        self.model = model
         self.os=os
         self.panel_bluraydrive=panel_bluraydrive
         self.ram_max=ram_max

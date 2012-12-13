@@ -33,20 +33,22 @@ def __values_for_dss ():
     ''' export data from db to dss.xls '''
     import xlwt
     wbk = xlwt.Workbook()
-    prefixes = 'hdd', 'cpu', 'ram', 'vga'
-    for prefix in prefixes:
+    prefixes = 'cpu', 'vga'
+    tests = 'testcpu_passmark', 'testvga_3dmark06'
+    for prefix, test in zip(prefixes, tests):
         all_values = {}
         id_values = {}
         comp_dict = workdevice.query.first().__dict__.keys()
         columns = [name for name in comp_dict if prefix in name]
         for comp in workdevice.query.all():
-            values = tuple(comp.__dict__[column] for column in columns)
-            if values in all_values: 
-                all_values[values].append(comp.url)
-                id_values[values].append(comp.id)
-            else: 
-                all_values[values] = [comp.url]
-                id_values[values] = [comp.id]
+            if not comp.__dict__[test]:
+                values = tuple(comp.__dict__[column] for column in columns)
+                if values in all_values: 
+                    all_values[values].append(comp.url)
+                    id_values[values].append(comp.id)
+                else: 
+                    all_values[values] = [comp.url]
+                    id_values[values] = [comp.id]
         sheet = wbk.add_sheet(prefix)
         for i, column in enumerate(columns + ['id', 'url', 'dss']):
             sheet.write(0, i, column)
@@ -187,12 +189,19 @@ def __separete_name():
     db.session.commit()
 
 
+def __export_dss_notebooks():
+    devices = workdevice.query.all()
+    print len([device for device in devices if not device.testvga_3dmark06 or not device.testcpu_passmark])
+        # print device.testvga_3dmark06, device.testcpu_passmark
+
 if __name__ == '__main__':
     # __insert_computers()
     # __separete_name()
     # __update_auto_dss()
     # __insert_prices()
     # __insert_shops()
-    __insert_concdevices()
+    # __insert_concdevices()
     # __dss_values_to_db()
     # __insert_empty_dss()
+    # __export_dss_notebooks()
+    __values_for_dss ()
