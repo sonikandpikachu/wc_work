@@ -52,7 +52,8 @@ def second():
             devices_id, devices_dss, dss_dict  = [], [], {}#nothing to return 
     
     #pagination test(if bad or wrong page) - REWRITE!!!
-    last_page = int(round(len(devices_id) / COMPUTERS_ON_PAGE + 0.49))
+    last_page = int(round(float(len(devices_id)) / COMPUTERS_ON_PAGE + 0.49))
+    print 'last_page', last_page, 'len(devices_id)', len(devices_id), (len(devices_id) / COMPUTERS_ON_PAGE + 0.49)
     try:
         page = int(request.args.get('page', '')) if 'page' in request.args else 1
     except ValueError:
@@ -67,6 +68,7 @@ def second():
 
     print 'page', page, 'last_page', last_page
     print 'pagination_pages', pretty_data.pagination_pages(page, last_page)
+    print 'devices_id_on_page', devices_id_on_page
 
     pretty_devices = pretty_data.small_devices(devices_id_on_page, devices_dss_on_page, dbwrapper)
 
