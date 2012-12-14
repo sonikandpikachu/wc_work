@@ -111,7 +111,9 @@ class DBWrapper (object):
     def max_and_min_price(self, device):
         all_prices = db.session.query(self.concdevice_table.price_grn).filter_by(device = device).\
             order_by(self.concdevice_table.price_grn).all()
-        return float(all_prices[0][0]), float(all_prices[-1][0])
+        if all_prices:
+            return float(all_prices[0][0]), float(all_prices[-1][0])
+        else: return 0, 0
 
     def concdevices_by_device_id(self, id):
         device = db.session.query(self.device_table).filter_by(id = id).one()
