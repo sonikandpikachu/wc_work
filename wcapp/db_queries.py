@@ -58,7 +58,8 @@ class DBWrapper (object):
                         'cpu' : 4, 
                         'ram' : 3, 
                         'vga' : 1, 
-                        'os' : 1, 
+                        'os' : 1,
+                        'display' : 1,
                         'price' : -8
                     }   
         for dss in dss_values: 

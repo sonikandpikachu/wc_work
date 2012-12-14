@@ -37,7 +37,8 @@ def small_computers(computers_id, computers_dss, dbwrapper):
 			'vga' : computer.vga_model,
 			'vga_amount' : computer.vga_amount,
 			'vga_dss' : dss.vga,
-			'price_dss' : dss.price
+			'price_dss' : dss.price,
+            'display_dss' : dss.display
 		}
 		pretty_computers.append(pretty_computer)
 	return pretty_computers 

@@ -257,6 +257,11 @@
                           vga&emsp;{{ comp.vga_dss }}
                         </td>   
                     </tr>
+                     <tr style = "width: 100%"> 
+                        <td style = "padding-left: 20px;">
+                          display&emsp;{{ comp.display_dss }}
+                        </td>                                                
+                    </tr>
                     <tr style = "width: 100%"> 
                         <td style = "padding-left: 20px;">
                           ram&emsp;{{ comp.ram_dss }}
@@ -265,7 +270,7 @@
                           os&emsp;{{ comp.os_dss }}
                         </td>   
                         <td style = "padding-left: 20px;">                         
-                          <b>comp&emsp;{{ comp.id }}&emsp;{{ comp.price_dss * dss_dict['price'] + comp.cpu_dss * dss_dict['cpu'] + comp.vga_dss * dss_dict['vga'] + comp.ram_dss * dss_dict['ram'] + comp.os_dss * dss_dict['os']}}</b>
+                          <b>comp&emsp;{{ comp.id }}&emsp;{{ comp.price_dss * dss_dict['price'] + comp.cpu_dss * dss_dict['cpu'] + comp.vga_dss * dss_dict['vga'] + comp.ram_dss * dss_dict['ram'] + comp.os_dss * dss_dict['os'] + comp.display_dss * dss_dict['display']}}</b>
                         </td>                         
                     </tr>
                 
