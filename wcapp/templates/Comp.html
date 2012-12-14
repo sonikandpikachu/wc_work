@@ -21,60 +21,52 @@
         </div>
       </div>
       <ul class = "description">
-        <li>
-          <div class="paramName">Название процессора:</div>
-          <div class="paramValue"> Intel Atom D425 </div>
-          <div class="paramStars">
-            <div class="cover"></div>
-            <div class="progress" style="width: 84%;"></div>
-          </div>
-        </li>
-        <li>
-          <div class="paramName">Частота процессора:</div>
-          <div class="paramValue"> 1,8 </div>
-          <div class="paramStars">
-            <div class="cover"></div>
-            <div class="progress" style="width: 10%;"></div>
-          </div>
-        </li>
-        <li>
-          <div class="paramName">Количество ядер/потоков:</div>
-          <div class="paramValue"> 1/(2) </div>
-          <div class="paramStars">
-            <div class="cover"></div>
-            <div class="progress" style="width: 54%;"></div>
-          </div>
-        </li>
-        <li>
-          <div class="paramName">Тип памяти:</div>
-          <div class="paramValue"> DDR3-1333 </div>
-          <div class="paramStars">
-            <div class="cover"></div>
-            <div class="progress" style="width: 74%;"></div>
-          </div>
-        </li>
-        <li>
-          <div class="paramName">Общий объем памяти:</div>
-          <div class="paramValue"> 2048 Mb </div>
-          <div class="paramStars">
-            <div class="cover"></div>
-            <div class="progress" style="width: 69%;"></div>
-          </div>
-        </li>
-        <li>
-          <div class="paramName">Чипсет материнской платы:</div>
-          <div class="paramValue"> Intel NM10 </div>
-          <div class="paramStars">
-            <div class="cover"></div>
-            <div class="progress" style="width: 62%;"></div>
-          </div>
-        </li>
-      </ul>
+            <li>
+              <div class="paramName">Процессор:</div>
+              <div class="paramValue"> {{ small_comp.cpu_name }} {{ small_comp.cpu_model }}, {{ small_comp.cpu_frequency }} Ггц</div>
+              <div class="paramStars">
+                <div class="cover"></div>
+                <div class="progress" style="width: {{ small_comp.cpu_dss }}%;"></div>
+              </div>
+            </li>
+            <li>
+              <div class="paramName">Оперативная память:</div>
+              <div class="paramValue"> {{ small_comp.ram_amount }} Gb </div>
+              <div class="paramStars">
+                <div class="cover"></div>
+                <div class="progress" style="width: {{ small_comp.ram_dss }}%;"></div>
+              </div>
+            </li>
+            <li>
+              <div class="paramName">Жесткий диск:</div>
+              <div class="paramValue"> {{ small_comp.hdd_capacity }} Gb</div>
+              <div class="paramStars">
+                <div class="cover"></div>
+                <div class="progress" style="width: {{ small_comp.hdd_dss }}%;"></div>
+              </div>
+            </li>
+            <li>
+              <div class="paramName">Видеокарта:</div>
+              <div class="paramValue"> {{ small_comp.vga }} {{ small_comp.vga_amount }} </div>
+              <div class="paramStars">
+                <div class="cover"></div>
+                <div class="progress" style="width: {{ small_comp.vga_dss }}%;"></div>
+              </div>
+            </li>
+            <li>
+              <div class="paramName"> Операционная система </div>
+              <div class="paramValue"> {{ small_comp.os }}</div>
+              <div class="paramStars">
+                <div class="cover"></div>
+                <div class="progress" style="width: {{ small_comp.os_dss }}%;"></div>
+              </div>
+            </li>
+          </ul>
     </div>
     <ul class = "answerButtons">
-      <li>
-        <div class = "price">3460 грн</div>
-        <div class = "priceRange">3400 - 3700</div>
+      <li> 
+            <div class = "price">{{ small_comp.price }} грн</div> 
+            <div class = "priceRange">{{ small_comp.max_price }} - {{ small_comp.min_price }} </div>
       </li>
       <li> <a  href = "Comp.html"> <img src="{{ url_for('static', filename='img/greenButtons/wNextButton1.jpg') }}" alt="Далее" 
                                 onMouseOver="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton2.jpg') }}'" 
@@ -93,161 +85,33 @@
     <div class="tabscontent">
       <div class="tabpage" id="parametrs_content">
         <table cellspacing="0" id="parametrs">
-          <tr class = "gray">
-            <td class="paramName">Тип</td>
-            <td class="paramSeparator"></td>
-            <td class="paramValue">Ноутбук </td> 
-          </tr>
-          <tr class = "green">
-            <td class="paramName">Процессор</td>
-            <td class="paramSeparator"></td>
-            <td class="paramValue">Intel Core i7-3610QM</td>
-          </tr>
-          <tr class = "gray">
-            <td class="paramName">Частота процессора, Ггц</td>
-            <td class="paramSeparator"></td>
-            <td class="paramValue">2,1</td>
-          </tr>
-          <tr class = "green">
-            <td class="paramName">Число ядер (потоков)</td>
-            <td class="paramSeparator"></td>
-            <td class="paramValue">4 (4)</td>
-          </tr>
-          <tr class = "gray">
-            <td class="paramName">Чипсет </td>
-            <td class="paramSeparator"></td>
-            <td class="paramValue">Intel HM67</td>
-          </tr>
-         <tr class = "green">
-            <td class="paramName">Объем оперативной памяти (стандарт/максимум)</td>
-            <td class="paramSeparator"></td>
-            <td class="paramValue">8192/8192 Мб</td>
-          </tr>
-          <tr class = "gray">
-            <td class="paramName">Жесткий диск</td>
-            <td class="paramSeparator"></td>
-            <td class="paramValue">1000 Гб</td>
-          </tr>
-         <tr class = "green">
-            <td class="paramName">Графический адаптер, объем памяти</td>
-            <td class="paramSeparator"></td>
-            <td class="paramValue">AMD Radeon HD 7670M, 1GB</td>
-          </tr>
-          <tr class = "gray">
-            <td class="paramName">Разрешение экрана </td>
-            <td class="paramSeparator"></td>
-            <td class="paramValue">1366x7687</td>
-          </tr>
-           <tr class = "green">
-            <td class="paramName">Диагональ экрана, дюймов</td>
-            <td class="paramSeparator"></td>
-            <td class="paramValue">15,6</td>
-          </tr>
-          <tr class = "gray">
-            <td class="paramName">Тип матрицы </td>
-            <td class="paramSeparator"></td>
-            <td class="paramValue">TN+film</td>
-          </tr>
-           <tr class = "green">
-            <td class="paramName">Покрытие</td>
-            <td class="paramSeparator"></td>
-            <td class="paramValue">глянцевое</td>
-          </tr>
-          <tr class = "gray">
-            <td class="paramName">Оптический привод </td>
-            <td class="paramSeparator"></td>
-            <td class="paramValue">DVD-RW</td>
-          </tr>
-           <tr class = "green">
-            <td class="paramName">Предустановленная ОС</td>
-            <td class="paramSeparator"></td>
-            <td class="paramValue">Linux</td>
-          </tr>
-          <tr class = "gray">
-            <td class="paramName">Емкость батареи, мА.ч </td>
-            <td class="paramSeparator"></td>
-            <td class="paramValue">н.д.</td>
-          </tr>
-          <tr class = "gray">
-            <td class="paramName">Масса, кг </td>
-            <td class="paramSeparator"></td>
-            <td class="paramValue">2,9</td>
-          </tr>
-           <tr class = "green">
-            <td class="paramName">Габариты, мм</td>
-            <td class="paramSeparator"></td>
-            <td class="paramValue">343х245,8х32,8</td>
-          </tr>
-          <tr class = "gray">
-            <td class="paramName">Внешние порты </td>
-            <td class="paramSeparator"></td>
-            <td class="paramValue">2xUSB 3.0, 1xUSB 2.0, e-SATA, VGA, HDMI, mic-in, speaker-out</td>
-          </tr>
-           <tr class = "green">
-            <td class="paramName">Wi-Fi</td>
-            <td class="paramSeparator"></td>
-            <td class="paramValue">802.11b/g/n</td>
-          </tr>
-          <tr class = "gray">
-            <td class="paramName">Bluetooth </td>
-            <td class="paramSeparator"></td>
-            <td class="paramValue">+</td>
-          </tr>         
-           <tr class = "green">
-            <td class="paramName">WiMAX</td>
-            <td class="paramSeparator"></td>
-            <td class="paramValue">-</td>
-          </tr>
-          <tr class = "gray">
-            <td class="paramName">3G </td>
-            <td class="paramSeparator"></td>
-            <td class="paramValue">-</td>
-          </tr>
-           <tr class = "green">
-            <td class="paramName">Кардридер</td>
-            <td class="paramSeparator"></td>
-            <td class="paramValue">+</td>
-          </tr>
-          <tr class = "gray">
-            <td class="paramName">WEB-камера </td>
-            <td class="paramSeparator"></td>
-            <td class="paramValue">+</td>
-          </tr>
-          <tr class = "green">
-            <td class="paramName">Слот расширения</td>
-            <td class="paramSeparator"></td>
-            <td class="paramValue">-</td>
-          </tr>
-          <tr class = "gray">
-            <td class="paramName">Сетевой адаптер</td>
-            <td class="paramSeparator"></td>
-            <td class="paramValue">10/100</td>
-          </tr>
+          {% for part in big_comp %}
+            <tr class = "gray">
+              <td class="paramName">{{ part }}</td>
+              <td class="paramSeparator"></td>
+              <td class="paramValue"></td>
+            </tr>
+            {% for key in big_comp[part] %}
+              <tr class = "gray">
+                <td class="paramName">{{ key }}</td>
+                <td class="paramSeparator"></td>
+                <td class="paramValue"> {{ big_comp[part][key] }}</td>
+              </tr>
+            {% endfor %}
+          {% endfor %}
         </table>
         </div>
       <div class="tabpage" id="stores_content">
         <table cellspacing="0" id="stores">
-          <tr class = "gray">
-            <td class="storeLogo"><img src="{{ url_for('static', filename='img/7276.png') }}" /></td>
-            <td class="paramSeparator"></td>
-            <td class="storeInfo"> <a  href = "#"> <span class = "storeName"> Repka.UA </span> <br> Dell Inspiron 5520 (DI5520I361281000Silver)</a></td>
-            <td class="paramSeparator"></td>
-            <td class="storePrice">3200 Грн</td> 
-          </tr>
-          <tr class = "gray">
-            <td class="storeLogo"><img src="{{ url_for('static', filename='img/919.png') }}" /></td>
-            <td class="paramSeparator"></td>
-            <td class="storeInfo"> <a  href = "#"> <span class = "storeName"> СОКОЛ </span> <br> Dell Inspiron 5520 (DI5520I361281000Silver)</a></td>
-            <td class="paramSeparator"></td>
-            <td class="storePrice">3530 Грн</td> 
-          </tr>
-          <tr class = "gray">
-            <td class="storeLogo"><img src="{{ url_for('static', filename='img/7008.png') }}" /></td>
-            <td class="paramSeparator"></td>
-            <td class="storeInfo"> <a  href = "#"> <span class = "storeName"> Mixera.ua </span> <br> Dell Inspiron 5520 (DI5520I361281000Silver)</a></td>
-            <td class="paramSeparator"></td>
-            <td class="storePrice">3304 Грн</td> 
-          </tr>
+          {% for cc in conccomps %}
+            <tr class = "gray">
+              <td class="storeLogo"><img src="{{ url_for('static', filename='img/7276.png') }}" /></td>
+              <td class="paramSeparator"></td>
+              <td class="storeInfo"> <a  href = "#"> <span class = "storeName"> {{ cc.shop.name }}</td>
+              <td class="paramSeparator"></td>
+              <td class="storePrice">{{ cc.price_grn }} Грн</td> 
+            </tr>
+          {% endfor %}
          </table>
       </div>
     </div>

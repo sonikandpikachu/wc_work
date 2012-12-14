@@ -239,7 +239,7 @@
             <div class = "price">{{ comp.price }} грн</div> 
             <div class = "priceRange">{{ comp.max_price }} - {{ comp.min_price }} </div>
           </li>
-          <li> <a  href = "Comp.html"> <img src="{{ url_for('static', filename='img/greenButtons/wNextButton1.png') }}" alt="Далее" 
+          <li> <a  href = "/computer/{{ comp.id }}/"> <img src="{{ url_for('static', filename='img/greenButtons/wNextButton1.png') }}" alt="Далее" 
                                 onMouseOver="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton2.png') }}'" 
                                 onMouseOut="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton1.png') }}'"
                                 onMouseDown="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton3.png') }}'"
@@ -267,7 +267,6 @@
                         <td style = "padding-left: 20px;"> 
                         {% if dss_dict %} 
                         <!-- вот это вот передаеться как comp.dss (уже сложенная вся сумма) -->
-                          <b>comp&emsp;{{ comp.id }}&emsp;{{ comp.price_dss * dss_dict['price'] + comp.cpu_dss * dss_dict['cpu'] + comp.vga_dss * dss_dict['vga'] + comp.ram_dss * dss_dict['ram'] + comp.os_dss * dss_dict['os']}}</b>
                         {% endif %}
                         </td>                         
                     </tr>

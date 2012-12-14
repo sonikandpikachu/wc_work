@@ -470,12 +470,12 @@ class wc_NotebookDSS(db.Model):
 class wc_User(db.Model):
     __tablename__ = 'wc_User'
     id = db.Column(db.Integer, primary_key=True)
-    computers_id = db.Column(db.PickleType)
-    computers_dss = db.Column(db.PickleType)
+    devices_id = db.Column(db.PickleType)
+    devices_dss = db.Column(db.PickleType)
 
-    def __init__(self, id = None, computers_id = None, computers_dss = None):
-        self.computers_dss = computers_dss
-        self.computers_id = computers_id
+    def __init__(self, id = None, devices_id = None, devices_dss = None):
+        self.devices_dss = devices_dss
+        self.devices_id = devices_id
         if id: self.id = id
 
 

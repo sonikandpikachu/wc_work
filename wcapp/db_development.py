@@ -29,6 +29,9 @@ workconfig = 'support/config/notebooks.config'
 
 
 
+# <b>comp&emsp;{{ comp.id }}&emsp;{{ comp.price_dss * dss_dict['price'] + comp.cpu_dss * dss_dict['cpu']
+#  + comp.vga_dss * dss_dict['vga'] + comp.ram_dss * dss_dict['ram'] + comp.os_dss * dss_dict['os']}}</b>
+
 def __values_for_dss ():
     ''' export data from db to dss.xls '''
     import xlwt
@@ -194,7 +197,28 @@ def __export_dss_notebooks():
     print len([device for device in devices if not device.testvga_3dmark06 or not device.testcpu_passmark])
         # print device.testvga_3dmark06, device.testcpu_passmark
 
+
+def __generate_third_page():
+    import codecs
+    f = codecs.open('support/config/onlycomputer.config', encoding = 'utf-8')
+    names = {}
+    for line in f.readlines():
+        rus_name = line.split('|')[0].strip()
+        eng_name = line.split('|')[1].strip().lower()
+        names[rus_name] = eng_name
+    part_names = set([key.split('_')[0] for key in names])
+    # print ', '.join(part_namses)
+    for part in part_names:
+        print 'pretty_computer[u"' + part + '"] = OrderedDict ( {'
+        for key in names:
+            if part in key:
+                print '\tu"' + key.split('_')[1] + '" : comp.' + names[key] + ','
+        print '})'
+
+# str(comp.height) + str(comp.width) + str(comp.length)
+
 if __name__ == '__main__':
+    import support.utf8_converter
     # __insert_computers()
     # __separete_name()
     # __update_auto_dss()
@@ -204,4 +228,5 @@ if __name__ == '__main__':
     # __dss_values_to_db()
     # __insert_empty_dss()
     # __export_dss_notebooks()
-    __values_for_dss ()
+    # __values_for_dss ()
+    __generate_third_page()

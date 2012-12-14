@@ -102,19 +102,22 @@ TwoPartTestFilter = filters.TwoPartFilter('TwoPartTest', cPart =  containerTestF
 #Type:
 texts = u"Компьютер", u'Ноутбук', u'Планшет', u'еще не знаю'
 values =  'computer', 'notebook', 'tablet', "all"
-def type_cut_function(selected_values):		
-	acceptTypes = []
-	for s in selected_values:
-		if s == 'computer' : acceptTypes.extend([u"неттоп", u"моноблок", u"игровой", u"настольный" , u"настольный / с монитором /"])
-		if s == 'notebook': acceptTypes.extend([u"ноутбук", u"нетбук", u"ультрабук", u"трансформер"])
-		if s == 'tablet': acceptTypes.extend([u"ноутбук"])
-		if s == 'all': acceptTypes.extend([u"неттоп", u"моноблок", u"игровой", u"настольный" , u"настольный / с монитором /", u"ноутбук", \
-									u"нетбук", u"ультрабук", u"трансформер"])
-	filters = []	
-	for aT in acceptTypes:		 
-			filters.append('type LIKE "%' + aT + '%"')
-	if len(filters) > 1: return '(' + ' OR '.join(filters) + ')'	
-	return filters[0] if filters else '' 
+def type_cut_function(selected_values):	\
+	# WE DON`T NEED THIS FUNCTION BECAUSE WE HAVE DIFERENT TABLES
+	# acceptTypes = []
+	# for s in selected_values:
+	# 	if s == 'computer' : acceptTypes.extend([u"неттоп", u"моноблок", u"игровой", u"настольный" , u"настольный / с монитором /"])
+	# 	if s == 'notebook': acceptTypes.extend([u"ноутбук", u"нетбук", u"ультрабук", u"трансформер"])
+	# 	if s == 'tablet': acceptTypes.extend([u"ноутбук"])
+	# 	if s == 'all': acceptTypes.extend([u"неттоп", u"моноблок", u"игровой", u"настольный" , u"настольный / с монитором /", u"ноутбук", \
+	# 								u"нетбук", u"ультрабук", u"трансформер"])
+	# filters = []	
+	# for aT in acceptTypes:		 
+	# 		filters.append('type LIKE "%' + aT + '%"')
+	# if len(filters) > 1: return '(' + ' OR '.join(filters) + ')'	
+	# return filters[0] if filters else '' 
+	return ''
+
 deviceType = filters.RadioFilter('type', u'Я хочу ...', 
 									texts, values, selected_value = 3,cut_function = type_cut_function)
 
