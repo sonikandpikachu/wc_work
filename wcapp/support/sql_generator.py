@@ -88,13 +88,36 @@ def alter_query (config):
         query += ',\n ADD COLUMN `' + column['names'][0] + '` ' +  column['types'][0].upper() + ' NULL '
     return query.replace('STRING', 'VARCHAR').replace('BOOLEAN', 'TINYINT(1)').replace('INTEGER', 'INT(11)')
 
+def create_notebooks_config ():
+    all_notebook_parameters = set()
+    for notebook_file in [nbf for nbf in os.listdir('../../data/notebooks') if nbf.endswith('.pkl')]:
+        notebook = sl.pickle_load('../../data/notebooks/' + notebook_file)
+        for key in notebook.keys():
+            all_notebook_parameters.add(key.decode('utf-8'))
+    import codecs
+    notebookconf = codecs.open('values', 'wb')
+    computerconf = codecs.open('config/computers.config', 'rb', encoding = 'utf-8')
+    sorted_notebook_parameters = []
+    for line in computerconf.readlines():
+        print line.split('|')[0].replace('_', '.').strip() in all_notebook_parameters
+        if line.split('|')[0].replace('_', '.').strip() in all_notebook_parameters:
+            sorted_notebook_parameters.append(line)
+    # print list(all_notebook_parameters)[0].decode('utf-8')
+    sorted_notebook_parameters.sort()
+    print sorted_notebook_parameters
+    notebookconf.write(''.join(sorted_notebook_parameters))
+    notebookconf.close()
+    computerconf.close()
+
 
 if __name__ == '__main__':
+    # create_notebooks_config()
     # rename_usb('../data/computers')
-    # save_sqlconf_file(('../data/computers',), 'config/sqltables.config')
-    # columns = table_columns('config/computers.config')
-    # print table_code(columns, 'Computer')
-    print alter_query('config/notebooks.config')
+    # save_sqlconf_file(('../../data/',), 'config/notebooks2.config')
+    columns = table_columns('config/notebooks.config')
+    columns.sort()
+    print table_code(columns, 'Notebook')
+    # print alter_query('config/notebooks.config')
 
 
 

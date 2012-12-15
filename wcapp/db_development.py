@@ -7,6 +7,8 @@ Its highly recomendent not to use any of this methods in other modules
 If you want to make some actions to some other devices(not computers), just change
 workdss, workdevice, workconcdevice and datapass parameters
 '''
+import os
+
 import sqlalchemy
 
 from wcconfig import db
@@ -14,31 +16,43 @@ import sqlorm as sql
 import re
 from support import pkl_to_dict as ptd
 
-workdevice = sql.wc_Computer
-workconcdevice = sql.wc_ConcComputer
-workdss = sql.wc_ComputerDSS
-workpass = "../data/computers"
-workconfig = 'support/config/computers.config'
+# workdevice = sql.wc_Computer
+# workconcdevice = sql.wc_ConcComputer
+# workdss = sql.wc_ComputerDSS
+# workpass = "../data/computers"
+# workconfig = 'support/config/computers.config'
 
+workdevice = sql.wc_Notebook
+workconcdevice = sql.wc_ConcNotebook
+workdss = sql.wc_NotebookDSS
+workpass = "../data/notebooks"
+workconfig = 'support/config/notebooks.config'
+
+
+
+# <b>comp&emsp;{{ comp.id }}&emsp;{{ comp.price_dss * dss_dict['price'] + comp.cpu_dss * dss_dict['cpu']
+#  + comp.vga_dss * dss_dict['vga'] + comp.ram_dss * dss_dict['ram'] + comp.os_dss * dss_dict['os']}}</b>
 
 def __values_for_dss ():
     ''' export data from db to dss.xls '''
     import xlwt
     wbk = xlwt.Workbook()
-    prefixes = 'hdd', 'cpu', 'ram', 'vga'
-    for prefix in prefixes:
+    prefixes = 'cpu', 'vga'
+    tests = 'testcpu_passmark', 'testvga_3dmark06'
+    for prefix, test in zip(prefixes, tests):
         all_values = {}
         id_values = {}
         comp_dict = workdevice.query.first().__dict__.keys()
         columns = [name for name in comp_dict if prefix in name]
         for comp in workdevice.query.all():
-            values = tuple(comp.__dict__[column] for column in columns)
-            if values in all_values: 
-                all_values[values].append(comp.url)
-                id_values[values].append(comp.id)
-            else: 
-                all_values[values] = [comp.url]
-                id_values[values] = [comp.id]
+            if not comp.__dict__[test]:
+                values = tuple(comp.__dict__[column] for column in columns)
+                if values in all_values: 
+                    all_values[values].append(comp.url)
+                    id_values[values].append(comp.id)
+                else: 
+                    all_values[values] = [comp.url]
+                    id_values[values] = [comp.id]
         sheet = wbk.add_sheet(prefix)
         for i, column in enumerate(columns + ['id', 'url', 'dss']):
             sheet.write(0, i, column)
@@ -101,17 +115,19 @@ def __insert_concdevices():
             shop = shops[0]
             db.session.query(sql.wc_Shop).filter_by(id = shops[1].id).delete()
         sqlconccomp = workconcdevice(price_usd = cc['price_usd'], price_grn = cc['price_grn'],
-                                            computer = comp, shop = shop)
+                                            device = comp, shop = shop)
         db.session.add(sqlconccomp)
-    db.session.commit()
+        db.session.commit()
 
 
 def __insert_shops():
     '''Inserting all shops from workpass'''
     pkl_shops = ptd.shops(workpass, "Устройство.магазины")
+    dbshops = [dbs[0] for dbs in db.session.query(sql.wc_Shop.name).all()]
     for s in pkl_shops:
-        shop = sql.wc_Shop(name = s)
-        db.session.add(shop)
+        if not s.decode('utf-8') in dbshops:
+            shop = sql.wc_Shop(name = s)
+            db.session.add(shop)
     db.session.commit()
 
 
@@ -228,10 +244,50 @@ def __update_auto_dss():
     db.session.commit()
 
 
+def __separete_name():
+    devices = workdevice.query.all()
+    for device in devices:
+        newname = device.name.split('$')[0]
+        newmodel = device.name.split('$')[1].replace('[', '').replace(']', '')
+        db.session.query(workdevice).filter_by(id = device.id).update({'name' : newname, 'model' : newmodel})
+    db.session.commit()
+
+
+def __export_dss_notebooks():
+    devices = workdevice.query.all()
+    print len([device for device in devices if not device.testvga_3dmark06 or not device.testcpu_passmark])
+        # print device.testvga_3dmark06, device.testcpu_passmark
+
+
+def __generate_third_page():
+    import codecs
+    f = codecs.open('support/config/onlycomputer.config', encoding = 'utf-8')
+    names = {}
+    for line in f.readlines():
+        rus_name = line.split('|')[0].strip()
+        eng_name = line.split('|')[1].strip().lower()
+        names[rus_name] = eng_name
+    part_names = set([key.split('_')[0] for key in names])
+    # print ', '.join(part_namses)
+    for part in part_names:
+        print 'pretty_computer[u"' + part + '"] = OrderedDict ( {'
+        for key in names:
+            if part in key:
+                print '\tu"' + key.split('_')[1] + '" : comp.' + names[key] + ','
+        print '})'
+
+# str(comp.height) + str(comp.width) + str(comp.length)
+
 if __name__ == '__main__':
-    __update_auto_dss()
+    import support.utf8_converter
+    # __insert_computers()
+    # __separete_name()
+    # __update_auto_dss()
     # __insert_prices()
     # __insert_shops()
     # __insert_concdevices()
     # __dss_values_to_db()
     # __insert_empty_dss()
+    # __export_dss_notebooks()
+    # __values_for_dss ()
+    __generate_third_page()

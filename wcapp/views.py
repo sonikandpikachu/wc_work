@@ -26,26 +26,34 @@ def first():
     
 @app.route('/qa/', methods=['POST', 'GET'])
 def second():
-    #need to set this parameter bases on users choose
+    #need refactor dbwrapper calls
     dbwrapper = db_queries.DBWrapper('computer')
     #getting computers id:
-    if request.method == 'POST': 
-        computers_id, computers_dss, dss_dict = filtered_computers_id(ALL_FILTERS, request.form, dbwrapper)
+    if request.method == 'POST':
+        session['type'] = request.form['type']
+        dbwrapper = db_queries.DBWrapper(request.form['type'])
+        devices_id, devices_dss, dss_dict = filtered_devices_id(ALL_FILTERS, request.form, dbwrapper)
         if 'user_id' in session: 
             dbwrapper.delete_user(session['user_id'])
             del session['user_id']
-        user_id = dbwrapper.add_user(computers_id, computers_dss)
+        user_id = dbwrapper.add_user(devices_id, devices_dss)
         session['user_id'] = user_id
     else:
         if 'user_id' in session:
+            dbwrapper = db_queries.DBWrapper(session['type'])
             user = dbwrapper.get_user(session['user_id'])
-            computers_id, computers_dss = user.computers_id, user.computers_dss
-            dss_dict = {}#????
+            if user:
+                devices_id, devices_dss = user.devices_id, user.devices_dss
+                dss_dict = {}#????
+            else:#there is no such user in our db
+                del session['user_id']
+                devices_id, devices_dss, dss_dict  = [], [], {}#nothing to return 
         else:
-            computers_id, computers_dss, dss_dict  = [], [], {}#nothing to return 
+            devices_id, devices_dss, dss_dict  = [], [], {}#nothing to return 
     
     #pagination test(if bad or wrong page) - REWRITE!!!
-    last_page = int(round(len(computers_id) / COMPUTERS_ON_PAGE + 0.49))
+    last_page = int(round(float(len(devices_id)) / COMPUTERS_ON_PAGE + 0.49))
+    print 'last_page', last_page, 'len(devices_id)', len(devices_id), (len(devices_id) / COMPUTERS_ON_PAGE + 0.49)
     try:
         page = int(request.args.get('page', '')) if 'page' in request.args else 1
     except ValueError:
@@ -54,17 +62,21 @@ def second():
     #     abort(404)
 
     first_comp_index = (page-1)*COMPUTERS_ON_PAGE
-    last_comp_index = min(page*COMPUTERS_ON_PAGE, len(computers_id))
-    computers_id_on_page = computers_id[first_comp_index : last_comp_index]    
-    computers_dss_on_page = computers_dss[first_comp_index : last_comp_index]
+    last_comp_index = min(page*COMPUTERS_ON_PAGE, len(devices_id))
+    devices_id_on_page = devices_id[first_comp_index : last_comp_index]    
+    devices_dss_on_page = devices_dss[first_comp_index : last_comp_index]
 
-    pretty_computers = pretty_data.small_computers(computers_id_on_page, computers_dss_on_page, dbwrapper)
+    print 'page', page, 'last_page', last_page
+    print 'pagination_pages', pretty_data.pagination_pages(page, last_page)
+    print 'devices_id_on_page', devices_id_on_page
 
-    return render_template('QandA.html', computers = pretty_computers, filters = ALL_FILTERS,
+    pretty_devices = pretty_data.small_devices(devices_id_on_page, devices_dss_on_page, dbwrapper)
+
+    return render_template('QandA.html', computers = pretty_devices, filters = ALL_FILTERS,
         current_page = page, pagination_pages = pretty_data.pagination_pages(page, last_page), dss_dict = dss_dict)
 
 
-def filtered_computers_id(filters, form, dbwrapper):
+def filtered_devices_id(filters, form, dbwrapper):
     '''
     Gets parameters from request form, executes filters functions and finally returns filtered computers id
     '''
@@ -76,7 +88,20 @@ def filtered_computers_id(filters, form, dbwrapper):
             dss, cut = filt.get_answers(values_dict)
             if dss: dss_values.append(dss)
             if cut: cut_values.append(cut)
-    return dbwrapper.sorted_computers_id(cut_values, dss_values)
+    print 'cut_values', cut_values, 'dss_values', dss_values
+    print dbwrapper.sorted_devices_id(cut_values, dss_values)
+    return dbwrapper.sorted_devices_id(cut_values, dss_values)
+
+
+@app.route('/computer/<id>/')
+def third_computer(id):
+    dbwrapper = db_queries.DBWrapper(session['type'])
+    concdevices = dbwrapper.concdevices_by_device_id(id)
+    big_pretty_comp =  pretty_data.big_computer(id, dbwrapper)
+    small_pretty_comp = pretty_data.small_devices([id], [0], dbwrapper)[0]
+    return render_template('Comp.html', big_comp = big_pretty_comp,
+                                small_comp = small_pretty_comp,
+                                conccomps = concdevices)
 
  
 if __name__ == '__main__':
