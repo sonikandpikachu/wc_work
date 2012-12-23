@@ -100,8 +100,8 @@ TwoPartTestFilter = filters.TwoPartFilter('TwoPartTest', cPart =  containerTestF
 
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
 #Type:
-texts = u"Компьютер", u'Ноутбук', u'Планшет', u'еще не знаю'
-values =  'computer', 'notebook', 'tablet', "all"
+texts = u"Компьютер", u'Ноутбук'
+values =  'computer', 'notebook'
 def type_cut_function(selected_values):	\
 	# WE DON`T NEED THIS FUNCTION BECAUSE WE HAVE DIFERENT TABLES
 	# acceptTypes = []
@@ -119,7 +119,7 @@ def type_cut_function(selected_values):	\
 	return ''
 
 deviceType = filters.RadioFilter('type', u'Я хочу ...', 
-									texts, values, selected_value = 3,cut_function = type_cut_function)
+									texts, values,cut_function = type_cut_function)
 
 
 #----------------------------------------------------------------------------------------------------------------------------------------------------------

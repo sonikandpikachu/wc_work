@@ -73,6 +73,7 @@ class DBWrapper (object):
         Returns 3 tuples: sorted_computers_id, sorted_computers_dss, initial dss values
         WHAT FOR DO WE NEED TO RETURN DSS_DICT???
         '''
+
         dss_dict = self._device_dss[self._device]
         for dss in dss_values: 
             for key in dss:

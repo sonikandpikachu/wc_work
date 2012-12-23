@@ -257,13 +257,18 @@
                           vga&emsp;{{ comp.vga_dss }}
                         </td>   
                     </tr>
+                     <tr style = "width: 100%"> 
+                        <td style = "padding-left: 20px;">
+                          display&emsp;{{ comp.display_dss }}
+                        </td>                                                
+                    </tr>
                     <tr style = "width: 100%"> 
                         <td style = "padding-left: 20px;">
                           ram&emsp;{{ comp.ram_dss }}
                         </td>
                         <td style = "padding-left: 20px;">
                           os&emsp;{{ comp.os_dss }}
-                        </td>   
+                        </td>
                         <td style = "padding-left: 20px;"> 
                         {% if dss_dict %} 
                         <!-- вот это вот передаеться как comp.dss (уже сложенная вся сумма) -->

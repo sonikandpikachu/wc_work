@@ -13,19 +13,20 @@ import sqlalchemy
 
 from wcconfig import db
 import sqlorm as sql
+import re
 from support import pkl_to_dict as ptd
 
-# workdevice = sql.wc_Computer
-# workconcdevice = sql.wc_ConcComputer
-# workdss = sql.wc_ComputerDSS
-# workpass = "../data/computers"
-# workconfig = 'support/config/computers.config'
+workdevice = sql.wc_Computer
+workconcdevice = sql.wc_ConcComputer
+workdss = sql.wc_ComputerDSS
+workpass = "../data/computers"
+workconfig = 'support/config/computers.config'
 
-workdevice = sql.wc_Notebook
-workconcdevice = sql.wc_ConcNotebook
-workdss = sql.wc_NotebookDSS
-workpass = "../data/notebooks"
-workconfig = 'support/config/notebooks.config'
+#workdevice = sql.wc_Notebook
+#workconcdevice = sql.wc_ConcNotebook
+#workdss = sql.wc_NotebookDSS
+#workpass = "../data/notebooks"
+#workconfig = 'support/config/notebooks.config'
 
 
 
@@ -150,17 +151,9 @@ def __update_devices():
 
 def __update_auto_dss():
     '''inserting dss values, wich is autocalculated, based on deffault parameters. Works only for computers and 
-    notebooks'''
-    computers = workdevice.query.all()
-    # Don't change!!!    
-    allhdd = [comp.hdd_capacity for comp in computers if comp.hdd_capacity]
-    allcpu = [comp.testcpu_passmark**0.25 for comp in computers if comp.testcpu_passmark]
-    allvga = [comp.testvga_3dmark06**0.25 for comp in computers if comp.vga_amount] 
-  
-    hddmin, hddmax = min(allhdd), max(allhdd)
-    cpumin, cpumax = min(allcpu), max(allcpu)
-    vgamin, vgamax = min(allvga), max(allvga)
-
+    notebooks'''    
+    
+    # Don't change!!!
     ram_dss = {'1':20,'2':40,'3':50,'4':60,'6':70,'8':80,'12':90,'16':100}
     
     def oss_dss_calc(os_name):
@@ -170,14 +163,82 @@ def __update_auto_dss():
             if key in os_name: os_dss = os_dss_dict[key] 
         return os_dss
 
+    def display_dss_calc(comp):        
+        rez = comp.display_diagonal * int(comp.display_resolution[:2]) / 5
+        if comp.display_led_backlight: rez += 5
+        if comp.display_sensor: rez += 10
+        return rez
+
+    def hdd_dss_calc(comp):
+        m = re.match(ur"(\d+) Гб", comp.hdd_capacity)
+        rez = int(m.group(1))        
+        if comp.hdd_type == 'HDD/SSD': rez += 500
+        if comp.hdd_speed == 5400: rez -=100
+        return rez
+
+    def size_dss_calc(comp):
+        return comp.height * comp.length * comp.width  
+
+    def panel_dss_calc(comp):
+        rez = 0
+        if comp.panel_audio: rez += 10
+        if comp.panel_cardreader: rez += 10
+        if comp.panel_cell3: rez += comp.panel_cell3
+        if comp.panel_cell5: rez += comp.panel_cell5
+        if comp.panel_digital_display: rez += 20
+        if comp.panel_usb2: rez += 2 * comp.panel_usb2
+        if comp.panel_usb3: rez += 3 * comp.panel_usb3
+        return rez   
+
+    def media_dss_calc(comp):
+        rez = 0        
+        if comp.media_jacks3: rez += comp.media_jacks3
+        if comp.media_microphone: rez += 20
+        if comp.media_remote: rez += 20
+        if comp.media_sound == '7.1': rez += 30
+        if comp.media_sound == '2.0': rez -= 20
+        if comp.media_tv_tunner: rez += 20
+        if comp.media_web_camera: rez += 40
+        return rez
+
+    def network_dss_calc(comp):
+        rez = 0        
+        if 'Wi-Fi' in comp.network: rez +=50
+        if 'Bluetooth' in comp.network: rez +=50
+        return rez
+
+    computers = workdevice.query.all()
+    allhdd = [hdd_dss_calc(comp) for comp in computers if comp.hdd_capacity]
+    allcpu = [comp.testcpu_passmark**0.25 for comp in computers if comp.testcpu_passmark]
+    allvga = [comp.testvga_3dmark06**0.25 for comp in computers if comp.vga_amount]
+    alldisplay = [display_dss_calc(comp) for comp in computers if comp.display_diagonal]
+    allsize = [size_dss_calc(comp) for comp in computers if comp.height]
+    allpanel = [panel_dss_calc(comp) for comp in computers]
+    allmedia = [media_dss_calc(comp) for comp in computers]   
+  
+    hddmin, hddmax = min(allhdd), max(allhdd)
+    sizemin, sizemax = min(allsize), max(allsize)
+    cpumin, cpumax = min(allcpu), max(allcpu)
+    vgamin, vgamax = min(allvga), max(allvga)
+    displaymin, displaymax = min(alldisplay), max(alldisplay)
+    mediamin, mediamax = min(allmedia), max(allmedia)
+    panelmin, panelmax = min(allpanel), max(allpanel)    
+
     for comp in computers:
         values = {
             'ram' : ram_dss[str(comp.ram_amount)] if comp.ram_amount else 0,
             'price' : comp.price / 500 if comp.price > 0 else 0,
             'os': oss_dss_calc(comp.os),
-            # 'hdd' : 100*(comp.hdd_capacity - hddmin)  / (hddmax - hddmin) if comp.hdd_capacity.replace('-','') else 0,
+            'network': network_dss_calc(comp) if comp.network else 0,
+            'hdd' : round(100*(hdd_dss_calc(comp) - hddmin)  / (hddmax - hddmin)) if comp.hdd_capacity else 0,
+            'thunderbolt' : 50*comp.thunderbolt if comp.thunderbolt else 0,
+            'panel' : round(100*(panel_dss_calc(comp) - panelmin)  / (panelmax - panelmin)),
+            'media' : round(100*(media_dss_calc(comp) - mediamin)  / (mediamax - mediamin)),
+            'size' : round(100*(size_dss_calc(comp) - sizemin)  / (sizemax - sizemin)) if comp.height else 100, # inverse
             'cpu' : round(90*(comp.testcpu_passmark**0.25 - cpumin) / (cpumax - cpumin) + 10) if comp.testcpu_passmark else 0,
-            'vga' : round(90*(comp.testvga_3dmark06**0.25 - vgamin) / (vgamax - vgamin) + 10) if comp.testvga_3dmark06 else 0
+            'vga' : round(90*(comp.testvga_3dmark06**0.25 - vgamin) / (vgamax - vgamin) + 10) if comp.testvga_3dmark06 else 0,
+            'display' : round(90*(display_dss_calc(comp) - displaymin) / (displaymax - displaymin) + 10) if comp.display_diagonal else 50 # mean value
+
         }
         db.session.query(workdss).filter_by(id = comp.id).update(values)
     db.session.commit()
@@ -221,7 +282,7 @@ if __name__ == '__main__':
     import support.utf8_converter
     # __insert_computers()
     # __separete_name()
-    # __update_auto_dss()
+    __update_auto_dss()
     # __insert_prices()
     # __insert_shops()
     # __insert_concdevices()
@@ -229,4 +290,4 @@ if __name__ == '__main__':
     # __insert_empty_dss()
     # __export_dss_notebooks()
     # __values_for_dss ()
-    __generate_third_page()
+    # __generate_third_page()
