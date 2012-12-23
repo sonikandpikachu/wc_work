@@ -16,17 +16,17 @@ import sqlorm as sql
 import re
 from support import pkl_to_dict as ptd
 
-# workdevice = sql.wc_Computer
-# workconcdevice = sql.wc_ConcComputer
-# workdss = sql.wc_ComputerDSS
-# workpass = "../data/computers"
-# workconfig = 'support/config/computers.config'
+workdevice = sql.wc_Computer
+workconcdevice = sql.wc_ConcComputer
+workdss = sql.wc_ComputerDSS
+workpass = "../data/computers"
+workconfig = 'support/config/computers.config'
 
-workdevice = sql.wc_Notebook
-workconcdevice = sql.wc_ConcNotebook
-workdss = sql.wc_NotebookDSS
-workpass = "../data/notebooks"
-workconfig = 'support/config/notebooks.config'
+#workdevice = sql.wc_Notebook
+#workconcdevice = sql.wc_ConcNotebook
+#workdss = sql.wc_NotebookDSS
+#workpass = "../data/notebooks"
+#workconfig = 'support/config/notebooks.config'
 
 
 
@@ -282,7 +282,7 @@ if __name__ == '__main__':
     import support.utf8_converter
     # __insert_computers()
     # __separete_name()
-    # __update_auto_dss()
+    __update_auto_dss()
     # __insert_prices()
     # __insert_shops()
     # __insert_concdevices()
@@ -290,4 +290,4 @@ if __name__ == '__main__':
     # __insert_empty_dss()
     # __export_dss_notebooks()
     # __values_for_dss ()
-    __generate_third_page()
+    # __generate_third_page()

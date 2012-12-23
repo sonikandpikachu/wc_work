@@ -2,19 +2,20 @@
 <html lang = "ru-RU">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link rel="stylesheet" type="text/css" href="style.css"/>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}"/>
+<script type="text/javascript" src="{{ url_for('static', filename='js/tabs.js') }}"></script>
 <title>What Computer</title>
 </head>
 
 <body>
 <div id = "wrapper">
-<div id = "header"> <img src="{{ url_for('static', filename='img/main_header.jpg') }}" alt="What Computer"/> </div>
+<div id = "header"> <img src="{{ url_for('static', filename='img/main_header.png') }}" alt="What Computer"/> </div>
 <div id = "content">
   <div class="comp">
-    <div class = "image"> <img src="{{ url_for('static', filename='img/compImg.jpg') }}" alt = "Рисунок"/></div>
+    <div class = "image"> <img src="{{ url_for('static', filename='img/computers/'+ small_comp.id +'_img/main.jpg') }}" alt = "Рисунок"/></div>
     <div class = "descriptionSection">
       <div class="title">
-        <div class = "name" style="font-size:18px"> Intel Atom D425s </div>
+        <div class = "name" style="font-size:18px"> {{ small_comp.name }} </div>
         <div class="classification" style="clear:left; top:0px">
           <div class="cover"></div>
           <div class="progress" style="width: 100%;"></div>
@@ -68,10 +69,10 @@
             <div class = "price">{{ small_comp.price }} грн</div> 
             <div class = "priceRange">{{ small_comp.max_price }} - {{ small_comp.min_price }} </div>
       </li>
-      <li> <a  href = "Comp.html"> <img src="{{ url_for('static', filename='img/greenButtons/wNextButton1.jpg') }}" alt="Далее" 
-                                onMouseOver="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton2.jpg') }}'" 
-                                onMouseOut="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton1.jpg') }}'"
-                                onMouseDown="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton3.jpg') }}'"
+      <li> <a  href = "Comp.html"> <img src="{{ url_for('static', filename='img/greenButtons/wNextButton1.png') }}" alt="Далее" 
+                                onMouseOver="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton2.png') }}'" 
+                                onMouseOut="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton1.png') }}'"
+                                onMouseDown="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton3.png') }}'"
                                 /> </a> </li>
     </ul>
   </div>

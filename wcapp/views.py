@@ -105,7 +105,7 @@ def third_computer(id):
 
  
 if __name__ == '__main__':
-    #app.run(debug = True, host = '192.168.1.100', port = 80)
+    #app.run(host = '192.168.1.100', port = 80)
     app.run(debug = True)
     # controller = SQLController()
     # session = controller.create_sql_session()
