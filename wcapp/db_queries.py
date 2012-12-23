@@ -142,4 +142,3 @@ class DBWrapper (object):
             user = None
         return user
 
-
