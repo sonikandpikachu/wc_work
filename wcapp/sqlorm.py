@@ -5,7 +5,8 @@ Created on Sep 18, 2012
 
 This modul realise our database as orm.
 '''
-from wcconfig import app, db
+from wcconfig import db
+
 
 class wc_Computer(db.Model):
     __tablename__ = "wc_Computer"
@@ -68,73 +69,73 @@ class wc_Computer(db.Model):
     testcpu_passmark = db.Column(db.Float)
     testvga_3dmark06 = db.Column(db.Float)
 
-
-    def __init__(self, id =None, chipset=None, color=None, cpu_frequency=None, cpu_kernel_count=None, cpu_model=None,
+    def __init__(self, id=None, chipset=None, color=None, cpu_frequency=None, cpu_kernel_count=None, cpu_model=None,
         cpu_name=None, display_brightness=None, display_diagonal=None, display_led_backlight=None, display_sensor=None,
         display_resolution=None, hdd_capacity=None, hdd_cell=None, hdd_speed=None, hdd_type=None, height=None,
-        jacks=None, length=None, material=None, media_builtin_dinamics=None, media_jacks3=None, media_microphone=None, 
-        media_remote=None, media_sound=None, media_tv_tunner=None, media_web_camera=None, model = None, name=None, network=None, 
-        os=None, panel_audio=None, panel_cardreader=None, panel_cell3=None, panel_cell5=None, panel_digital_display=None, 
-        panel_drive=None, panel_usb2=None, panel_usb3=None, pb_power=None, ps2=None, 
-        ram_amount=None, ram_frequency=None, ram_jacks=None, ram_type=None, thunderbolt=None, type=None, url=None, 
-        vga_amount=None, vga_model=None, vga_type=None, weight=None, width=None, price = None,
+        jacks=None, length=None, material=None, media_builtin_dinamics=None, media_jacks3=None, media_microphone=None,
+        media_remote=None, media_sound=None, media_tv_tunner=None, media_web_camera=None, model=None, name=None, network=None,
+        os=None, panel_audio=None, panel_cardreader=None, panel_cell3=None, panel_cell5=None, panel_digital_display=None,
+        panel_drive=None, panel_usb2=None, panel_usb3=None, pb_power=None, ps2=None,
+        ram_amount=None, ram_frequency=None, ram_jacks=None, ram_type=None, thunderbolt=None, type=None, url=None,
+        vga_amount=None, vga_model=None, vga_type=None, weight=None, width=None, price=None,
         testcpu_passmark = None, testvga_3dmark06=None):
-        self.chipset=chipset
-        self.color=color
-        self.cpu_frequency=cpu_frequency
-        self.cpu_kernel_count=cpu_kernel_count
-        self.cpu_model=cpu_model
-        self.cpu_name=cpu_name
-        self.display_brightness=display_brightness
-        self.display_diagonal=display_diagonal
-        self.display_led_backlight=display_led_backlight
-        self.display_sensor=display_sensor
-        self.display_resolution=display_resolution
-        self.hdd_capacity=hdd_capacity
-        self.hdd_cell=hdd_cell
-        self.hdd_speed=hdd_speed
-        self.hdd_type=hdd_type
-        self.height=height
-        self.jacks=jacks
-        self.length=length
-        self.material=material
-        self.media_builtin_dinamics=media_builtin_dinamics
-        self.media_jacks3=media_jacks3
-        self.media_microphone=media_microphone
-        self.media_remote=media_remote
-        self.media_sound=media_sound
-        self.media_tv_tunner=media_tv_tunner
-        self.media_web_camera=media_web_camera
+        self.chipset = chipset
+        self.color = color
+        self.cpu_frequency = cpu_frequency
+        self.cpu_kernel_count = cpu_kernel_count
+        self.cpu_model = cpu_model
+        self.cpu_name = cpu_name
+        self.display_brightness = display_brightness
+        self.display_diagonal = display_diagonal
+        self.display_led_backlight = display_led_backlight
+        self.display_sensor = display_sensor
+        self.display_resolution = display_resolution
+        self.hdd_capacity = hdd_capacity
+        self.hdd_cell = hdd_cell
+        self.hdd_speed = hdd_speed
+        self.hdd_type = hdd_type
+        self.height = height
+        self.jacks = jacks
+        self.length = length
+        self.material = material
+        self.media_builtin_dinamics = media_builtin_dinamics
+        self.media_jacks3 = media_jacks3
+        self.media_microphone = media_microphone
+        self.media_remote = media_remote
+        self.media_sound = media_sound
+        self.media_tv_tunner = media_tv_tunner
+        self.media_web_camera = media_web_camera
         self.model = model
-        self.name=name
-        self.network=network
-        self.os=os
-        self.panel_audio=panel_audio
-        self.panel_cardreader=panel_cardreader
-        self.panel_cell3=panel_cell3
-        self.panel_cell5=panel_cell5
-        self.panel_digital_display=panel_digital_display
-        self.panel_drive=panel_drive
-        self.panel_usb2=panel_usb2
-        self.panel_usb3=panel_usb3
-        self.pb_power=pb_power
-        self.ps2=ps2
-        self.ram_amount=ram_amount
-        self.ram_frequency=ram_frequency
-        self.ram_jacks=ram_jacks
-        self.ram_type=ram_type
-        self.thunderbolt=thunderbolt
-        self.type=type
-        self.url=url
-        self.vga_amount=vga_amount
-        self.vga_model=vga_model
-        self.vga_type=vga_type
-        self.weight=weight
-        self.width=width
+        self.name = name
+        self.network = network
+        self.os = os
+        self.panel_audio = panel_audio
+        self.panel_cardreader = panel_cardreader
+        self.panel_cell3 = panel_cell3
+        self.panel_cell5 = panel_cell5
+        self.panel_digital_display = panel_digital_display
+        self.panel_drive = panel_drive
+        self.panel_usb2 = panel_usb2
+        self.panel_usb3 = panel_usb3
+        self.pb_power = pb_power
+        self.ps2 = ps2
+        self.ram_amount = ram_amount
+        self.ram_frequency = ram_frequency
+        self.ram_jacks = ram_jacks
+        self.ram_type = ram_type
+        self.thunderbolt = thunderbolt
+        self.type = type
+        self.url = url
+        self.vga_amount = vga_amount
+        self.vga_model = vga_model
+        self.vga_type = vga_type
+        self.weight = weight
+        self.width = width
         self.price = price
         self.testcpu_passmark = testcpu_passmark
         self.testvga_3dmark06 = testvga_3dmark06
-        if id: self.id = id
+        if id:
+            self.id = id
 
 
 class wc_ConcComputer(db.Model):
@@ -152,12 +153,13 @@ class wc_ConcComputer(db.Model):
     shop = db.relationship('wc_Shop',
         backref=db.backref('conccomputers', lazy='dynamic'))
 
-    def __init__(self, id = None, price_usd = None, price_grn = None, device = None, shop = None):
+    def __init__(self, id=None, price_usd=None, price_grn=None, device=None, shop=None):
         self.price_grn = price_grn
         self.price_usd = price_usd
         self.shop = shop
         self.device = device
-        if id: self.id = id
+        if id:
+            self.id = id
 
 
 class wc_Shop(db.Model):
@@ -166,11 +168,13 @@ class wc_Shop(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(300))
 
-    def __init__(self, id = None, name = None):
-        self.name=name
-        if id: self.id = id
+    def __init__(self, id=None, name=None):
+        self.name = name
+        if id:
+            self.id = id
 
-#wc_dss.id == wc_computer.id 
+
+#wc_dss.id == wc_computer.id
 class wc_ComputerDSS(db.Model):
     __tablename__ = 'wc_ComputerDSS'
 
@@ -188,8 +192,8 @@ class wc_ComputerDSS(db.Model):
     thunderbolt = db.Column(db.Float)
     network = db.Column(db.Float)
 
-    def __init__(self, id = None, hdd = None, cpu = None, display = None, ram = None, vga = None,
-        os = None, size = None, panel = None, media= None, thunderbolt = None, network = None, price = None):
+    def __init__(self, id=None, hdd=None, cpu=None, display=None, ram=None, vga=None,
+        os=None, size=None, panel=None, media= None, thunderbolt=None, network=None, price=None):
         self.hdd = hdd
         self.cpu = cpu
         self.vga = vga
@@ -206,7 +210,7 @@ class wc_ComputerDSS(db.Model):
 
 class wc_Notebook(db.Model):
     __tablename__ = "wc_Notebook"
-    
+
     id = db.Column(db.Integer, primary_key=True)
     battery_capacity = db.Column(db.Float)
     battery_cells = db.Column(db.Float)
@@ -299,7 +303,7 @@ class wc_Notebook(db.Model):
     height = db.Column(db.Float)
     price = db.Column(db.Float)
 
-    def __init__(self,id =None, battery_capacity=None, battery_cells=None, battery_charging_time=None,
+    def __init__(self, id=None, battery_capacity=None, battery_cells=None, battery_charging_time=None,
             battery_voltage=None, battery_work_time=None,
             cpu_frequency=None, cpu_kernel_count=None, cpu_model=None, cpu_name=None,
             com_g3=None, com_bluetooth=None, com_dialup=None, com_nfs=None, com_slot=None,
@@ -307,114 +311,115 @@ class wc_Notebook(db.Model):
             display_brightness=None, display_contrast=None, display_cover=None,
             display_diagonal=None, display_gorilla_glass=None, display_light_sensor=None,
             display_matrix=None, display_multitouch=None, display_rotation=None,
-            display_sensor=None, disply_resolution=None, hdd_capacity=None, 
-            hdd_speed=None, hdd_type=None, panel_drive=None, panel_usb2=None, 
-            panel_usb3=None, ram_amount=None, ram_jacks=None, system_bus=None, 
+            display_sensor=None, disply_resolution=None, hdd_capacity=None,
+            hdd_speed=None, hdd_type=None, panel_drive=None, panel_usb2=None,
+            panel_usb3=None, ram_amount=None, ram_jacks=None, system_bus=None,
             vga_amount=None, vga_type=None, accoustic_format=None,
-            additional_headphones_port=None, chipset=None, color=None, 
-            completeness=None, connection_ports=None, cpu_cash2=None, 
-            cpu_cash3=None, doc_station_connection=None, hdd_capacity2=None, 
-            hdd_free_fall=None, hdd_raid=None, input_aditional_keys=None, 
-            input_keyboard_backlight=None, input_keyboard_keycolors=None, 
-            input_keys_constraction=None, input_manipulator=None, 
-            input_multitouch=None, input_numblock=None, lan=None, material=None, 
-            multimedia=None, name=None, model = None, os=None, panel_bluraydrive=None, ram_max=None, 
-            ram_standart=None, ram_type=None, shell=None, shockproof=None, 
-            testcpu_3dmark06=None, testcpu_passmark=None, testcpu_super=None, testvga_3dmark=None, 
-            testvga_3dmark06=None, thunderbolt=None, type=None, url=None, vga_memory_type=None, 
-            vga_model=None, vga_number=None, waterproof=None, web_camera=None, weight=None, 
-            width=None, length=None, height=None, price = None):
-        self.battery_capacity=battery_capacity
-        self.battery_cells=battery_cells
-        self.battery_charging_time=battery_charging_time
-        self.battery_voltage=battery_voltage
-        self.battery_work_time=battery_work_time
-        self.cpu_frequency=cpu_frequency
-        self.cpu_kernel_count=cpu_kernel_count
-        self.cpu_model=cpu_model
-        self.cpu_name=cpu_name
-        self.com_g3=com_g3
-        self.com_bluetooth=com_bluetooth
-        self.com_dialup=com_dialup
-        self.com_nfs=com_nfs
-        self.com_slot=com_slot
-        self.com_slot_type=com_slot_type
-        self.com_widi=com_widi
-        self.com_wifi=com_wifi
-        self.com_wimax=com_wimax
-        self.display_led_backlight=display_led_backlight
-        self.display_brightness=display_brightness
-        self.display_contrast=display_contrast
-        self.display_cover=display_cover
-        self.display_diagonal=display_diagonal
-        self.display_gorilla_glass=display_gorilla_glass
-        self.display_light_sensor=display_light_sensor
-        self.display_matrix=display_matrix
-        self.display_multitouch=display_multitouch
-        self.display_rotation=display_rotation
-        self.display_sensor=display_sensor
-        self.disply_resolution=disply_resolution
-        self.hdd_capacity=hdd_capacity
-        self.hdd_speed=hdd_speed
-        self.hdd_type=hdd_type
-        self.panel_drive=panel_drive
-        self.panel_usb2=panel_usb2
-        self.panel_usb3=panel_usb3
-        self.ram_amount=ram_amount
-        self.ram_jacks=ram_jacks
-        self.system_bus=system_bus
-        self.vga_amount=vga_amount
-        self.vga_type=vga_type
-        self.accoustic_format=accoustic_format
-        self.additional_headphones_port=additional_headphones_port
-        self.chipset=chipset
-        self.color=color
-        self.completeness=completeness
-        self.connection_ports=connection_ports
-        self.cpu_cash2=cpu_cash2
-        self.cpu_cash3=cpu_cash3
-        self.doc_station_connection=doc_station_connection
-        self.hdd_capacity2=hdd_capacity2
-        self.hdd_free_fall=hdd_free_fall
-        self.hdd_raid=hdd_raid
-        self.input_aditional_keys=input_aditional_keys
-        self.input_keyboard_backlight=input_keyboard_backlight
-        self.input_keyboard_keycolors=input_keyboard_keycolors
-        self.input_keys_constraction=input_keys_constraction
-        self.input_manipulator=input_manipulator
-        self.input_multitouch=input_multitouch
-        self.input_numblock=input_numblock
-        self.lan=lan
-        self.material=material
-        self.multimedia=multimedia
-        self.name=name
+            additional_headphones_port=None, chipset=None, color=None,
+            completeness=None, connection_ports=None, cpu_cash2=None,
+            cpu_cash3=None, doc_station_connection=None, hdd_capacity2=None,
+            hdd_free_fall=None, hdd_raid=None, input_aditional_keys=None,
+            input_keyboard_backlight=None, input_keyboard_keycolors=None,
+            input_keys_constraction=None, input_manipulator=None,
+            input_multitouch=None, input_numblock=None, lan=None, material=None,
+            multimedia=None, name=None, model=None, os=None, panel_bluraydrive=None, ram_max=None,
+            ram_standart=None, ram_type=None, shell=None, shockproof=None,
+            testcpu_3dmark06=None, testcpu_passmark=None, testcpu_super=None, testvga_3dmark=None,
+            testvga_3dmark06=None, thunderbolt=None, type=None, url=None, vga_memory_type=None,
+            vga_model=None, vga_number=None, waterproof=None, web_camera=None, weight=None,
+            width=None, length=None, height=None, price=None):
+        self.battery_capacity = battery_capacity
+        self.battery_cells = battery_cells
+        self.battery_charging_time = battery_charging_time
+        self.battery_voltage = battery_voltage
+        self.battery_work_time = battery_work_time
+        self.cpu_frequency = cpu_frequency
+        self.cpu_kernel_count = cpu_kernel_count
+        self.cpu_model = cpu_model
+        self.cpu_name = cpu_name
+        self.com_g3 = com_g3
+        self.com_bluetooth = com_bluetooth
+        self.com_dialup = com_dialup
+        self.com_nfs = com_nfs
+        self.com_slot = com_slot
+        self.com_slot_type = com_slot_type
+        self.com_widi = com_widi
+        self.com_wifi = com_wifi
+        self.com_wimax = com_wimax
+        self.display_led_backlight = display_led_backlight
+        self.display_brightness = display_brightness
+        self.display_contrast = display_contrast
+        self.display_cover = display_cover
+        self.display_diagonal = display_diagonal
+        self.display_gorilla_glass = display_gorilla_glass
+        self.display_light_sensor = display_light_sensor
+        self.display_matrix = display_matrix
+        self.display_multitouch = display_multitouch
+        self.display_rotation = display_rotation
+        self.display_sensor = display_sensor
+        self.disply_resolution = disply_resolution
+        self.hdd_capacity = hdd_capacity
+        self.hdd_speed = hdd_speed
+        self.hdd_type = hdd_type
+        self.panel_drive = panel_drive
+        self.panel_usb2 = panel_usb2
+        self.panel_usb3 = panel_usb3
+        self.ram_amount = ram_amount
+        self.ram_jacks = ram_jacks
+        self.system_bus = system_bus
+        self.vga_amount = vga_amount
+        self.vga_type = vga_type
+        self.accoustic_format = accoustic_format
+        self.additional_headphones_port = additional_headphones_port
+        self.chipset = chipset
+        self.color = color
+        self.completeness = completeness
+        self.connection_ports = connection_ports
+        self.cpu_cash2 = cpu_cash2
+        self.cpu_cash3 = cpu_cash3
+        self.doc_station_connection = doc_station_connection
+        self.hdd_capacity2 = hdd_capacity2
+        self.hdd_free_fall = hdd_free_fall
+        self.hdd_raid = hdd_raid
+        self.input_aditional_keys = input_aditional_keys
+        self.input_keyboard_backlight = input_keyboard_backlight
+        self.input_keyboard_keycolors = input_keyboard_keycolors
+        self.input_keys_constraction = input_keys_constraction
+        self.input_manipulator = input_manipulator
+        self.input_multitouch = input_multitouch
+        self.input_numblock = input_numblock
+        self.lan = lan
+        self.material = material
+        self.multimedia = multimedia
+        self.name = name
         self.model = model
-        self.os=os
-        self.panel_bluraydrive=panel_bluraydrive
-        self.ram_max=ram_max
-        self.ram_standart=ram_standart
-        self.ram_type=ram_type
-        self.shell=shell
-        self.shockproof=shockproof
-        self.testcpu_3dmark06=testcpu_3dmark06
-        self.testcpu_passmark=testcpu_passmark
-        self.testcpu_super=testcpu_super
-        self.testvga_3dmark=testvga_3dmark
-        self.testvga_3dmark06=testvga_3dmark06
-        self.thunderbolt=thunderbolt
-        self.type=type
-        self.url=url
-        self.vga_memory_type=vga_memory_type
-        self.vga_model=vga_model
-        self.vga_number=vga_number
-        self.waterproof=waterproof
-        self.web_camera=web_camera
-        self.weight=weight
-        self.width=width
-        self.length=length
-        self.height=height
+        self.os = os
+        self.panel_bluraydrive = panel_bluraydrive
+        self.ram_max = ram_max
+        self.ram_standart = ram_standart
+        self.ram_type = ram_type
+        self.shell = shell
+        self.shockproof = shockproof
+        self.testcpu_3dmark06 = testcpu_3dmark06
+        self.testcpu_passmark = testcpu_passmark
+        self.testcpu_super = testcpu_super
+        self.testvga_3dmark = testvga_3dmark
+        self.testvga_3dmark06 = testvga_3dmark06
+        self.thunderbolt = thunderbolt
+        self.type = type
+        self.url = url
+        self.vga_memory_type = vga_memory_type
+        self.vga_model = vga_model
+        self.vga_number = vga_number
+        self.waterproof = waterproof
+        self.web_camera = web_camera
+        self.weight = weight
+        self.width = width
+        self.length = length
+        self.height = height
         self.price = price
-        if id: self.id = id
+        if id:
+            self.id = id
 
 
 class wc_ConcNotebook(db.Model):
@@ -432,12 +437,13 @@ class wc_ConcNotebook(db.Model):
     shop = db.relationship('wc_Shop',
         backref=db.backref('concnotebooks', lazy='dynamic'))
 
-    def __init__(self, id = None, price_usd = None, price_grn = None, device = None, shop = None):
+    def __init__(self, id=None, price_usd=None, price_grn=None, device=None, shop=None):
         self.price_grn = price_grn
         self.price_usd = price_usd
         self.shop = shop
         self.device = device
-        if id: self.id = id
+        if id:
+            self.id = id
 
 
 class wc_NotebookDSS(db.Model):
@@ -453,9 +459,17 @@ class wc_NotebookDSS(db.Model):
     price = db.Column(db.Float)
     size = db.Column(db.Float)
     network = db.Column(db.Float)
+    web_camera = db.Column(db.Float)
+    accoustic = db.Column(db.Float)
+    input = db.Column(db.Float)
+    com = db.Column(db.Float)
+    battery = db.Column(db.Float)
+    panel = db.Column(db.Float)
+    weight = db.Column(db.Float)
 
-    def __init__(self, id = None, hdd = None, cpu = None, display = None, ram = None, vga = None,
-        os = None, size = None, network = None, price = None):
+    def __init__(self, id=None, hdd=None, cpu=None, display=None, ram=None, vga=None,
+        os=None, size=None, network=None, price=None, web_camera=None, accoustic=None,
+        input=None, com=None, battery=None, panel=None, weight=None):
         self.hdd = hdd
         self.cpu = cpu
         self.vga = vga
@@ -465,6 +479,15 @@ class wc_NotebookDSS(db.Model):
         self.price = price
         self.size = size
         self.network = network
+        self.web_camera = web_camera
+        self.accoustic = accoustic
+        self.input = input
+        self.com = com
+        self.battery = battery
+        self.panel = panel
+        self.weight = weight
+        if id:
+            self.id = id
 
 
 class wc_User(db.Model):
@@ -473,10 +496,11 @@ class wc_User(db.Model):
     devices_id = db.Column(db.PickleType)
     devices_dss = db.Column(db.PickleType)
 
-    def __init__(self, id = None, devices_id = None, devices_dss = None):
+    def __init__(self, id=None, devices_id=None, devices_dss=None):
         self.devices_dss = devices_dss
         self.devices_id = devices_id
-        if id: self.id = id
+        if id:
+            self.id = id
 
 
 def add_computers(computers):
@@ -489,10 +513,10 @@ def add_computers(computers):
 def add_conccomputers(pairs):
     #pair: url + shop + price_grn + price_usd
     for pair in pairs:
-        computer = wc_Computer.query.filter_by(url = pair['url']).first()
-        shop = wc_Shop.query.filter_by(name = pair['shop']).first()
-        conc = wc_ConcComputer(price_grn = pair['price_grn'], price_usd = pair['price_usd'], shop = shop, 
-            computer = computer)
+        computer = wc_Computer.query.filter_by(url=pair['url']).first()
+        shop = wc_Shop.query.filter_by(name=pair['shop']).first()
+        conc = wc_ConcComputer(price_grn=pair['price_grn'], price_usd=pair['price_usd'], shop=shop,
+            computer=computer)
         db.session.add(conc)
     db.session.commit()
 
