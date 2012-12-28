@@ -17,9 +17,7 @@ def small_devices(computers_id, computers_dss, dbwrapper):
     for index, dss, computer in zip(range(len(dsses)), dsses, computers):
         max_price, min_price = dbwrapper.max_and_min_price(computer)
         pretty_computer = {
-        #
-        #   A mozno mne peredat otdelno vse dostupnie dss vmeste spiskop
-        #    Toest chtob bilo i 'price_dss',vga_dss',... i  prosto spisok - dsses
+            'type': computer.__class__.__name__[3:].lower(),  # type without 'wc_' prefix
             'id': str(computer.id),
             'name': computer.name,
             'model': computer.model,

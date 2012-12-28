@@ -18,17 +18,17 @@ import sqlorm as sql
 import re
 from support import pkl_to_dict as ptd
 
-# workdevice = sql.wc_Computer
-# workconcdevice = sql.wc_ConcComputer
-# workdss = sql.wc_ComputerDSS
-# workpass = "../data/computers"
-# workconfig = 'support/config/computers.config'
+workdevice = sql.wc_Computer
+workconcdevice = sql.wc_ConcComputer
+workdss = sql.wc_ComputerDSS
+workpass = "../data/computers"
+workconfig = 'support/config/computers.config'
 
-workdevice = sql.wc_Notebook
-workconcdevice = sql.wc_ConcNotebook
-workdss = sql.wc_NotebookDSS
-workpass = "../data/notebooks"
-workconfig = 'support/config/notebooks.config'
+# workdevice = sql.wc_Notebook
+# workconcdevice = sql.wc_ConcNotebook
+# workdss = sql.wc_NotebookDSS
+# workpass = "../data/notebooks"
+# workconfig = 'support/config/notebooks.config'
 
 
 def __values_for_dss():
@@ -81,8 +81,8 @@ def __dss_values_to_db():
                 if 'vga_amount' in xlscomp and not xlscomp['vga_amount']:
                     del xlscomp['vga_amount']
                 db.session.query(workdevice).filter_by(id=id).update(xlscomp)
-            db.session.commit()
             print nrow
+        db.session.commit()
 
 
 def __insert_computers():
@@ -287,9 +287,9 @@ def __rename_photo_folders():
         os.rename(folder, newname)
 
 
-def __grab_device_prices():
-    workdevice.query(workdevice.url).filter(workdevice.price < 0).all()
-
+# def __grab_device_prices():
+#     for device in workdevice.query(workdevice.url).filter(workdevice.price < 0).all()
+        
 # str(comp.height) + str(comp.width) + str(comp.length)
 
 if __name__ == '__main__':
@@ -300,10 +300,15 @@ if __name__ == '__main__':
     # __insert_prices()
     # __insert_shops()
     # __insert_concdevices()
-    __dss_values_to_db()
+    # __dss_values_to_db()
     # __insert_empty_dss()
     # __export_dss_notebooks()
     # __values_for_dss ()
     # __generate_third_page()
     # __rename_photo_folders()
     # __grab_device_prices()
+    #.filter(workdevice.price < 0)
+    for device in workdevice.query.filter(workdevice.price < 0).all():
+        db.session.query(workdevice).filter_by(id=device.id).update({'in_view': False})
+        print device.id
+    db.session.commit()

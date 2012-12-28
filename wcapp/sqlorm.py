@@ -68,6 +68,7 @@ class wc_Computer(db.Model):
     price = db.Column(db.Float)
     testcpu_passmark = db.Column(db.Float)
     testvga_3dmark06 = db.Column(db.Float)
+    in_view = db.Column(db.Boolean)
 
     def __init__(self, id=None, chipset=None, color=None, cpu_frequency=None, cpu_kernel_count=None, cpu_model=None,
         cpu_name=None, display_brightness=None, display_diagonal=None, display_led_backlight=None, display_sensor=None,
@@ -78,7 +79,7 @@ class wc_Computer(db.Model):
         panel_drive=None, panel_usb2=None, panel_usb3=None, pb_power=None, ps2=None,
         ram_amount=None, ram_frequency=None, ram_jacks=None, ram_type=None, thunderbolt=None, type=None, url=None,
         vga_amount=None, vga_model=None, vga_type=None, weight=None, width=None, price=None,
-        testcpu_passmark = None, testvga_3dmark06=None):
+        testcpu_passmark=None, testvga_3dmark06=None, in_view=None):
         self.chipset = chipset
         self.color = color
         self.cpu_frequency = cpu_frequency
@@ -134,6 +135,7 @@ class wc_Computer(db.Model):
         self.price = price
         self.testcpu_passmark = testcpu_passmark
         self.testvga_3dmark06 = testvga_3dmark06
+        self.in_view = in_view
         if id:
             self.id = id
 
@@ -193,7 +195,7 @@ class wc_ComputerDSS(db.Model):
     network = db.Column(db.Float)
 
     def __init__(self, id=None, hdd=None, cpu=None, display=None, ram=None, vga=None,
-        os=None, size=None, panel=None, media= None, thunderbolt=None, network=None, price=None):
+        os=None, size=None, panel=None, media=None, thunderbolt=None, network=None, price=None):
         self.hdd = hdd
         self.cpu = cpu
         self.vga = vga
@@ -302,6 +304,7 @@ class wc_Notebook(db.Model):
     length = db.Column(db.Float)
     height = db.Column(db.Float)
     price = db.Column(db.Float)
+    in_view = db.Column(db.Boolean)
 
     def __init__(self, id=None, battery_capacity=None, battery_cells=None, battery_charging_time=None,
             battery_voltage=None, battery_work_time=None,
@@ -327,7 +330,7 @@ class wc_Notebook(db.Model):
             testcpu_3dmark06=None, testcpu_passmark=None, testcpu_super=None, testvga_3dmark=None,
             testvga_3dmark06=None, thunderbolt=None, type=None, url=None, vga_memory_type=None,
             vga_model=None, vga_number=None, waterproof=None, web_camera=None, weight=None,
-            width=None, length=None, height=None, price=None):
+            width=None, length=None, height=None, price=None, in_view=None):
         self.battery_capacity = battery_capacity
         self.battery_cells = battery_cells
         self.battery_charging_time = battery_charging_time
@@ -418,6 +421,7 @@ class wc_Notebook(db.Model):
         self.length = length
         self.height = height
         self.price = price
+        self.in_view = in_view
         if id:
             self.id = id
 
