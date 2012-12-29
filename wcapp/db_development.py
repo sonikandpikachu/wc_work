@@ -296,7 +296,7 @@ if __name__ == '__main__':
     import support.utf8_converter
     # __insert_computers()
     # __separete_name()
-    # __update_auto_dss()
+    __update_auto_dss()
     # __insert_prices()
     # __insert_shops()
     # __insert_concdevices()
@@ -308,7 +308,7 @@ if __name__ == '__main__':
     # __rename_photo_folders()
     # __grab_device_prices()
     #.filter(workdevice.price < 0)
-    for device in workdevice.query.filter(workdevice.price < 0).all():
-        db.session.query(workdevice).filter_by(id=device.id).update({'in_view': False})
-        print device.id
-    db.session.commit()
+    #for device in workdevice.query.filter(workdevice.price < 0).all():
+    #    db.session.query(workdevice).filter_by(id=device.id).update({'in_view': False})
+    #    print device.id
+    #db.session.commit()
