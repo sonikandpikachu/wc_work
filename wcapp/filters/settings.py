@@ -198,9 +198,9 @@ def required_parameters_cut_function(selected_values):
 required_parameters = filters.CheckboxFilter('rp', u'Я хочу чтоб обязательно был:', 
 									texts, values, type = "table", cut_function = required_parameters_cut_function)
 
-texts = u'всё равно',u'звук 5.1', u'звук 7.1'
-values =  'all','media_sound_5', 'media_sound_7'
-def audio_cut_function(selected_values):	
+texts = u'всё равно', u'звук 5.1', u'звук 7.1'
+values =  'all', 'media_sound_5', 'media_sound_7'
+def audio_cut_function(selected_values):
 	if 'all' in selected_values: return ""
 	if 'media_sound_5' in selected_values : return'media_sound = 5.1'
 	if 'media_sound_7' in selected_values : return'media_sound = 7.1'		
@@ -215,6 +215,6 @@ commonFilter = filters.ContainerFilter([required_parameters, audioFilter], 'comm
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-#COMP_FILTERS = deviceType, priceFilter, performanceFilter, videoFilter, displayFilter, hddFilter, osFilter, commonFilter
-#NOTEBOOK_FILTERS = deviceType, priceFilter, performanceFilter, batteryFilter
-ALL_FILTERS = deviceType, priceFilter, performanceFilter, batteryFilter
+COMP_FILTERS = deviceType, priceFilter, performanceFilter, videoFilter, displayFilter, hddFilter, osFilter, commonFilter
+NOTEBOOK_FILTERS = deviceType, priceFilter, performanceFilter, batteryFilter
+# ALL_FILTERS = deviceType, priceFilter, performanceFilter, batteryFilter

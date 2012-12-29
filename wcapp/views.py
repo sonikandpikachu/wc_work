@@ -9,12 +9,17 @@ from sqlorm import *
 from flask import render_template, request, abort, session
 
 from wcconfig import app
-from filters.settings import ALL_FILTERS
+import filters.settings
 import pretty_data
 import db_queries
 
 #move to html settings
 COMPUTERS_ON_PAGE = 10
+DEFFAULT_DEVICE_TYPE = u'computer'
+FILTERS = {
+    u'computer': filters.settings.COMP_FILTERS,
+    u'notebook': filters.settings.NOTEBOOK_FILTERS
+}
 
 
 @app.route('/')
@@ -25,12 +30,12 @@ def first():
 @app.route('/qa/', methods=['POST', 'GET'])
 def second():
     #need refactor dbwrapper calls
-    dbwrapper = db_queries.DBWrapper('computer')
+    dbwrapper = db_queries.DBWrapper(DEFFAULT_DEVICE_TYPE)
     #getting computers id:
     if request.method == 'POST':
         session['type'] = request.form['type']
         dbwrapper = db_queries.DBWrapper(request.form['type'])
-        devices_id, devices_dss, dss_dict = filtered_devices_id(ALL_FILTERS, request.form, dbwrapper)
+        devices_id, devices_dss, dss_dict = filtered_devices_id(FILTERS[dbwrapper.device], request.form, dbwrapper)
         if 'user_id' in session:
             dbwrapper.delete_user(session['user_id'])
             del session['user_id']
@@ -48,9 +53,9 @@ def second():
                 devices_id, devices_dss, dss_dict = [], [], {}  # nothing to return
         else:
             devices_id, devices_dss, dss_dict = [], [], {}  # nothing to return
-    # pagination test(if bad or wrong page) - REWRITE!!!
+
     last_page = int(round(float(len(devices_id)) / COMPUTERS_ON_PAGE + 0.49))
-    #print 'last_page', last_page, 'len(devices_id)', len(devices_id), (len(devices_id) / COMPUTERS_ON_PAGE + 0.49)
+    # pagination test(if bad or wrong page) - REWRITE!!!
     try:
         page = int(request.args.get('page', '')) if 'page' in request.args else 1
     except ValueError:
@@ -63,13 +68,9 @@ def second():
     devices_id_on_page = devices_id[first_comp_index: last_comp_index]
     devices_dss_on_page = devices_dss[first_comp_index: last_comp_index]
 
-    #print 'page', page, 'last_page', last_page
-    #print 'pagination_pages', pretty_data.pagination_pages(page, last_page)
-    #print 'devices_id_on_page', devices_id_on_page
-
     pretty_devices = pretty_data.small_devices(devices_id_on_page, devices_dss_on_page, dbwrapper)
 
-    return render_template('QandA.html', computers=pretty_devices, filters=ALL_FILTERS,
+    return render_template('QandA.html', computers=pretty_devices, filters=FILTERS[dbwrapper.device],
         current_page=page, pagination_pages=pretty_data.pagination_pages(page, last_page), dss_dict=dss_dict)
 
 
