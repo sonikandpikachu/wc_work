@@ -18,11 +18,18 @@ class DBWrapper (object):
     #in this dictionary we defines dsses for every device type
     _device_dss = {
         u'computer' : {
+                        'price' : -9,
                         'cpu' : 4, 
                         'ram' : 3, 
-                        'vga' : 1, 
-                        'os' : 1, 
-                        'price' : -8
+                        'vga' : 3, 
+                        'hdd' : 2,
+                        'display' : 1,
+                        'os' : 0.5,
+                        'network' : 0.5,
+                        'panel' : 0.5,
+                        'media' : 0.5,
+                        'thunderbolt' : 0.1,
+                        'size' : -0.01
         },
 
         u'notebook' : {
@@ -31,7 +38,7 @@ class DBWrapper (object):
                         'vga' : 1, 
                         'os' : 1, 
                         'price' : -8
-        },
+        }
     }
 
     _device_parameters = {
@@ -62,7 +69,7 @@ class DBWrapper (object):
         '''
         # print cut_values
         cut_string = ' AND '.join(cut_values)
-        # print 'CUT STRING', cut_string
+        print 'CUT STRING', cut_string
         devices_id = db.session.query(self.device_table.id).filter(cut_string).all()
         return tuple(int(comp[0]) for comp in devices_id)
 
@@ -74,12 +81,12 @@ class DBWrapper (object):
         WHAT FOR DO WE NEED TO RETURN DSS_DICT???
         '''
 
-        dss_dict = self._device_dss[self._device]
+        dss_dict = self._device_dss[self._device].copy() #podumai!!!!        
         for dss in dss_values: 
             for key in dss:
-                dss_dict[key] += dss[key]
+                dss_dict[key] += dss[key]        
         devices_id = self._cutted_devices_id(cut_values)#all devices after cutting
-        print 'devices_id', devices_id
+        #print 'devices_id', devices_id
         #getting dss for this devices from db
         sqldsses = db.session.query(self.dss_table).filter(self.dss_table.id.in_(devices_id)).all()
         devices_dss = {}#dict of id and dss for each device

@@ -157,7 +157,7 @@ def __update_auto_dss():
     ram_dss = {'1':20,'2':40,'3':50,'4':60,'6':70,'8':80,'12':90,'16':100}
     
     def oss_dss_calc(os_name):
-        os_dss_dict = {'FreeDOS':0,'Linux':20,'Windows 7 Starter':30,'Windows 8':80,'Windows 7 Professional':100}
+        os_dss_dict = {'FreeDOS':0,'Linux':20,'Windows 7 Starter':30,'Windows 7 Home Basic':40,'Windows 8':80,'Windows 7 Professional':100}
         os_dss = 50
         for key in os_dss_dict:
             if key in os_name: os_dss = os_dss_dict[key] 

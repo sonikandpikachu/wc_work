@@ -49,13 +49,13 @@
                 {% for i in range(values|length) %}
                 <label>
                     <input type="radio" name="{{ name }}" value="{{ values[i] }}" id="{{ name }}_{{ values[i] }}">
-                    {{ texts[i] }}   
+                    {{ texts[i] }}                   
                 </label>
-                {% if selected_value %} {% if i == selected_value %}
+                {% if i == selected_value %}                             
                               <script type="text/javascript">
                                   qParams["{{ name }}_{{ values[i] }}"] = "checked";
-                                </script>                  
-                {% endif %}{% endif %}
+                              </script>                                        
+                {% endif %}
                 {% endfor %}                               
             {% else %}
                 <table>
@@ -68,11 +68,11 @@
                             <input type="radio" name="{{ name }}" value="{{ values[colloop.index0*4 + loop.index0] }}" id="{{ name }}_{{ values[colloop.index0*4 + loop.index0] }}">
                             {{ texts[colloop.index0*4 + loop.index0] }}
                         </label>
-                        {% if selected_value %} {% if i == selected_value %}
+                        {% if i == selected_value %}
                               <script type="text/javascript">
                                   qParams["{{ name }}_{{ values[colloop.index0*4 + loop.index0] }}"] = "checked";
                                 </script>                  
-                       {% endif %}{% endif %}                    
+                       {% endif %}                    
                     {%- endfor -%}
                     </td>
                 {%- endfor -%}

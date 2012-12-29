@@ -16,14 +16,11 @@ def small_devices(computers_id, computers_dss, dbwrapper):
     pretty_devices = []
     for index, dss, computer in zip(range(len(dsses)), dsses, computers):
         max_price, min_price = dbwrapper.max_and_min_price(computer)
-        pretty_computer = {
-        #
-        #   A mozno mne peredat otdelno vse dostupnie dss vmeste spiskop
-        #    Toest chtob bilo i 'price_dss',vga_dss',... i  prosto spisok - dsses
+        pretty_computer = {       
             'id': str(computer.id),
             'name': computer.name,
             'model': computer.model,
-            'dss': computers_dss[index],
+            'comp_dss': computers_dss[index],
             'cpu_name': computer.cpu_name,
             'cpu_model': computer.cpu_model,
             'cpu_frequency': computer.cpu_frequency,

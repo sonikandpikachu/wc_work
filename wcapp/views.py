@@ -53,7 +53,7 @@ def second():
     
     #pagination test(if bad or wrong page) - REWRITE!!!
     last_page = int(round(float(len(devices_id)) / COMPUTERS_ON_PAGE + 0.49))
-    print 'last_page', last_page, 'len(devices_id)', len(devices_id), (len(devices_id) / COMPUTERS_ON_PAGE + 0.49)
+    #print 'last_page', last_page, 'len(devices_id)', len(devices_id), (len(devices_id) / COMPUTERS_ON_PAGE + 0.49)
     try:
         page = int(request.args.get('page', '')) if 'page' in request.args else 1
     except ValueError:
@@ -66,9 +66,9 @@ def second():
     devices_id_on_page = devices_id[first_comp_index : last_comp_index]    
     devices_dss_on_page = devices_dss[first_comp_index : last_comp_index]
 
-    print 'page', page, 'last_page', last_page
-    print 'pagination_pages', pretty_data.pagination_pages(page, last_page)
-    print 'devices_id_on_page', devices_id_on_page
+    #print 'page', page, 'last_page', last_page
+    #print 'pagination_pages', pretty_data.pagination_pages(page, last_page)
+    #print 'devices_id_on_page', devices_id_on_page
 
     pretty_devices = pretty_data.small_devices(devices_id_on_page, devices_dss_on_page, dbwrapper)
 
@@ -81,6 +81,7 @@ def filtered_devices_id(filters, form, dbwrapper):
     Gets parameters from request form, executes filters functions and finally returns filtered computers id
     '''
     #choosing with what device we are working
+    print 'FORM', form
     dss_values, cut_values = [], []
     for filt in filters:
         values_dict = dict((key,form[key]) for key in form if key.startswith(filt.name))
@@ -88,8 +89,8 @@ def filtered_devices_id(filters, form, dbwrapper):
             dss, cut = filt.get_answers(values_dict)
             if dss: dss_values.append(dss)
             if cut: cut_values.append(cut)
-    print 'cut_values', cut_values, 'dss_values', dss_values
-    print dbwrapper.sorted_devices_id(cut_values, dss_values)
+    #print 'cut_values', cut_values, 'dss_values', dss_values
+    #print dbwrapper.sorted_devices_id(cut_values, dss_values)
     return dbwrapper.sorted_devices_id(cut_values, dss_values)
 
 

@@ -40,6 +40,7 @@
       function setValues(params, type)
       {
           var sliders = new Array();
+          var twoParts = new Array();
           var inputs = document.qForm.getElementsByTagName("input");
                for (i = 0; i < inputs.length;i++){
                 if((inputs[i].type == "radio") || (inputs[i].type == "checkbox"))
@@ -54,7 +55,29 @@
                }else{               
                  if (key.split('_')[1] == "hi")
                  {
-                    if(params[key] == 1){                
+                    twoParts.push(key); 
+                 }else{ 
+                  if (key.split('_')[1] == "select"){                    
+                      document.getElementById(key.split('_')[0]).value = params[key];
+                  } else{              
+                     var param = params[key].split(';');                   
+                     if (param.length > 1){                        
+                        $(sKey).slider("value", param[0], param[1]);
+                      }
+                      else     
+                        $(sKey).slider("value", param[0]);                   
+                     sliders.push(sKey);
+                   }
+                 }
+               }                      
+            }
+            for (i = 0; i < sliders.length;i++){
+              $(sliders[i]).slider().update();
+            }
+          for (j = 0; j < twoParts.length;j++){
+              var key = twoParts[j];
+              var sKey = "#"+key;
+              if(params[key] == 1){                
                       if (type == 'first') {$("#" + key.split('_')[0]).css('marginLeft','-800px');}
                       else {$("#" + key.split('_')[0]).animate({ marginLeft: '-800px' }, 800);}
                       $(sKey).val(1);
@@ -67,25 +90,10 @@
                       $(sKey).val(0);
                       $("#lArrow"+ key.split('_')[0]).hide();
                       $("#rArrow"+ key.split('_')[0]).show();
-                    } 
-                 }else{ 
-                  if (key.split('_')[1] == "select"){                                                         
-                      document.getElementById(key.split('_')[0]).value = params[key];                     
-                  } else{              
-                     var param = params[key].split(';');                   
-                     if (param.length > 1)
-                        $(sKey).slider("value", param[0], param[1]);
-                      else     
-                        $(sKey).slider("value", param[0]);                   
-                     sliders.push(sKey);
-                   }
-                 }
-               }                      
-            }                                 
-            $.uniform.update();
-            for (i = 0; i < sliders.length;i++){
-              $(sliders[i]).slider().update();
-            }            
+                    }
+            }  
+            
+            $.uniform.update();            
       }
       function saveValues()
       {         
@@ -97,7 +105,7 @@
                     MyQParams[inputs[i].id]  = "checked";
                 }
               else{
-                MyQParams[inputs[i].id] = inputs[i].value
+                MyQParams[inputs[i].id] = inputs[i].value;
               }
           }
           var selects = document.qForm.getElementsByTagName("select");
@@ -188,7 +196,7 @@
             <div class = "name"> {{ comp.name }} &nbsp; {{ comp.model }} </div>
             <div class="classification">
               <div class="cover"></div>
-              <div class="progress" style="width: {{ comp.dss }}%;"></div>
+              <div class="progress" style="width: {{ comp.comp_dss }}%;"></div>
             </div>
           </div>
           <ul class = "description">
@@ -248,38 +256,49 @@
         <table class = "console" style = "width: 100%">   
                    <tr style = "width: 100%"> 
                         <td style = "padding-left: 20px;">
-                          price&emsp;{{ comp.price_dss }}
+                          price&emsp;{{ comp.dss.price }}
                         </td>
                         <td style = "padding-left: 20px;">
-                          cpu&emsp;{{ comp.cpu_dss }}
+                          cpu&emsp;{{ comp.dss.cpu }}
                         </td> 
                         <td style = "padding-left: 20px;">
-                          vga&emsp;{{ comp.vga_dss }}
+                          vga&emsp;{{ comp.dss.vga }}
                         </td>   
                     </tr>
                      <tr style = "width: 100%"> 
                         <td style = "padding-left: 20px;">
-                          display&emsp;{{ comp.display_dss }}
+                          ram&emsp;{{ comp.dss.ram }}
+                        </td>
+                        <td style = "padding-left: 20px;">
+                          hdd&emsp;{{ comp.dss.hdd }}
+                        </td>
+                        <td style = "padding-left: 20px;">
+                          display&emsp;{{ comp.dss.display }}
                         </td>                                                
                     </tr>
                     <tr style = "width: 100%"> 
                         <td style = "padding-left: 20px;">
-                          ram&emsp;{{ comp.ram_dss }}
+                          os&emsp;{{ comp.dss.os }}
                         </td>
                         <td style = "padding-left: 20px;">
-                          os&emsp;{{ comp.os_dss }}
+                          size&emsp;{{ comp.dss.size }}
                         </td>
-                        <td style = "padding-left: 20px;"> 
-                        {% if dss_dict %} 
-                        Пример исспользования дсс:
-                        hdd:{{ comp.dss.hdd }}, ram:{{ comp.dss.ram }}, cpu:{{ comp.dss.cpu }}, os:{{ comp.dss.os }} ...
-                        <!-- вот это вот передаеться как comp.dss (уже сложенная вся сумма) -->
-                        {% endif %}
-                        </td>                         
+                        <td style = "padding-left: 20px;">
+                          panel&emsp;{{ comp.dss.panel }}
+                        </td>                      
                     </tr>
-                
-      
-    </table>
+                    <tr style = "width: 100%"> 
+                        <td style = "padding-left: 20px;">
+                          media&emsp;{{ comp.dss.media }}
+                        </td>
+                        <td style = "padding-left: 20px;">
+                          thunderbolt&emsp;{{ comp.dss.thunderbolt }}
+                        </td>
+                        <td style = "padding-left: 20px;">
+                          network&emsp;{{ comp.dss.network }}
+                        </td>                      
+                    </tr>
+    </table>   
       </li>
       {% endfor %} 
     </ul>
