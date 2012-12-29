@@ -8,6 +8,7 @@ This class describes all filters for answers. Every filter has to realise class 
 For more details look filters.py 
 '''
 from sqlorm import wc_Computer
+#from sqlorm import wc_Notebook
 from wcconfig import db
 from dss import DSS_WEIGHTS
 import filters
@@ -148,6 +149,19 @@ def hdd_diagonal_cut_function(selected_values):
 hddFilter  = filters.SliderDoubleFilter('hdd', u'Объем памяти:',250, 2000, [500, 1000],
 											dimension = u' Gb', step = 50)
 
+#----------------------------------------------------------------------------------------------------------------------------------------------------------
+#Battery:
+
+
+def battery_dss_function(selected_values):
+	return {'battery' : int(selected_values[0])*0.5}	
+descriptionBatteryN = u'<p style = "text-indent: 10px;">Значение определяет на сколько увеличиться важность батареии </br>\
+в подбираемой модели в ущерб остальным параметрам</p>'
+batteryFilter = filters.SliderSingleFilter('battery', u'Батарея:', 0, 5, 0,
+									labels = [u'Обычная', u'Максимальная автономность'], description = descriptionBatteryN, dss_function = battery_dss_function)
+
+
+
 
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
 #os:
@@ -200,6 +214,7 @@ commonFilter = filters.ContainerFilter([required_parameters, audioFilter], 'comm
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
 
-#all filters to use at page:
-#ALL_FILTERS = TwoPartTestFilter, performanceNFilter, osFilterC, osFilterR, required_parameters
-ALL_FILTERS = deviceType, priceFilter, performanceFilter, videoFilter, displayFilter, hddFilter, osFilter, commonFilter
+
+#COMP_FILTERS = deviceType, priceFilter, performanceFilter, videoFilter, displayFilter, hddFilter, osFilter, commonFilter
+#NOTEBOOK_FILTERS = deviceType, priceFilter, performanceFilter, batteryFilter
+ALL_FILTERS = deviceType, priceFilter, performanceFilter, batteryFilter

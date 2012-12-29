@@ -18,17 +18,17 @@ import sqlorm as sql
 import re
 from support import pkl_to_dict as ptd
 
-workdevice = sql.wc_Computer
-workconcdevice = sql.wc_ConcComputer
-workdss = sql.wc_ComputerDSS
-workpass = "../data/computers"
-workconfig = 'support/config/computers.config'
+#workdevice = sql.wc_Computer
+#workconcdevice = sql.wc_ConcComputer
+#workdss = sql.wc_ComputerDSS
+#workpass = "../data/computers"
+#workconfig = 'support/config/computers.config'
 
-# workdevice = sql.wc_Notebook
-# workconcdevice = sql.wc_ConcNotebook
-# workdss = sql.wc_NotebookDSS
-# workpass = "../data/notebooks"
-# workconfig = 'support/config/notebooks.config'
+workdevice = sql.wc_Notebook
+workconcdevice = sql.wc_ConcNotebook
+workdss = sql.wc_NotebookDSS
+workpass = "../data/notebooks"
+workconfig = 'support/config/notebooks.config'
 
 
 def __values_for_dss():
@@ -150,10 +150,10 @@ def __update_devices():
     db.session.commit()
 
 
-def __update_auto_dss():
+def __update_comp_dss():
     '''inserting dss values, wich is autocalculated, based on deffault parameters. Works only for computers and 
     notebooks'''
-    # Don't change!!!
+
     ram_dss = {'1':20,'2':40,'3':50,'4':60,'6':70,'8':80,'12':90,'16':100}
 
     def oss_dss_calc(os_name):
@@ -210,7 +210,7 @@ def __update_auto_dss():
     computers = workdevice.query.all()
     allhdd = [hdd_dss_calc(comp) for comp in computers if comp.hdd_capacity]
     allcpu = [comp.testcpu_passmark**0.25 for comp in computers if comp.testcpu_passmark]
-    allvga = [comp.testvga_3dmark06**0.25 for comp in computers if comp.vga_amount]
+    allvga = [comp.testvga_3dmark06**0.25 for comp in computers if comp.testvga_3dmark06]
     alldisplay = [display_dss_calc(comp) for comp in computers if comp.display_diagonal]
     allsize = [size_dss_calc(comp) for comp in computers if comp.height]
     allpanel = [panel_dss_calc(comp) for comp in computers]
@@ -242,6 +242,166 @@ def __update_auto_dss():
         }
         db.session.query(workdss).filter_by(id = comp.id).update(values)
     db.session.commit()
+
+
+def __update_notebook_dss():
+    '''inserting dss values, wich is autocalculated, based on deffault parameters. Works only for computers and 
+    notebooks'''
+
+    
+
+    def ram_dss_calc(comp):
+        ram_dss = {'1024':15,'2048':35,'3072':45,'3096':55,'4096':55,'6144':65,'8192':75,'12288':85,'16384':95}
+        rez = ram_dss[str(comp.ram_amount)]
+        if comp.ram_standart:
+            if 'PC2' in comp.ram_standart: rez *=0.7
+            if comp.ram_standart == 'PC3-12800': rez +=10            
+            if 'PC3-10600' in comp.ram_standart: rez +=5
+        elif comp.ram_type:
+            if comp.ram_type == 'DDR 2': rez *=0.7
+        if rez > 100: rez = 100
+        return rez
+
+    def common_dss_calc(comp):        
+        rez = 0
+        if comp.waterproof: rez += 40
+        if comp.shockproof: rez += 40
+        if comp.doc_station_connection: rez += 20
+        return rez
+
+    def input_dss_calc(comp):        
+        rez = 0
+        if comp.input_keyboard_backlight: rez += 50
+        if comp.input_multitouch: rez += 50
+        return rez
+
+    def battery_dss_calc(comp):
+        if comp.battery_work_time: 
+            return comp.battery_work_time
+        elif comp.battery_capacity:
+            if comp.battery_capacity > 1000:
+                return 3.57+0.00046*comp.battery_capacity
+            else:
+                return 3.35+0.05*comp.battery_capacity
+        return 0 
+
+    def com_dss_calc(comp):        
+        rez = 0
+        if comp.com_bluetooth: rez += 15
+        if comp.com_dialup: rez += 15
+        if comp.com_widi: rez += 15
+        if comp.com_wifi:
+            if '300' in comp.com_wifi:
+                rez += 25
+            else:
+                rez += 10
+        if comp.com_wimax: rez += 15
+        if comp.com_slot: rez += 10
+        if comp.com_g3: rez += 20
+        if 'отсутствует' in comp.lan: rez -= 20
+        if comp.thunderbolt: rez += 15
+        if rez > 100: rez = 100
+        return rez
+
+    def accoustic_dss_calc(comp):
+        accoustic_dss = {'1.0':0, '2.0':45,'2.1':50,'4.0':80,'4.1':90,'5.1':100}      
+        rez = accoustic_dss[comp.accoustic_format[:3]]
+        if comp.additional_headphones_port: rez += 5
+        if rez > 100: rez = 100 
+        return rez
+
+    def webcamera_dss_calc(comp):
+        webcamera_dss = {'0.3':20, '1.0':40,'1.3':60,'2.0':80,'3.0':100}      
+        if comp.web_camera == 'отсутствует': 
+            return 0 
+        else: 
+            return webcamera_dss[comp.web_camera[:3]]
+
+    def oss_dss_calc(os_name):
+        os_dss_dict = {u'без ОС': 0,'FreeDOS':0,'Linux':20,'MeeGo':20,'Windows XP':30,'Windows 7 Starter':30,'Windows 7 Home Basic':40,'Windows 8':80,'Windows 7 Professional':100,'Windows 7 Ultimate':100}
+        os_dss = 50
+        for key in os_dss_dict:
+            if key in os_name: os_dss = os_dss_dict[key] 
+        return os_dss
+
+    def display_dss_calc(comp):        
+        rez = comp.display_diagonal * int(comp.disply_resolution[:2]) / 5
+        if comp.display_led_backlight: rez += 5
+        if comp.display_sensor: rez += 10
+        if comp.display_light_sensor: rez += 3
+        if comp.display_gorilla_glass: rez += 3
+        if comp.display_multitouch: rez += 3
+        if comp.display_matrix == 'IPS': rez += 10
+        if u'матовое' in comp.display_cover: rez += 7
+        if comp.display_contrast:
+            m = re.match(ur"(\d+)", comp.display_contrast)
+            contrast = int(m.group(1)) 
+            if comp.display_contrast > 200: rez += contrast/40
+        return rez
+
+    def hdd_dss_calc(comp):
+        m = re.match(ur"(\d+) Гб", comp.hdd_capacity)
+        rez = int(m.group(1))
+        if comp.hdd_capacity2:
+            m = re.match(ur"(\d+) Гб", comp.hdd_capacity2)
+            rez += int(m.group(1))         
+        if 'SSD' in comp.hdd_type: rez += 500
+        if comp.hdd_speed == 5400: rez -=200
+        if comp.hdd_free_fall: rez += 50
+        if comp.hdd_raid: rez += 50
+        return rez
+
+    def size_dss_calc(comp):
+        return comp.height * comp.length * comp.width  
+
+    def panel_dss_calc(comp):
+        rez = 0       
+        if comp.panel_bluraydrive: rez += 15
+        if comp.panel_usb2: rez += 2 * comp.panel_usb2
+        if comp.panel_usb3: rez += 4 * comp.panel_usb3
+        return rez   
+
+    computers = workdevice.query.all()
+    allhdd = [hdd_dss_calc(comp) for comp in computers if comp.hdd_capacity]
+    allcpu = [comp.testcpu_passmark**0.25 for comp in computers if comp.testcpu_passmark]
+    allvga = [comp.testvga_3dmark06**0.25 for comp in computers if comp.testvga_3dmark06]
+    alldisplay = [display_dss_calc(comp) for comp in computers if comp.display_diagonal]
+    allsize = [size_dss_calc(comp) for comp in computers if comp.height]
+    allbattery = [battery_dss_calc(comp) for comp in computers]
+    allpanel = [panel_dss_calc(comp) for comp in computers]  
+    allweight = [comp.weight for comp in computers if comp.weight]  
+  
+    hddmin, hddmax = min(allhdd), max(allhdd)
+    sizemin, sizemax = min(allsize), max(allsize)
+    cpumin, cpumax = min(allcpu), max(allcpu)
+    vgamin, vgamax = min(allvga), max(allvga)
+    displaymin, displaymax = min(alldisplay), max(alldisplay)
+    batterymin, batterymax = min(allbattery), max(allbattery)
+    panelmin, panelmax = min(allpanel), max(allpanel)
+    weightmin, weightmax = min(allweight), max(allweight)    
+
+    for comp in computers:
+        values = {
+            'ram' : ram_dss_calc(comp) if comp.ram_amount else 0,
+            'price' : comp.price / 500 if comp.price > 0 else 0,
+            'os': oss_dss_calc(comp.os),
+            'common': common_dss_calc(comp),
+            'input': input_dss_calc(comp),
+            'com': com_dss_calc(comp),
+            'web_camera': webcamera_dss_calc(comp) if comp.web_camera else 0,
+            'accoustic': accoustic_dss_calc(comp) if comp.accoustic_format else 0,
+            'hdd' : round(100*(hdd_dss_calc(comp) - hddmin)  / (hddmax - hddmin)) if comp.hdd_capacity else 0,            #
+            'weight' : round(100*(comp.weight - weightmin)  / (weightmax - weightmin)) if comp.weight else 50,
+            'panel' : round(100*(panel_dss_calc(comp) - panelmin)  / (panelmax - panelmin)),
+            'battery' : round(100*(battery_dss_calc(comp) - batterymin)  / (batterymax - batterymin)),
+            'size' : round(100*(size_dss_calc(comp) - sizemin)  / (sizemax - sizemin)) if comp.height else 100, # inverse
+            'cpu' : round(90*(comp.testcpu_passmark**0.25 - cpumin) / (cpumax - cpumin) + 10) if comp.testcpu_passmark else 0,
+            'vga' : round(90*(comp.testvga_3dmark06**0.25 - vgamin) / (vgamax - vgamin) + 10) if comp.testvga_3dmark06 else 0,
+            'display' : round(100*(display_dss_calc(comp) - displaymin) / (displaymax - displaymin)) if comp.display_diagonal else 0 # mean value
+
+        }
+        db.session.query(workdss).filter_by(id = comp.id).update(values)
+    db.session.commit()    
 
 
 def __separete_name():
@@ -296,7 +456,8 @@ if __name__ == '__main__':
     import support.utf8_converter
     # __insert_computers()
     # __separete_name()
-    # __update_auto_dss()
+    #__update_comp_dss()
+    __update_notebook_dss()
     # __insert_prices()
     # __insert_shops()
     # __insert_concdevices()
@@ -308,7 +469,7 @@ if __name__ == '__main__':
     # __rename_photo_folders()
     # __grab_device_prices()
     #.filter(workdevice.price < 0)
-    for device in workdevice.query.filter(workdevice.price < 0).all():
-        db.session.query(workdevice).filter_by(id=device.id).update({'in_view': False})
-        print device.id
-    db.session.commit()
+    #for device in workdevice.query.filter(workdevice.price < 0).all():
+    #    db.session.query(workdevice).filter_by(id=device.id).update({'in_view': False})
+    #    print device.id
+    #db.session.commit()

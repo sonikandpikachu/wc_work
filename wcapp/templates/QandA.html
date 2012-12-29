@@ -193,7 +193,7 @@
         </div>
         <div class = "descriptionSection">
           <div class="title">
-            <div class = "name"> {{ comp.name }} &nbsp; {{ comp.model }} &nbsp; {{ comp.type }} </div>
+            <div class = "name"> {{ comp.name }} &nbsp; {{ comp.model }}</div>
             <div class="classification">
               <div class="cover"></div>
               <div class="progress" style="width: {{ comp.comp_dss }}%;"></div>
@@ -253,7 +253,8 @@
                                 onMouseDown="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton3.png') }}'"
                                 /> </a> </li>
         </ul>
-        <table class = "console" style = "width: 100%">   
+        <table class = "console" style = "width: 100%">
+           {% if comp.type != 'notebook' %}
                    <tr style = "width: 100%"> 
                         <td style = "padding-left: 20px;">
                           price&emsp;{{ comp.dss.price }}
@@ -298,6 +299,68 @@
                           network&emsp;{{ comp.dss.network }}
                         </td>                      
                     </tr>
+          {% else %}
+            <tr style = "width: 100%"> 
+                        <td style = "padding-left: 20px;">
+                          price&emsp;{{ comp.dss.price }}
+                        </td>
+                        <td style = "padding-left: 20px;">
+                          cpu&emsp;{{ comp.dss.cpu }}
+                        </td> 
+                        <td style = "padding-left: 20px;">
+                          vga&emsp;{{ comp.dss.vga }}
+                        </td>   
+                    </tr>
+                     <tr style = "width: 100%"> 
+                        <td style = "padding-left: 20px;">
+                          ram&emsp;{{ comp.dss.ram }}
+                        </td>
+                        <td style = "padding-left: 20px;">
+                          hdd&emsp;{{ comp.dss.hdd }}
+                        </td>
+                        <td style = "padding-left: 20px;">
+                          display&emsp;{{ comp.dss.display }}
+                        </td>                                                
+                    </tr>
+                    <tr style = "width: 100%"> 
+                        <td style = "padding-left: 20px;">
+                          os&emsp;{{ comp.dss.os }}
+                        </td>
+                        <td style = "padding-left: 20px;">
+                          size&emsp;{{ comp.dss.size }}
+                        </td>
+                        <td style = "padding-left: 20px;">
+                          weight&emsp;{{ comp.dss.weight }}
+                        </td>                      
+                    </tr>
+                    <tr style = "width: 100%"> 
+                        <td style = "padding-left: 20px;">
+                          battery&emsp;{{ comp.dss.battery}}
+                        </td>
+                        <td style = "padding-left: 20px;">
+                          com&emsp;{{ comp.dss.com }}
+                        </td>
+                        <td style = "padding-left: 20px;">
+                          web_camera&emsp;{{ comp.dss.web_camera }}
+                        </td>                      
+                    </tr>
+                    <tr style = "width: 100%"> 
+                        <td style = "padding-left: 20px;">
+                          panel&emsp;{{ comp.dss.panel}}
+                        </td>
+                        <td style = "padding-left: 20px;">
+                          common&emsp;{{ comp.dss.common }}
+                        </td>
+                        <td style = "padding-left: 20px;">
+                          input&emsp;{{ comp.dss.input}}
+                        </td>                      
+                    </tr>
+                    <tr style = "width: 100%"> 
+                        <td style = "padding-left: 20px;">
+                          accoustic&emsp;{{ comp.dss.accoustic}}
+                        </td>                        
+                    </tr>
+         {% endif %}
     </table>   
       </li>
       {% endfor %} 
