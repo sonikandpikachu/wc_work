@@ -8,6 +8,8 @@ If you want to make some actions to some other devices(not computers), just chan
 workdss, workdevice, workconcdevice and datapass parameters
 '''
 import os
+import re
+import glob
 
 import sqlalchemy
 
@@ -22,18 +24,14 @@ workdss = sql.wc_ComputerDSS
 workpass = "../data/computers"
 workconfig = 'support/config/computers.config'
 
-#workdevice = sql.wc_Notebook
-#workconcdevice = sql.wc_ConcNotebook
-#workdss = sql.wc_NotebookDSS
-#workpass = "../data/notebooks"
-#workconfig = 'support/config/notebooks.config'
+# workdevice = sql.wc_Notebook
+# workconcdevice = sql.wc_ConcNotebook
+# workdss = sql.wc_NotebookDSS
+# workpass = "../data/notebooks"
+# workconfig = 'support/config/notebooks.config'
 
 
-
-# <b>comp&emsp;{{ comp.id }}&emsp;{{ comp.price_dss * dss_dict['price'] + comp.cpu_dss * dss_dict['cpu']
-#  + comp.vga_dss * dss_dict['vga'] + comp.ram_dss * dss_dict['ram'] + comp.os_dss * dss_dict['os']}}</b>
-
-def __values_for_dss ():
+def __values_for_dss():
     ''' export data from db to dss.xls '''
     import xlwt
     wbk = xlwt.Workbook()
@@ -47,10 +45,10 @@ def __values_for_dss ():
         for comp in workdevice.query.all():
             if not comp.__dict__[test]:
                 values = tuple(comp.__dict__[column] for column in columns)
-                if values in all_values: 
+                if values in all_values:
                     all_values[values].append(comp.url)
                     id_values[values].append(comp.id)
-                else: 
+                else:
                     all_values[values] = [comp.url]
                     id_values[values] = [comp.id]
         sheet = wbk.add_sheet(prefix)
@@ -58,9 +56,9 @@ def __values_for_dss ():
             sheet.write(0, i, column)
         for i, values in enumerate(all_values):
             for j, value in enumerate(values):
-                sheet.write(i+1, j, value)
-            sheet.write(i+1, len(values) + 1, ', '.join(all_values[values]))
-            sheet.write(i+1, len(values), ', '.join([str(v) for v in id_values[values]]))
+                sheet.write(i + 1, j, value)
+            sheet.write(i + 1, len(values) + 1, ', '.join(all_values[values]))
+            sheet.write(i + 1, len(values), ', '.join([str(v) for v in id_values[values]]))
     wbk.save('dss.xls')
 
 
@@ -71,18 +69,20 @@ def __dss_values_to_db():
     sheet_names = wbk.sheet_names()
     for name in sheet_names:
         sheet = wbk.sheet_by_name(name)
-        column_names = dict((row_value,i) for i, row_value in enumerate(sheet.row_values(0)))
-        # print 'column_names', column_names
-        assert 'id' in column_names,'dss or url isn`t defined in sheet ' + name
+        column_names = dict((row_value, i) for i, row_value in enumerate(sheet.row_values(0)))
+        print 'column_names', column_names
+        assert 'id' in column_names, 'id isn`t defined in sheet ' + name
         for nrow in range(1, sheet.nrows):
             row_values = sheet.row_values(nrow)
             ids = [int(rv.strip()) for rv in row_values[column_names['id']].split(',')]
             for id in ids:
-                xlscomp = dict((cn, row_values[column_names[cn]]) for cn in column_names if not cn in ('Passmark G3D Mark', 'id'))
-                if 'vga_amount' in xlscomp and not xlscomp['vga_amount']: del xlscomp['vga_amount']
-                db.session.query(workdevice).filter_by(id = id + 1).update(xlscomp)
-            db.session.commit()
+                xlscomp = dict((cn, row_values[column_names[cn]]) for cn in column_names
+                    if not cn in ('Passmark G3D Mark', 'id') and row_values[column_names[cn]])
+                if 'vga_amount' in xlscomp and not xlscomp['vga_amount']:
+                    del xlscomp['vga_amount']
+                db.session.query(workdevice).filter_by(id=id).update(xlscomp)
             print nrow
+        db.session.commit()
 
 
 def __insert_computers():
@@ -98,8 +98,8 @@ def __insert_prices():
     ''' adds average prices to every computer '''
     for comp in workdevice.query.all():
         prices = [conc.price_usd for conc in comp.concretes]
-        price = sum(prices)/len(prices) if prices else -1
-        db.session.query(workdevice).filter_by(id = comp.id).update({'price' : price}, synchronize_session=False)
+        price = sum(prices) / len(prices) if prices else -1
+        db.session.query(workdevice).filter_by(id=comp.id).update({'price': price}, synchronize_session=False)
     db.session.commit()
 
 
@@ -108,14 +108,15 @@ def __insert_concdevices():
     conccomputers = ptd.conccomputers(workpass, "Устройство.магазины", "Устройство.цены_грн", "Устройство.цены_длр")
     print len(conccomputers)
     for cc in conccomputers:
-        comp = workdevice.query.filter_by(url = cc['url']).one()
-        try: shop = sql.wc_Shop.query.filter_by(name = cc['shop']).one()
-        except sqlalchemy.orm.exc.MultipleResultsFound: 
-            shops = sql.wc_Shop.query.filter_by(name = cc['shop'])
+        comp = workdevice.query.filter_by(url=cc['url']).one()
+        try:
+            shop = sql.wc_Shop.query.filter_by(name=cc['shop']).one()
+        except sqlalchemy.orm.exc.MultipleResultsFound:
+            shops = sql.wc_Shop.query.filter_by(name=cc['shop'])
             shop = shops[0]
-            db.session.query(sql.wc_Shop).filter_by(id = shops[1].id).delete()
-        sqlconccomp = workconcdevice(price_usd = cc['price_usd'], price_grn = cc['price_grn'],
-                                            device = comp, shop = shop)
+            db.session.query(sql.wc_Shop).filter_by(id=shops[1].id).delete()
+        sqlconccomp = workconcdevice(price_usd=cc['price_usd'], price_grn=cc['price_grn'],
+                                            device=comp, shop=shop)
         db.session.add(sqlconccomp)
         db.session.commit()
 
@@ -126,7 +127,7 @@ def __insert_shops():
     dbshops = [dbs[0] for dbs in db.session.query(sql.wc_Shop.name).all()]
     for s in pkl_shops:
         if not s.decode('utf-8') in dbshops:
-            shop = sql.wc_Shop(name = s)
+            shop = sql.wc_Shop(name=s)
             db.session.add(shop)
     db.session.commit()
 
@@ -135,7 +136,7 @@ def __insert_empty_dss():
     '''inserts only dss id'''
     devices = db.session.query(workdevice).all()
     for device in devices:
-        dss = workdss(id = device.id)
+        dss = workdss(id=device.id)
         db.session.add(dss)
     db.session.commit()
 
@@ -145,17 +146,16 @@ def __update_devices():
     pkl_notebooks = ptd.computers(workpass, workconfig)
     for c in pkl_notebooks:
         del c['id']
-        db.session.query(workdevice).filter_by(id = id).update(c)
+        db.session.query(workdevice).filter_by(id=id).update(c)
     db.session.commit()
 
 
 def __update_auto_dss():
     '''inserting dss values, wich is autocalculated, based on deffault parameters. Works only for computers and 
-    notebooks'''    
-    
+    notebooks'''
     # Don't change!!!
     ram_dss = {'1':20,'2':40,'3':50,'4':60,'6':70,'8':80,'12':90,'16':100}
-    
+
     def oss_dss_calc(os_name):
         os_dss_dict = {'FreeDOS':0,'Linux':20,'Windows 7 Starter':30,'Windows 7 Home Basic':40,'Windows 8':80,'Windows 7 Professional':100}
         os_dss = 50
@@ -261,7 +261,7 @@ def __export_dss_notebooks():
 
 def __generate_third_page():
     import codecs
-    f = codecs.open('support/config/onlycomputer.config', encoding = 'utf-8')
+    f = codecs.open('support/config/onlycomputer.config', encoding='utf-8')
     names = {}
     for line in f.readlines():
         rus_name = line.split('|')[0].strip()
@@ -276,13 +276,27 @@ def __generate_third_page():
                 print '\tu"' + key.split('_')[1] + '" : comp.' + names[key] + ','
         print '})'
 
+
+def __rename_photo_folders():
+    photo_folders = [path for path in glob.glob(os.path.join(workpass, '*')) if os.path.isdir(path)]
+    photo_folders.sort(reverse=True)
+    for folder in photo_folders:
+        oldnumber = re.findall('\d+', os.path.split(folder)[1])[0]
+        newname = os.path.split(folder)[0] + '/' + oldnumber + '_img'
+        print 'renaming', folder, 'to', newname
+        os.rename(folder, newname)
+
+
+# def __grab_device_prices():
+#     for device in workdevice.query(workdevice.url).filter(workdevice.price < 0).all()
+        
 # str(comp.height) + str(comp.width) + str(comp.length)
 
 if __name__ == '__main__':
     import support.utf8_converter
     # __insert_computers()
     # __separete_name()
-    __update_auto_dss()
+    # __update_auto_dss()
     # __insert_prices()
     # __insert_shops()
     # __insert_concdevices()
@@ -291,3 +305,10 @@ if __name__ == '__main__':
     # __export_dss_notebooks()
     # __values_for_dss ()
     # __generate_third_page()
+    # __rename_photo_folders()
+    # __grab_device_prices()
+    #.filter(workdevice.price < 0)
+    for device in workdevice.query.filter(workdevice.price < 0).all():
+        db.session.query(workdevice).filter_by(id=device.id).update({'in_view': False})
+        print device.id
+    db.session.commit()
