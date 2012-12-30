@@ -108,7 +108,7 @@ def third_computer(id):
 
 if __name__ == '__main__':
     #app.run(host = '192.168.1.100', port = 80)
-    app.run(debug=True)
+    app.run(port=47547)
     # controller = SQLController()
     # session = controller.create_sql_session()
     # components =  wc_RAM, wc_HD, wc_CPU, wc_OS, wc_ODD, wc_Screen, wc_Type, wc_Chipset
