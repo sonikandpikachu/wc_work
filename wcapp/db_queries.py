@@ -32,11 +32,22 @@ class DBWrapper (object):
         },
 
         u'notebook' : {
+                        'price' : -12,
                         'cpu' : 4, 
                         'ram' : 3, 
-                        'vga' : 1, 
-                        'os' : 1, 
-                        'price' : -8
+                        'vga' : 3, 
+                        'hdd' : 2,
+                        'display' : 0.7,
+                        'battery' : 1,
+                        'com' : 0.7,
+                        'weight' : -1,
+                        'os' : 0.5,                        
+                        'web_camera' : 0.5,
+                        'panel' : 0.5,                        
+                        'common' : 0.3,
+                        'input' : 0.1,
+                        'accoustic' : 0.1,                        
+                        'size' : -0.01
         }
     }
     _device_parameters = {

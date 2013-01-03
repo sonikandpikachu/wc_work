@@ -462,7 +462,7 @@ class wc_NotebookDSS(db.Model):
     os = db.Column(db.Float)
     price = db.Column(db.Float)
     size = db.Column(db.Float)
-    network = db.Column(db.Float)
+    common = db.Column(db.Float)
     web_camera = db.Column(db.Float)
     accoustic = db.Column(db.Float)
     input = db.Column(db.Float)
@@ -472,7 +472,7 @@ class wc_NotebookDSS(db.Model):
     weight = db.Column(db.Float)
 
     def __init__(self, id=None, hdd=None, cpu=None, display=None, ram=None, vga=None,
-        os=None, size=None, network=None, price=None, web_camera=None, accoustic=None,
+        os=None, size=None, common=None, price=None, web_camera=None, accoustic=None,
         input=None, com=None, battery=None, panel=None, weight=None):
         self.hdd = hdd
         self.cpu = cpu
@@ -482,7 +482,7 @@ class wc_NotebookDSS(db.Model):
         self.os = os
         self.price = price
         self.size = size
-        self.network = network
+        self.common = common
         self.web_camera = web_camera
         self.accoustic = accoustic
         self.input = input
