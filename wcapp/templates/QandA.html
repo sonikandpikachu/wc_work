@@ -136,6 +136,22 @@
     <form method = 'post' action = '/qa/' name = "qForm">
       <ul id = "questions">
         <a href = "javascript:void(0)" onclick="restoreDefValues()" id="defaultButton" >Востановить начальные значения</a>
+        <li>    
+            <div id = "mainQuestion" class="question question-radio inline" style = "">       
+            <p class = "qText">Я хочу ... </p>
+                <label>
+                    <input type="radio" name="type" value="computer" id="type_computer">
+                    Компьютер                   
+                </label>          
+                              <script type="text/javascript">
+                                  qParams["type_computer"] = "checked";
+                              </script>
+                <label>
+                    <input type="radio" name="type" value="notebook" id="type_notebook">
+                    Ноутбук                   
+                </label>
+            </div>
+        </li>
         {% include 'filters.html' %}
         <a href = "javascript:void(0)" id = "goButton" onclick="saveValues();document.qForm.submit();return false;"> <img src="{{ url_for('static', filename='img/greenButtons/wGoButton1.jpg') }}" alt="Далее" 
                               onMouseOver="this.src='{{ url_for('static', filename='img/greenButtons/wGoButton2.jpg') }}'" 

@@ -159,15 +159,37 @@ displayFilter = filters.ContainerFilter([displayCheckFilter, displayDiagonalFilt
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
 #DisplayNotebook:
 
-texts = [u'обязательно',]
-values = ['musthave']
-def display_cut_function(selected_values):
-	return 'display_diagonal IS NOT NULL'
-def display_dss_function(selected_values):
-	return {'display' : 2, 'vga' : 1}
-displayCheckFilter = filters.CheckboxFilter('dispCheck', u'Встроенный дисплей', 
-									texts, values, cut_function = display_cut_function, dss_function = display_dss_function)
-displayFilterNotebook = filters.ContainerFilter([displayCheckFilter, displayDiagonalFilter], 'disp')
+texts = [u'глянцевое',u'глянцевое антибликовое',u'матовое']
+values = ['glyancevoe','glyancevoeAB','matovoe']
+def display_cover_cut_function(selected_values):
+	filters = []
+	for s in selected_values:
+		if s == 'glyancevoe': filters.append('display_cover LIKE "%' + u'глянцевое'+ '%"')
+		if s == 'glyancevoeAB': filters.append('display_cover LIKE "%' + u'глянцевое (антибликовое)'+ '%"')
+		if s == 'matovoe': filters.append('display_cover LIKE "%' + u'матовое' + '%"')
+	if len(filters) > 1: return ' AND '.join(filters)
+	return filters[0] if filters else ''
+displayCoverFilter = filters.CheckboxFilter('dispCover', u'Покрытие дисплея', 
+									texts, values, [0,1,2],cut_function = display_cover_cut_function)
+
+texts = u'всё равно', u'TN+Film', u'IPS'
+values =  'all', 'TN+Film', 'IPS'
+def matrix_cut_function(selected_values):
+	if 'all' in selected_values: return ""
+	if 'TN+Film' in selected_values : return'display_matrix = TN+Film'
+	if 'IPS' in selected_values : return'display_matrix = IPS'		
+	if len(filters) > 1: return ' AND '.join(filters)
+	return ''
+displayMatrixFilter = filters.RadioFilter('dispMatrix', u'Тип матрицы:', 
+									texts, values, cut_function = matrix_cut_function)
+
+def display_diagonal_cut_function(selected_values):
+	return '(display_diagonal IS NULL OR (display_diagonal >= ' + selected_values[0].split(';')[0]  + ' AND ' + 'display_diagonal <= ' + selected_values[0].split(';')[1] + "))"
+displayDiagonalFilterNotebook  = filters.SliderDoubleFilter('dispDiagonalNote', u'Диагональ экрана дисплея:',15, 27, [14, 24], 
+											cut_function = display_diagonal_cut_function, 
+											dimension = u' "', step = 1)
+
+displayFilterNotebook = filters.ContainerFilter([displayCoverFilter, displayMatrixFilter], 'dispNote')
 
 
 
@@ -268,6 +290,6 @@ commonFilter = filters.ContainerFilter([required_parameters, audioFilter], 'comm
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-COMP_FILTERS = deviceType, priceFilter, performanceFilter, videoFilter, displayFilter, hddFilter, osFilter, commonFilter
-NOTEBOOK_FILTERS = deviceType, priceFilter, performanceFilterNotebook, batteryFilter, compactnessFilter
+COMP_FILTERS = priceFilter, performanceFilter, videoFilter, displayFilter, hddFilter, osFilter, commonFilter
+NOTEBOOK_FILTERS = priceFilter, performanceFilterNotebook, displayDiagonalFilterNotebook, displayFilterNotebook, batteryFilter, compactnessFilter
 # ALL_FILTERS = deviceType, priceFilter, performanceFilter, batteryFilter

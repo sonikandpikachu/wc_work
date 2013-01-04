@@ -418,6 +418,16 @@ body {
 	vertical-align: super;
 }
 
+#mainQuestion label{  
+    font-family: Myriad Pro Light, Myriad Pro,Verdana, Tahoma, Arial, Helvetica, sans-serif;
+    margin-left: 40px; 
+}
+
+#mainQuestion .qText{
+	padding: 5px 0px 20px 20px;
+	font-size: 16px;	
+}
+
 .question{
 	float: left;
 	margin-right: 50px;	
@@ -429,7 +439,7 @@ body {
 
 .question-radio label{
     color: #145571;    
-    font-family: Myriad Pro Light, Myriad Pro, Verdana, Tahoma, Arial, Helvetica, sans-serif; 
+    font-family: Myriad Pro, Verdana, Tahoma, Arial, Helvetica, sans-serif; 
 }
 
 .question-checkbox label{

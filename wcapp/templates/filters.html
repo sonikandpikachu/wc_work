@@ -1,7 +1,6 @@
 {% macro titlePart(title, description) -%}
    <p class = "qText">{{ title }} {% if description %}<a href="javascript:void(0)" title="{{ description|e }}"> ?</a> {% endif %}</p>
 {%- endmacro %}
-
 {% macro checkbox(title, name, texts, values, selected_values, description, style, type) -%}          
           <div class="question question-checkbox {{ type }}" style = "{{ style }}">       
             {{ titlePart(title, description) }}
@@ -41,7 +40,6 @@
             {% endif %}    
           </div>
 {%- endmacro %}
-
 {% macro radio(title, name, texts, values, selected_value, description, style, type) -%}
           <div class="question question-radio {{ type }}" style = "{{ style }}">       
             {{ titlePart(title, description) }}
@@ -80,9 +78,7 @@
                 </table>                
             {% endif %}
           </div>
-          
 {%- endmacro %}
-
 {% macro select(title, name, texts, values, description, style) -%}
         <div class="question question-select" style = "{{ style }}">
             {{ titlePart(title, description) }}
@@ -98,7 +94,6 @@
                   });
         </script>
 {%- endmacro %}
-
 {% macro sliderDouble(title, name, min, max, start_values, description, heterogeneity, dimension, step, style) -%}
         <div class="question question-slider" style = "{{ style }}">        
             {{ titlePart(title, description) }}            
@@ -110,7 +105,6 @@
 
         </script> 
 {%- endmacro %}
-
 {% macro sliderSingle(title, name, min, max, start_value, description, labels, scale, dimension, step, style) -%}
         <div class="question question-slider" style = "{{ style }}">
             {{ titlePart(title, description) }}
@@ -125,13 +119,11 @@
             qParams["{{ name }}"] = "{{ start_value }}";
         </script> 
 {%- endmacro %}
-
 {% macro container(children) -%}
     {% for child in children %}
         {{ getContent(child) }}
     {% endfor %}
 {%- endmacro %}
-
 {% macro twoPart(name, cPart, nPart, defPart) -%}
     <div class="question-content" id = "{{ name }}">
           <input type = "hidden" name = "{{ name }}_hi" id = "{{ name }}_hi" value = "{{ defPart }}">
@@ -178,10 +170,8 @@
                 $("#{{ name }}").animate({ marginLeft: newMargin }, 800);
                 });
             qParams["{{ name }}_hi"] = "{{ defPart }}";     
-        </script> 
-
+        </script>
 {%- endmacro %}
-
 {% macro getContent(filter) -%}
         {% if filter.ftype == 'container' %}
             {{ container(filter.children) }}
@@ -199,8 +189,6 @@
             {{ sliderSingle(filter.title, filter.name, filter.min_value, filter.max_value, filter.start_value, filter.description, filter.labels, filter.scale, filter.dimension, filter.step, filter.style) }}
         {% endif %}
 {%- endmacro %}
-
-
 {% for filter in filters %}
     {% if filter.ftype == 'twoPart' %} <li class="questions-big"> {% else %} <li> {% endif %}
     {{ getContent(filter) }}
