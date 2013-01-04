@@ -72,8 +72,8 @@ performanceNFilter = filters.SliderSingleFilter('perfN', u'Производит�
 
 def cpu_cut_function(selected_values):
 	if '1lvl' in selected_values: return 'testcpu_passmark <= 2000'
-	if '2lvl' in selected_values: return 'testcpu_passmark <= 4000 AND testcpu_passmark > 2000'
-	if '3lvl' in selected_values: return 'testcpu_passmark <= 6000 AND testcpu_passmark > 4000'
+	if '2lvl' in selected_values: return 'testcpu_passmark <= 3500 AND testcpu_passmark > 2000'
+	if '3lvl' in selected_values: return 'testcpu_passmark <= 6000 AND testcpu_passmark > 3500'
 	if '4lvl' in selected_values: return 'testcpu_passmark > 6000'
 	return ""	
 
@@ -92,6 +92,22 @@ performanceRamFilter  = filters.SliderDoubleFilter('perfRam', u'Оператив
 
 performanceCFilter = filters.ContainerFilter([performanceCpuFilter, performanceRamFilter])
 performanceFilter = filters.TwoPartFilter('perf', cPart =  performanceCFilter, nPart =  performanceNFilter)
+
+#----------------------------------------------------------------------------------------------------------------------------------------------------------
+#PerformanceNotebook:
+
+def ram_cut_function(selected_values):	
+	maxValue = (int(selected_values[0].split(';')[1]) + 1)*1000
+	minValue = int(selected_values[0].split(';')[0])*1000
+	return 'ram_amount >= ' +  str(minValue)  + ' AND ' + 'ram_amount <= ' + str(maxValue) 
+performanceRamFilterNotebook  = filters.SliderDoubleFilter('perfRam', u'Оперативная память:',0, 16, [4, 8], 
+											cut_function = ram_cut_function,
+											heterogeneity = [6, 8], 
+											dimension = u' Gb', step = 1, style = "width: 45%")
+
+performanceCFilterNotebook = filters.ContainerFilter([performanceCpuFilter, performanceRamFilterNotebook])
+performanceFilterNotebook = filters.TwoPartFilter('perf', cPart =  performanceCFilterNotebook, nPart =  performanceNFilter)
+
 
 
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -141,6 +157,21 @@ displayFilter = filters.ContainerFilter([displayCheckFilter, displayDiagonalFilt
 
 
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
+#DisplayNotebook:
+
+texts = [u'обязательно',]
+values = ['musthave']
+def display_cut_function(selected_values):
+	return 'display_diagonal IS NOT NULL'
+def display_dss_function(selected_values):
+	return {'display' : 2, 'vga' : 1}
+displayCheckFilter = filters.CheckboxFilter('dispCheck', u'Встроенный дисплей', 
+									texts, values, cut_function = display_cut_function, dss_function = display_dss_function)
+displayFilterNotebook = filters.ContainerFilter([displayCheckFilter, displayDiagonalFilter], 'disp')
+
+
+
+#----------------------------------------------------------------------------------------------------------------------------------------------------------
 #Hdd:
 
 
@@ -154,13 +185,35 @@ hddFilter  = filters.SliderDoubleFilter('hdd', u'Объем памяти:',250, 
 
 
 def battery_dss_function(selected_values):
-	return {'battery' : int(selected_values[0])*0.5}	
+	return {'battery' : int(selected_values[0])}	
 descriptionBatteryN = u'<p style = "text-indent: 10px;">Значение определяет на сколько увеличиться важность батареии </br>\
 в подбираемой модели в ущерб остальным параметрам</p>'
 batteryFilter = filters.SliderSingleFilter('battery', u'Батарея:', 0, 5, 0,
 									labels = [u'Обычная', u'Максимальная автономность'], description = descriptionBatteryN, dss_function = battery_dss_function)
 
 
+
+#----------------------------------------------------------------------------------------------------------------------------------------------------------
+#Compactness:
+
+
+def size_dss_function(selected_values):
+	return {'size' : -int(selected_values[0])}	
+descriptionSize = u'<p style = "text-indent: 10px;">Значение определяет на сколько увеличиться важность батареии </br>\
+в подбираемой модели в ущерб остальным параметрам</p>'
+sizeFilter = filters.SliderSingleFilter('compactSize', u'Размер:', 0, 5, 0,
+									labels = [u'Не имеет значения', u'Максимально компактный'], description = descriptionSize,
+									 dss_function = size_dss_function, style = "width: 40%")
+
+def weight_dss_function(selected_values):
+	return {'weight' : -int(selected_values[0])}	
+descriptionWeight = u'<p style = "text-indent: 10px;">Значение определяет на сколько увеличиться важность батареии </br>\
+в подбираемой модели в ущерб остальным параметрам</p>'
+weightFilter = filters.SliderSingleFilter('compactWeight', u'Вес', 0, 5, 2,
+									labels = [u'Не имеет значения', u'Максимально легкий'], description = descriptionWeight, 
+									dss_function = weight_dss_function, style = "width: 40%")
+
+compactnessFilter = filters.ContainerFilter([weightFilter, sizeFilter], 'compact')
 
 
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -216,5 +269,5 @@ commonFilter = filters.ContainerFilter([required_parameters, audioFilter], 'comm
 
 
 COMP_FILTERS = deviceType, priceFilter, performanceFilter, videoFilter, displayFilter, hddFilter, osFilter, commonFilter
-NOTEBOOK_FILTERS = deviceType, priceFilter, performanceFilter, batteryFilter
+NOTEBOOK_FILTERS = deviceType, priceFilter, performanceFilterNotebook, batteryFilter, compactnessFilter
 # ALL_FILTERS = deviceType, priceFilter, performanceFilter, batteryFilter
