@@ -18,7 +18,8 @@ COMPUTERS_ON_PAGE = 10
 DEFFAULT_DEVICE_TYPE = u'computer'
 FILTERS = {
     u'computer': filters.settings.COMP_FILTERS,
-    u'notebook': filters.settings.NOTEBOOK_FILTERS
+    u'notebook': filters.settings.NOTEBOOK_FILTERS,
+    u'all': filters.settings.NOTEBOOK_FILTERS + filters.settings.COMP_FILTERS,
 }
 
 
@@ -70,7 +71,7 @@ def second():
 
     pretty_devices = pretty_data.small_devices(devices_id_on_page, devices_dss_on_page, dbwrapper)
 
-    return render_template('QandA.html', computers=pretty_devices, filters=FILTERS[dbwrapper.device],
+    return render_template('QandA.html', computers=pretty_devices, filters=FILTERS[u'all'],
         current_page=page, pagination_pages=pretty_data.pagination_pages(page, last_page), dss_dict=dss_dict)
 
 
@@ -107,7 +108,8 @@ def third_computer(id):
 
 if __name__ == '__main__':
     #app.run(host = '192.168.1.100', port = 80)
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
     # controller = SQLController()
     # session = controller.create_sql_session()
     # components =  wc_RAM, wc_HD, wc_CPU, wc_OS, wc_ODD, wc_Screen, wc_Type, wc_Chipset
