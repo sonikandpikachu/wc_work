@@ -4,6 +4,7 @@ Created on Sep 18, 2012
 
 @author: Pavel
 '''
+import os
 
 from sqlorm import *
 from flask import render_template, request, abort, session
@@ -16,10 +17,20 @@ import db_queries
 #move to html settings
 COMPUTERS_ON_PAGE = 10
 DEFFAULT_DEVICE_TYPE = u'computer'
+
+
+def unique_union(list_a, list_b):
+    union = list(list_a)
+    for el in list_b:
+        if el not in list_a:
+            union.append(el)
+    return union
+
+
 FILTERS = {
     u'computer': filters.settings.COMP_FILTERS,
     u'notebook': filters.settings.NOTEBOOK_FILTERS,
-    u'all': filters.settings.NOTEBOOK_FILTERS + filters.settings.COMP_FILTERS,
+    u'all': unique_union(filters.settings.COMP_FILTERS, filters.settings.NOTEBOOK_FILTERS)
 }
 
 
@@ -110,6 +121,9 @@ if __name__ == '__main__':
     #app.run(host = '192.168.1.100', port = 80)
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
+    # print FILTERS[u'computer']
+    # print FILTERS[u'notebook']
+    # print FILTERS[u'all']
     # controller = SQLController()
     # session = controller.create_sql_session()
     # components =  wc_RAM, wc_HD, wc_CPU, wc_OS, wc_ODD, wc_Screen, wc_Type, wc_Chipset
