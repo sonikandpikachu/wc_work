@@ -150,6 +150,16 @@
                     <input type="radio" name="type" value="notebook" id="type_notebook">
                     Ноутбук                   
                 </label>
+                <script>
+                  $("#type_computer").click(function() {
+                    $(".notebook").fadeOut();
+                    $(".computer").fadeIn();
+                  });
+                  $("#type_notebook").click(function() {
+                    $(".computer").fadeOut();
+                    $(".notebook").fadeIn();
+                  });
+                </script>
             </div>
         </li>
         {% include 'filters.html' %}

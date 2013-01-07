@@ -91,7 +91,7 @@ performanceRamFilter  = filters.SliderDoubleFilter('perfRam', u'Оператив
 											dimension = u' Gb', step = 1, style = "width: 45%")
 
 performanceCFilter = filters.ContainerFilter([performanceCpuFilter, performanceRamFilter])
-performanceFilter = filters.TwoPartFilter('perf', cPart =  performanceCFilter, nPart =  performanceNFilter)
+performanceFilter = filters.TwoPartFilter('perf', cPart =  performanceCFilter, nPart =  performanceNFilter, dtype = 'computer')
 
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
 #PerformanceNotebook:
@@ -106,7 +106,7 @@ performanceRamFilterNotebook  = filters.SliderDoubleFilter('perfRam', u'Опер
 											dimension = u' Gb', step = 1, style = "width: 45%")
 
 performanceCFilterNotebook = filters.ContainerFilter([performanceCpuFilter, performanceRamFilterNotebook])
-performanceFilterNotebook = filters.TwoPartFilter('perf', cPart =  performanceCFilterNotebook, nPart =  performanceNFilter)
+performanceFilterNotebook = filters.TwoPartFilter('perf', cPart =  performanceCFilterNotebook, nPart =  performanceNFilter, dtype = 'notebook')
 
 
 
@@ -134,7 +134,7 @@ def videoC_cut_function(selected_values):
 
 videoSeriyaFilter  = filters.SelectFilter('videoSeriya', u'Серия видеокарты:', 
 									texts, values, cut_function = videoC_cut_function)
-videoFilter = filters.TwoPartFilter('video', cPart =  videoSeriyaFilter, nPart =  videoNFilter, defPart = 1)
+videoFilter = filters.TwoPartFilter('video', cPart =  videoSeriyaFilter, nPart =  videoNFilter, defPart = 1, dtype = 'computer')
 
 
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -153,7 +153,7 @@ def display_diagonal_cut_function(selected_values):
 displayDiagonalFilter  = filters.SliderDoubleFilter('dispDiagonal', u'Диагональ экрана дисплея:',15, 27, [14, 24], 
 											cut_function = display_diagonal_cut_function, 
 											dimension = u' "', step = 1)
-displayFilter = filters.ContainerFilter([displayCheckFilter, displayDiagonalFilter], 'disp')
+displayFilter = filters.ContainerFilter([displayCheckFilter, displayDiagonalFilter], 'disp', dtype = 'computer')
 
 
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -187,9 +187,9 @@ def display_diagonal_cut_function(selected_values):
 	return '(display_diagonal IS NULL OR (display_diagonal >= ' + selected_values[0].split(';')[0]  + ' AND ' + 'display_diagonal <= ' + selected_values[0].split(';')[1] + "))"
 displayDiagonalFilterNotebook  = filters.SliderDoubleFilter('dispDiagonalNote', u'Диагональ экрана дисплея:',15, 27, [14, 24], 
 											cut_function = display_diagonal_cut_function, 
-											dimension = u' "', step = 1)
+											dimension = u' "', step = 1, dtype = 'notebook')
 
-displayFilterNotebook = filters.ContainerFilter([displayCoverFilter, displayMatrixFilter], 'dispNote')
+displayFilterNotebook = filters.ContainerFilter([displayCoverFilter, displayMatrixFilter], 'dispNote', dtype = 'notebook')
 
 
 
@@ -211,7 +211,7 @@ def battery_dss_function(selected_values):
 descriptionBatteryN = u'<p style = "text-indent: 10px;">Значение определяет на сколько увеличиться важность батареии </br>\
 в подбираемой модели в ущерб остальным параметрам</p>'
 batteryFilter = filters.SliderSingleFilter('battery', u'Батарея:', 0, 5, 0,
-									labels = [u'Обычная', u'Максимальная автономность'], description = descriptionBatteryN, dss_function = battery_dss_function)
+									labels = [u'Обычная', u'Максимальная автономность'], description = descriptionBatteryN, dss_function = battery_dss_function, dtype = 'notebook')
 
 
 
@@ -235,7 +235,7 @@ weightFilter = filters.SliderSingleFilter('compactWeight', u'Вес', 0, 5, 2,
 									labels = [u'Не имеет значения', u'Максимально легкий'], description = descriptionWeight, 
 									dss_function = weight_dss_function, style = "width: 40%")
 
-compactnessFilter = filters.ContainerFilter([weightFilter, sizeFilter], 'compact')
+compactnessFilter = filters.ContainerFilter([weightFilter, sizeFilter], 'compact', dtype = 'notebook')
 
 
 #----------------------------------------------------------------------------------------------------------------------------------------------------------

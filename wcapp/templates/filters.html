@@ -190,7 +190,11 @@
         {% endif %}
 {%- endmacro %}
 {% for filter in filters %}
-    {% if filter.ftype == 'twoPart' %} <li class="questions-big"> {% else %} <li> {% endif %}
+    {% if filter.ftype == 'twoPart' %} 
+      <li class="questions-big {% if filter.dtype %} {{ filter.dtype }} {% endif %}"> 
+    {% else %} 
+      <li {% if filter.dtype %} class="{{ filter.dtype }}"{% endif %}> 
+    {% endif %}
     {{ getContent(filter) }}
     </li>
 {% endfor %}

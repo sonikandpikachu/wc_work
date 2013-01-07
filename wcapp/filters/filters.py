@@ -38,7 +38,7 @@ class Filter(object):
 				For examples see settings.py 
 	'''
 	def __init__(self, ftype, name = "", title = "", style = "", description = None, cut_function = None,
-	    dss_function = None):
+	    dss_function = None, dtype = None):
 		self.ftype = ftype
 		self.cut_function = cut_function
 		self.dss_function = dss_function
@@ -46,6 +46,7 @@ class Filter(object):
 		self.description = description
 		self.name = name
 		self.style = style
+		self.dtype = dtype
 
 
 	def get_answers(self, values): 
@@ -61,8 +62,8 @@ class Filter(object):
 class ContainerFilter(Filter):
 	"""Container for multifilter question"""
 
-	def __init__(self, children, name = ""):
-		super(ContainerFilter, self).__init__('container', name)
+	def __init__(self, children, name = "", dtype = None):
+		super(ContainerFilter, self).__init__('container', name, dtype = dtype)
 		self.children = children
 
 	def get_answers(self, values):
@@ -97,8 +98,8 @@ class TwoPartFilter(Filter):
 
 	"""
 
-	def __init__(self, name, cPart, nPart, defPart = 0):
-		super(TwoPartFilter, self).__init__('twoPart', name)
+	def __init__(self, name, cPart, nPart, defPart = 0, dtype = None):
+		super(TwoPartFilter, self).__init__('twoPart', name, dtype = dtype)
 		self.cPart = cPart
 		self.nPart = nPart			
 		self.defPart = defPart
@@ -131,8 +132,8 @@ class RadioFilter(Filter):
 		selected_value - list of selected values
 	'''
 	
-	def __init__(self, name, title, texts, values, selected_value = 0, description = None, style = "", type = "rows", cut_function = None, dss_function = None):
-		super(RadioFilter, self).__init__('radio', name, title, style, description, cut_function, dss_function)
+	def __init__(self, name, title, texts, values, selected_value = 0, description = None, style = "", type = "rows", cut_function = None, dss_function = None, dtype = None):
+		super(RadioFilter, self).__init__('radio', name, title, style, description, cut_function, dss_function, dtype)
 		self.texts = texts
 		self.values = values
 		self.selected_value = selected_value
@@ -148,8 +149,8 @@ class CheckboxFilter(Filter):
 		selected_values - list of selected values
 	'''
 	
-	def __init__(self, name, title, texts, values, selected_values = None, description = None, style = "", type = "rows", cut_function = None, dss_function = None):
-		super(CheckboxFilter, self).__init__('checkbox', name, title, style, description, cut_function, dss_function)
+	def __init__(self, name, title, texts, values, selected_values = None, description = None, style = "", type = "rows", cut_function = None, dss_function = None, dtype = None):
+		super(CheckboxFilter, self).__init__('checkbox', name, title, style, description, cut_function, dss_function, dtype)
 		self.texts = texts
 		self.values = values
 		self.selected_values = selected_values
@@ -165,8 +166,8 @@ class SelectFilter(Filter):
 		selected_values - list of selected values
 	'''
 	
-	def __init__(self, name, title, texts, values, description = None, style = "", cut_function = None, dss_function = None):
-		super(SelectFilter, self).__init__('select', name, title, style, description, cut_function, dss_function)
+	def __init__(self, name, title, texts, values, description = None, style = "", cut_function = None, dss_function = None, dtype = None):
+		super(SelectFilter, self).__init__('select', name, title, style, description, cut_function, dss_function, dtype)
 		self.texts = texts
 		self.values = values	
 
@@ -182,8 +183,8 @@ class SliderDoubleFilter(Filter):
 
 	def __init__(self, name, title, min_value, max_value, start_values, 
 		description = None, style = "", cut_function = None, dss_function = None, 
-		heterogeneity = False, dimension = ' ', step = 1):
-		super(SliderDoubleFilter, self).__init__('sliderDouble', name, title, style, description, cut_function, dss_function)
+		heterogeneity = False, dimension = ' ', step = 1, dtype = None):
+		super(SliderDoubleFilter, self).__init__('sliderDouble', name, title, style, description, cut_function, dss_function, dtype)
 		self.min_value, self.max_value = min_value, max_value  
 		self.start_values = start_values
 		self.heterogeneity = heterogeneity
@@ -201,8 +202,8 @@ class SliderSingleFilter(Filter):
 
 	def __init__(self, name, title, min_value, max_value, start_value, 
 		labels = None, description = None, style = "", cut_function = None, 
-		dss_function = None, scale = '[0, 1, 2, 3, 4, 5]', dimension = ' ', step = 1):
-		super(SliderSingleFilter, self).__init__('sliderSingle', name, title, style, description, cut_function, dss_function)
+		dss_function = None, scale = '[0, 1, 2, 3, 4, 5]', dimension = ' ', step = 1, dtype = None):
+		super(SliderSingleFilter, self).__init__('sliderSingle', name, title, style, description, cut_function, dss_function, dtype)
 		self.min_value, self.max_value = min_value, max_value  
 		self.start_value = start_value
 		self.scale = scale
