@@ -36,19 +36,27 @@
           });
         });
       });
-      var qParams = new Array();      
+      var qParams = new Array();
+      var sliders;      
       function setValues(params, type)
       {
-          var sliders = new Array();
+          sliders = new Array();
           var twoParts = new Array();
           var inputs = document.qForm.getElementsByTagName("input");
                for (i = 0; i < inputs.length;i++){
                 if((inputs[i].type == "radio") || (inputs[i].type == "checkbox"))
                                 inputs[i].checked = false; 
                             }
-          $('select').val('Atom');
           for(key in params)
-            {              
+            {
+              if (key == "type_computer"){
+                $(".computer").fadeIn();
+                $(".notebook").hide();
+              }
+              if (key == "type_notebook"){
+                $(".notebook").fadeIn();
+                $(".computer").hide();
+              }               
                var sKey = "#"+key;
                if (params[key] == "checked") {
                   $(sKey).attr("checked", true);                                                     
@@ -57,8 +65,8 @@
                  {
                     twoParts.push(key); 
                  }else{ 
-                  if (key.split('_')[1] == "select"){                    
-                      document.getElementById(key.split('_')[0]).value = params[key];
+                  if (key.split('_')[1] == "select"){
+                      $("#"+key.split('_')[0]).selectbox("change", 'value', params[key]);
                   } else{              
                      var param = params[key].split(';');                   
                      if (param.length > 1){                        
@@ -93,7 +101,7 @@
                     }
             }  
             
-            $.uniform.update();            
+          $.uniform.update();       
       }
       function saveValues()
       {         
@@ -152,12 +160,18 @@
                 </label>
                 <script>
                   $("#type_computer").click(function() {
-                    $(".notebook").fadeOut();
+                    $(".notebook").fadeOut();                    
                     $(".computer").fadeIn();
+                    for (i = 0; i < sliders.length;i++){
+                                  $(sliders[i]).slider().update();
+                                              }
                   });
                   $("#type_notebook").click(function() {
-                    $(".computer").fadeOut();
+                    $(".computer").fadeOut();                    
                     $(".notebook").fadeIn();
+                    for (i = 0; i < sliders.length;i++){
+                                  $(sliders[i]).slider().update();
+                                              }
                   });
                 </script>
             </div>

@@ -84,30 +84,17 @@ performanceCpuFilter = filters.RadioFilter('perfCpu', u'Производител
 									texts, values, cut_function = cpu_cut_function)
 
 def ram_cut_function(selected_values):
-	return 'ram_amount >= ' + selected_values[0].split(';')[0]  + ' AND ' + 'ram_amount <= ' + selected_values[0].split(';')[1]
+	#return 'ram_amount >= ' + selected_values[0].split(';')[0]  + ' AND ' + 'ram_amount <= ' + selected_values[0].split(';')[1]
+	maxValue = (int(selected_values[0].split(';')[1]) + 1)*1000
+	minValue = int(selected_values[0].split(';')[0])*1000
+	return '((ram_amount >= ' +  str(minValue)  + ' AND ' + 'ram_amount <= ' + str(maxValue) + ') OR ( ram_amount >= ' + selected_values[0].split(';')[0]  + ' AND ' + 'ram_amount <= ' + selected_values[0].split(';')[1] + "))" 
 performanceRamFilter  = filters.SliderDoubleFilter('perfRam', u'Оперативная память:',0, 16, [4, 8], 
 											cut_function = ram_cut_function,
 											heterogeneity = [6, 8], 
 											dimension = u' Gb', step = 1, style = "width: 45%")
 
 performanceCFilter = filters.ContainerFilter([performanceCpuFilter, performanceRamFilter])
-performanceFilter = filters.TwoPartFilter('perf', cPart =  performanceCFilter, nPart =  performanceNFilter, dtype = 'computer')
-
-#----------------------------------------------------------------------------------------------------------------------------------------------------------
-#PerformanceNotebook:
-
-def ram_cut_function(selected_values):	
-	maxValue = (int(selected_values[0].split(';')[1]) + 1)*1000
-	minValue = int(selected_values[0].split(';')[0])*1000
-	return 'ram_amount >= ' +  str(minValue)  + ' AND ' + 'ram_amount <= ' + str(maxValue) 
-performanceRamFilterNotebook  = filters.SliderDoubleFilter('perfRam', u'Оперативная память:',0, 16, [4, 8], 
-											cut_function = ram_cut_function,
-											heterogeneity = [6, 8], 
-											dimension = u' Gb', step = 1, style = "width: 45%")
-
-performanceCFilterNotebook = filters.ContainerFilter([performanceCpuFilter, performanceRamFilterNotebook])
-performanceFilterNotebook = filters.TwoPartFilter('perf', cPart =  performanceCFilterNotebook, nPart =  performanceNFilter, dtype = 'notebook')
-
+performanceFilter = filters.TwoPartFilter('perf', cPart =  performanceCFilter, nPart =  performanceNFilter)
 
 
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -122,12 +109,13 @@ videoNFilter = filters.SliderSingleFilter('videoN', u'Видео:', 0, 5, 0,
 									labels = [u'Нормальная', u'Очень высокая'], description = descriptionVideoN, dss_function = videoN_dss_function)
 
 
-texts = u"GeForce GT3xx", u'GeForce GT4xx',u'GeForce GT5xx',u'GeForce GT6xx', u'GeForce GTX4xx',\
+texts = u"Всё равно", u"GeForce GT3xx", u'GeForce GT4xx',u'GeForce GT5xx',u'GeForce GT6xx', u'GeForce GTX4xx',\
 u'GeForce GTX5xx', u'GeForce GTX6xx' , u'Intel HD Graphics', u'nVidia ION', u'Quadro', u'Radeon HD 3xxx', u'Radeon HD 4xxx', u'Radeon HD 5xxx', u'Radeon HD 6xxx', u'Radeon HD 7xxx'
 values = texts[:]
 
 def videoC_cut_function(selected_values):
-	print 'selected_values',selected_values
+	if selected_values[0] == u"Всё равно":
+		return ''
 	for s in selected_values:
 		s = s.replace('x','')	
 		return 'vga_model LIKE "%' + s+ '%"'
@@ -135,6 +123,62 @@ def videoC_cut_function(selected_values):
 videoSeriyaFilter  = filters.SelectFilter('videoSeriya', u'Серия видеокарты:', 
 									texts, values, cut_function = videoC_cut_function)
 videoFilter = filters.TwoPartFilter('video', cPart =  videoSeriyaFilter, nPart =  videoNFilter, defPart = 1, dtype = 'computer')
+
+#----------------------------------------------------------------------------------------------------------------------------------------------------------
+#VideoNotebook:
+def videoN_dss_function(selected_values):
+	return {'vga' : int(selected_values[0])*1.5}
+	
+
+descriptionVideoN= u'<p style = "text-indent: 10px;">Значение определяет на сколько увеличиться важность видео </br>\
+в подбираемой модели в ущерб остальным параметрам</p>'
+videoNFilterNotebook = filters.SliderSingleFilter('videoNoteN', u'Видео:', 0, 5, 0,
+									labels = [u'Нормальная', u'Очень высокая'], description = descriptionVideoN, dss_function = videoN_dss_function)
+
+
+texts = u"Всё равно", u"GeForce GT3xx", u'GeForce GT4xx',u'GeForce GT5xx',u'GeForce GT6xx', u'GeForce GTX4xx',\
+u'GeForce GTX5xx', u'GeForce GTX6xx' , u'Intel GMA 4000',  u'Intel GMA 3000',  u'Intel GMA 2000', u'Quadro', u'Radeon HD 4xxx', u'Radeon HD 5xxx', u'Radeon HD 6xxx', u'Radeon HD 7xxx'
+values = texts[:]
+
+def videoC_cut_function(selected_values):
+	if selected_values[0] == u"Всё равно":
+		return ''
+	if selected_values[0] == u'Quadro':
+		return '(vga_model = "nVIDIA Quadro" OR vga_number LIKE "%NVS%")'
+	if selected_values[0] == u'GeForce GT3xx':
+		return '(vga_model = "nVIDIA GeForce" AND vga_number LIKE "%GT 3%")'
+	if selected_values[0] == u'GeForce GT4xx':
+		return '(vga_model = "nVIDIA GeForce" AND vga_number LIKE "%GT 4%")'
+	if selected_values[0] == u'GeForce GT5xx':
+		return '(vga_model = "nVIDIA GeForce" AND vga_number LIKE "%GT 5%")'
+	if selected_values[0] == u'GeForce GT6xx':
+		return '(vga_model = "nVIDIA GeForce" AND vga_number LIKE "%GT 6%")'
+	if selected_values[0] == u'GeForce GTX4xx':
+		return '(vga_model = "nVIDIA GeForce" AND vga_number LIKE "%GTX 4%")'
+	if selected_values[0] == u'GeForce GTX5xx':
+		return '(vga_model = "nVIDIA GeForce" AND vga_number LIKE "%GTX 5%")'
+	if selected_values[0] == u'GeForce GTX6xx':
+		return '(vga_model = "nVIDIA GeForce" AND vga_number LIKE "%GTX 6%")'		
+	if selected_values[0] == u'Intel GMA 4000':
+		return '(vga_model = "Intel GMA" AND vga_number = "HD 4000")'
+	if selected_values[0] == u'Intel GMA 3000':
+		return '(vga_model = "Intel GMA" AND vga_number = "HD 3000")'
+	if selected_values[0] == u'Intel GMA 2000':
+		return '(vga_model = "Intel GMA" AND vga_number = "HD 2000")'
+	if selected_values[0] == u'Radeon HD 4xxx':
+		return '(vga_model = "AMD Mobility Radeon" AND vga_number LIKE "%HD 4")'
+	if selected_values[0] == u'Radeon HD 5xxx':
+		return '(vga_model = "AMD Mobility Radeon" AND vga_number LIKE "%HD 5%")'
+	if selected_values[0] == u'Radeon HD 6xxx':
+		return '(vga_model = "AMD Mobility Radeon" AND vga_number LIKE "%HD 6%")'		
+	if selected_values[0] == u'Radeon HD 7xxx':
+		return '(vga_model = "AMD Mobility Radeon" AND vga_number LIKE "%HD 7%")'
+
+
+videoSeriyaFilterNotebook  = filters.SelectFilter('videoNoteSeriya', u'Серия видеокарты:', 
+									texts, values, cut_function = videoC_cut_function)
+videoFilterNotebook = filters.TwoPartFilter('videoNote', cPart =  videoSeriyaFilterNotebook, nPart =  videoNFilterNotebook, defPart = 1, dtype = 'notebook')
+
 
 
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -291,5 +335,5 @@ commonFilter = filters.ContainerFilter([required_parameters, audioFilter], 'comm
 
 
 COMP_FILTERS = priceFilter, performanceFilter, videoFilter, displayFilter, hddFilter, osFilter, commonFilter
-NOTEBOOK_FILTERS = priceFilter, performanceFilterNotebook, displayDiagonalFilterNotebook, displayFilterNotebook, batteryFilter, compactnessFilter
+NOTEBOOK_FILTERS = priceFilter, performanceFilter, videoFilterNotebook, displayDiagonalFilterNotebook, displayFilterNotebook, batteryFilter, compactnessFilter
 # ALL_FILTERS = deviceType, priceFilter, performanceFilter, batteryFilter
