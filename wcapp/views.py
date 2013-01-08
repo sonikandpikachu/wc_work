@@ -39,15 +39,16 @@ def first():
     return render_template('index.html')
 
 
-@app.route('/qa/', methods=['POST', 'GET'])
+@app.route('/qa/', methods=['GET'])
 def second():
     #need refactor dbwrapper calls
     dbwrapper = db_queries.DBWrapper(DEFFAULT_DEVICE_TYPE)
     #getting computers id:
-    if request.method == 'POST':
-        session['type'] = request.form['type']
-        dbwrapper = db_queries.DBWrapper(request.form['type'])
-        devices_id, devices_dss, dss_dict = filtered_devices_id(FILTERS[dbwrapper.device], request.form, dbwrapper)
+    print request.args
+    if 'type' in request.args.keys():
+        session['type'] = request.args['type']
+        dbwrapper = db_queries.DBWrapper(request.args['type'])
+        devices_id, devices_dss, dss_dict = filtered_devices_id(FILTERS[dbwrapper.device], request.args, dbwrapper)
         if 'user_id' in session:
             dbwrapper.delete_user(session['user_id'])
             del session['user_id']
@@ -86,15 +87,15 @@ def second():
         current_page=page, pagination_pages=pretty_data.pagination_pages(page, last_page), dss_dict=dss_dict)
 
 
-def filtered_devices_id(filters, form, dbwrapper):
+def filtered_devices_id(filters, args, dbwrapper):
     '''
-    Gets parameters from request form, executes filters functions and finally returns filtered computers id
+    Gets parameters from request args, executes filters functions and finally returns filtered computers id
     '''
     #choosing with what device we are working
-    print 'FORM', form
+    print 'ARGS', args
     dss_values, cut_values = [], []
     for filt in filters:
-        values_dict = dict((key, form[key]) for key in form if key.startswith(filt.name))
+        values_dict = dict((key, args[key]) for key in args.keys() if key.startswith(filt.name))
         if values_dict:
             dss, cut = filt.get_answers(values_dict)
             if dss:

@@ -141,7 +141,7 @@
   <div id = "header"> <img src="{{ url_for('static', filename='img/main_header.png') }}" alt="What Computer"/> </div>
   <div id = "content">
     {% include 'menu.html' %}         
-    <form method = 'post' action = '/qa/' name = "qForm">
+    <form method = 'get' action = '/qa/' name = "qForm">
       <ul id = "questions">
         <a href = "javascript:void(0)" onclick="restoreDefValues()" id="defaultButton" >Востановить начальные значения</a>
         <li>    
