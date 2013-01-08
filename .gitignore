@@ -7,5 +7,4 @@ data
 wcapp/wcconfig.py
 wcapp/static/img/computers/
 wcapp/static/img/notebooks/
-wcapp/wcconfig.py
 *.pyc
