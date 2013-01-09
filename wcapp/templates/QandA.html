@@ -20,7 +20,6 @@
 <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.tooltip.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.selectbox-0.2.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.uniform.min.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.cookie.js') }}"></script>
 <script type="text/javascript" charset="utf-8">
     $(function(){        
         $("input, textarea, button").uniform();
@@ -36,8 +35,42 @@
           });
         });
       });
-      var qParams = new Array();
-      var sliders;      
+      var qParams = {};
+      var sliders;
+      var cheks = new Array();
+      var selectes = new Array();
+
+      function getUrlParams(){
+        var rez = {};
+        var Params = location.search.substring(1).split("&");
+        if (Params[0] == "")
+          return null;
+        for (var i = 0; i < Params.length; i++){
+            if (Params[i].split("=").length > 1)
+                          rez[Params[i].split("=")[0]] = Params[i].split("=")[1]; 
+        }
+         return rez;
+      }
+
+      function recognizeElements(params)
+      {
+        rez = {}
+          for(key in params)
+            {          
+               if ($.inArray(key, cheks) != -1){
+                  rez[key+"_"+params[key]] = "checked";
+                }else{
+                  if ($.inArray(key, selectes) != -1)
+                  {
+                    rez[key+"_select"] = params[key].replace("+"," ");                    
+                  }else{
+                    rez[key] = params[key].replace("%3B",";");
+                  }
+                }
+            }
+        return rez;
+      }  
+
       function setValues(params, type)
       {
           sliders = new Array();
@@ -102,34 +135,9 @@
             }  
             
           $.uniform.update();       
-      }
-      function saveValues()
-      {         
-          var MyQParams = {};
-          var inputs = document.qForm.getElementsByTagName("input");
-          for (i = 0; i < inputs.length;i++){
-              if((inputs[i].type == "radio") || (inputs[i].type == "checkbox")){
-                if (inputs[i].checked == true)
-                    MyQParams[inputs[i].id]  = "checked";
-                }
-              else{
-                MyQParams[inputs[i].id] = inputs[i].value;
-              }
-          }
-          var selects = document.qForm.getElementsByTagName("select");
-          for (i = 0; i < selects.length;i++){ 
-            var selectValue = selects[i].options[selects[i].selectedIndex].value;
-            MyQParams[selects[i].id+"_select"]  = selectValue;
-          }    
-          $.cookie('MyQParams', JSON.stringify(MyQParams));
-      }
-      function restoreValues(type)
-      {  
-          setValues(JSON.parse($.cookie('MyQParams')), type);          
-      }
+      }      
       function restoreDefValues()
-      {  
-          $.removeCookie('MyQParams');
+      {            
           setValues(qParams);          
       }       
     </script>
@@ -153,6 +161,7 @@
                 </label>          
                               <script type="text/javascript">
                                   qParams["type_computer"] = "checked";
+                                  cheks.push("type");
                               </script>
                 <label>
                     <input type="radio" name="type" value="notebook" id="type_notebook">
@@ -177,7 +186,7 @@
             </div>
         </li>
         {% include 'filters.html' %}
-        <a href = "javascript:void(0)" id = "goButton" onclick="saveValues();document.qForm.submit();return false;"> <img src="{{ url_for('static', filename='img/greenButtons/wGoButton1.jpg') }}" alt="Далее" 
+        <a href = "javascript:void(0)" id = "goButton" onclick="document.qForm.submit();return false;"> <img src="{{ url_for('static', filename='img/greenButtons/wGoButton1.jpg') }}" alt="Далее" 
                               onMouseOver="this.src='{{ url_for('static', filename='img/greenButtons/wGoButton2.jpg') }}'" 
                               onMouseOut="this.src='{{ url_for('static', filename='img/greenButtons/wGoButton1.jpg') }}'"
                               onMouseDown="this.src='{{ url_for('static', filename='img/greenButtons/wGoButton3.jpg') }}'"
@@ -206,11 +215,11 @@
        $("#ctrigger").click( function(){        
         $(".console").slideToggle();        
       });
-      if ($.cookie('MyQParams') == null){
+       if (getUrlParams() == null){
         setValues(qParams, 'first');
-      }else{
-        restoreValues('first');
-      } 
+      }else{         
+        setValues(recognizeElements(getUrlParams()), 'first');
+      }   
     </script>
     <table  class = "console" style = "width: 100%">
       

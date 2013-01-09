@@ -1,7 +1,10 @@
 {% macro titlePart(title, description) -%}
    <p class = "qText">{{ title }} {% if description %}<a href="javascript:void(0)" title="{{ description|e }}"> ?</a> {% endif %}</p>
 {%- endmacro %}
-{% macro checkbox(title, name, texts, values, selected_values, description, style, type) -%}          
+{% macro checkbox(title, name, texts, values, selected_values, description, style, type) -%} 
+          <script type="text/javascript">
+              cheks.push("{{ name }}");
+          </script>            
           <div class="question question-checkbox {{ type }}" style = "{{ style }}">       
             {{ titlePart(title, description) }}
             {% if type != 'table' %}  
@@ -30,7 +33,7 @@
                         {% if selected_values %} {% if colloop.index0*4 + loop.index0 in selected_values %}                         
                               <script type="text/javascript">
                                   qParams["{{ name }}_{{ values[colloop.index0*4 + loop.index0] }}"] = "checked";
-                                </script>                  
+                              </script>                  
                         {% endif %} {% endif %}                    
                     {%- endfor -%}
                     </td>
@@ -41,6 +44,9 @@
           </div>
 {%- endmacro %}
 {% macro radio(title, name, texts, values, selected_value, description, style, type) -%}
+          <script type="text/javascript">
+              cheks.push("{{ name }}");
+          </script> 
           <div class="question question-radio {{ type }}" style = "{{ style }}">       
             {{ titlePart(title, description) }}
             {% if type != 'table' %}            
@@ -69,7 +75,7 @@
                         {% if i == selected_value %}
                               <script type="text/javascript">
                                   qParams["{{ name }}_{{ values[colloop.index0*4 + loop.index0] }}"] = "checked";
-                                </script>                  
+                              </script>                  
                        {% endif %}                    
                     {%- endfor -%}
                     </td>
@@ -80,6 +86,9 @@
           </div>
 {%- endmacro %}
 {% macro select(title, name, texts, values, description, style) -%}
+          <script type="text/javascript">
+              selectes.push("{{ name }}");
+          </script> 
         <div class="question question-select" style = "{{ style }}">
             {{ titlePart(title, description) }}
             <select name="{{ name }}" id="{{ name }}">
@@ -89,7 +98,7 @@
             </select>
         </div>    
         <script type="text/javascript">
-                qParams["{{ name }}_select"] = "Всё равно";
+                qParams["{{ name }}_select"] = "Всё равно";                
                 $(function (){
                     $("#{{ name }}").selectbox();     
                   });
