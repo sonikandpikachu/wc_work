@@ -38,7 +38,7 @@ class DBWrapper (object):
                         'vga' : 3, 
                         'hdd' : 2,
                         'display' : 0.7,
-                        'battery' : 1,
+                        'battery' : 0.01,
                         'com' : 0.7,
                         'weight' : -1,
                         'os' : 0.5,                        

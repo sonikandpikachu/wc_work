@@ -120,11 +120,9 @@ def third_computer(id):
 
 if __name__ == '__main__':
     #app.run(host = '192.168.1.100', port = 80)
-    port = int(os.environ.get('PORT', 5000))
-    app.run(debug=True, host='0.0.0.0', port=port)
-    # print FILTERS[u'computer']
-    # print FILTERS[u'notebook']
-    # print FILTERS[u'all']
+    #port = int(os.environ.get('PORT', 5000))
+    #app.run(host='0.0.0.0', port=port)
+    app.run(debug=True)
     # controller = SQLController()
     # session = controller.create_sql_session()
     # components =  wc_RAM, wc_HD, wc_CPU, wc_OS, wc_ODD, wc_Screen, wc_Type, wc_Chipset

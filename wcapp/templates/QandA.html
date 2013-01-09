@@ -20,7 +20,6 @@
 <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.tooltip.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.selectbox-0.2.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.uniform.min.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.cookie.js') }}"></script>
 <script type="text/javascript" charset="utf-8">
     $(function(){        
         $("input, textarea, button").uniform();
@@ -36,19 +35,61 @@
           });
         });
       });
-      var qParams = new Array();      
+      var qParams = {};
+      var sliders;
+      var cheks = new Array();
+      var selectes = new Array();
+
+      function getUrlParams(){
+        var rez = {};
+        var Params = location.search.substring(1).split("&");
+        if (Params[0] == "")
+          return null;
+        for (var i = 0; i < Params.length; i++){
+            if (Params[i].split("=").length > 1)
+                          rez[Params[i].split("=")[0]] = Params[i].split("=")[1]; 
+        }
+         return rez;
+      }
+
+      function recognizeElements(params)
+      {
+        rez = {}
+          for(key in params)
+            {          
+               if ($.inArray(key, cheks) != -1){
+                  rez[key+"_"+params[key]] = "checked";
+                }else{
+                  if ($.inArray(key, selectes) != -1)
+                  {
+                    rez[key+"_select"] = params[key].replace("+"," ");                    
+                  }else{
+                    rez[key] = params[key].replace("%3B",";");
+                  }
+                }
+            }
+        return rez;
+      }  
+
       function setValues(params, type)
       {
-          var sliders = new Array();
+          sliders = new Array();
           var twoParts = new Array();
           var inputs = document.qForm.getElementsByTagName("input");
                for (i = 0; i < inputs.length;i++){
                 if((inputs[i].type == "radio") || (inputs[i].type == "checkbox"))
                                 inputs[i].checked = false; 
                             }
-          $('select').val('Atom');
           for(key in params)
-            {              
+            {
+              if (key == "type_computer"){
+                $(".computer").fadeIn();
+                $(".notebook").hide();
+              }
+              if (key == "type_notebook"){
+                $(".notebook").fadeIn();
+                $(".computer").hide();
+              }               
                var sKey = "#"+key;
                if (params[key] == "checked") {
                   $(sKey).attr("checked", true);                                                     
@@ -57,8 +98,8 @@
                  {
                     twoParts.push(key); 
                  }else{ 
-                  if (key.split('_')[1] == "select"){                    
-                      document.getElementById(key.split('_')[0]).value = params[key];
+                  if (key.split('_')[1] == "select"){
+                      $("#"+key.split('_')[0]).selectbox("change", 'value', params[key]);
                   } else{              
                      var param = params[key].split(';');                   
                      if (param.length > 1){                        
@@ -93,35 +134,10 @@
                     }
             }  
             
-            $.uniform.update();            
-      }
-      function saveValues()
-      {         
-          var MyQParams = {};
-          var inputs = document.qForm.getElementsByTagName("input");
-          for (i = 0; i < inputs.length;i++){
-              if((inputs[i].type == "radio") || (inputs[i].type == "checkbox")){
-                if (inputs[i].checked == true)
-                    MyQParams[inputs[i].id]  = "checked";
-                }
-              else{
-                MyQParams[inputs[i].id] = inputs[i].value;
-              }
-          }
-          var selects = document.qForm.getElementsByTagName("select");
-          for (i = 0; i < selects.length;i++){ 
-            var selectValue = selects[i].options[selects[i].selectedIndex].value;
-            MyQParams[selects[i].id+"_select"]  = selectValue;
-          }    
-          $.cookie('MyQParams', JSON.stringify(MyQParams));
-      }
-      function restoreValues(type)
-      {  
-          setValues(JSON.parse($.cookie('MyQParams')), type);          
-      }
+          $.uniform.update();       
+      }      
       function restoreDefValues()
-      {  
-          $.removeCookie('MyQParams');
+      {            
           setValues(qParams);          
       }       
     </script>
@@ -136,8 +152,41 @@
     <form method = 'get' action = '/qa/' name = "qForm">
       <ul id = "questions">
         <a href = "javascript:void(0)" onclick="restoreDefValues()" id="defaultButton" >Востановить начальные значения</a>
+        <li>    
+            <div id = "mainQuestion" class="question question-radio inline" style = "">       
+            <p class = "qText">Я хочу ... </p>
+                <label>
+                    <input type="radio" name="type" value="computer" id="type_computer">
+                    Компьютер                   
+                </label>          
+                              <script type="text/javascript">
+                                  qParams["type_computer"] = "checked";
+                                  cheks.push("type");
+                              </script>
+                <label>
+                    <input type="radio" name="type" value="notebook" id="type_notebook">
+                    Ноутбук                   
+                </label>
+                <script>
+                  $("#type_computer").click(function() {
+                    $(".notebook").fadeOut();                    
+                    $(".computer").fadeIn();
+                    for (i = 0; i < sliders.length;i++){
+                                  $(sliders[i]).slider().update();
+                                              }
+                  });
+                  $("#type_notebook").click(function() {
+                    $(".computer").fadeOut();                    
+                    $(".notebook").fadeIn();
+                    for (i = 0; i < sliders.length;i++){
+                                  $(sliders[i]).slider().update();
+                                              }
+                  });
+                </script>
+            </div>
+        </li>
         {% include 'filters.html' %}
-        <a href = "javascript:void(0)" id = "goButton" onclick="saveValues();document.qForm.submit();return false;"> <img src="{{ url_for('static', filename='img/greenButtons/wGoButton1.jpg') }}" alt="Далее" 
+        <a href = "javascript:void(0)" id = "goButton" onclick="document.qForm.submit();return false;"> <img src="{{ url_for('static', filename='img/greenButtons/wGoButton1.jpg') }}" alt="Далее" 
                               onMouseOver="this.src='{{ url_for('static', filename='img/greenButtons/wGoButton2.jpg') }}'" 
                               onMouseOut="this.src='{{ url_for('static', filename='img/greenButtons/wGoButton1.jpg') }}'"
                               onMouseDown="this.src='{{ url_for('static', filename='img/greenButtons/wGoButton3.jpg') }}'"
@@ -166,11 +215,11 @@
        $("#ctrigger").click( function(){        
         $(".console").slideToggle();        
       });
-      if ($.cookie('MyQParams') == null){
+       if (getUrlParams() == null){
         setValues(qParams, 'first');
-      }else{
-        restoreValues('first');
-      } 
+      }else{         
+        setValues(recognizeElements(getUrlParams()), 'first');
+      }   
     </script>
     <table  class = "console" style = "width: 100%">
       
