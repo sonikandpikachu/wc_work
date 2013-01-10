@@ -5,7 +5,7 @@ Created on Sep 30, 2012
 @author: Pavel
 
 This class describes all filters for answers. Every filter has to realise class filters.Filter or its implementation.
-For more details look filters.py 
+For more details look filters.py
 '''
 from sqlorm import wc_Computer
 #from sqlorm import wc_Notebook
