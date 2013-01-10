@@ -41,8 +41,8 @@
       var selectes = new Array();
 
       function getUrlParams(){
-        var rez = {};
-        var Params = location.search.substring(1).split("&");
+        var rez = {};        
+        var Params = decodeURI(location.search.substring(1)).split("&");
         if (Params[0] == "")
           return null;
         for (var i = 0; i < Params.length; i++){
@@ -217,7 +217,7 @@
       });
        if (getUrlParams() == null){
         setValues(qParams, 'first');
-      }else{         
+      }else{       
         setValues(recognizeElements(getUrlParams()), 'first');
       }   
     </script>

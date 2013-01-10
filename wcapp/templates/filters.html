@@ -98,10 +98,8 @@
             </select>
         </div>    
         <script type="text/javascript">
-                qParams["{{ name }}_select"] = "Всё равно";                
-                $(function (){
-                    $("#{{ name }}").selectbox();     
-                  });
+                qParams["{{ name }}_select"] = "Всё равно";
+                $("#{{ name }}").selectbox();
         </script>
 {%- endmacro %}
 {% macro sliderDouble(title, name, min, max, start_values, description, heterogeneity, dimension, step, style) -%}
