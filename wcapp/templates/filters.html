@@ -1,10 +1,7 @@
 {% macro titlePart(title, description) -%}
    <p class = "qText">{{ title }} {% if description %}<a href="javascript:void(0)" title="{{ description|e }}"> ?</a> {% endif %}</p>
 {%- endmacro %}
-{% macro checkbox(title, name, texts, values, selected_values, description, style, type) -%} 
-          <script type="text/javascript">
-              cheks.push("{{ name }}");
-          </script>            
+{% macro checkbox(title, name, texts, values, selected_values, description, style, type) -%}                     
           <div class="question question-checkbox {{ type }}" style = "{{ style }}">       
             {{ titlePart(title, description) }}
             {% if type != 'table' %}  
@@ -12,7 +9,10 @@
                 <label>
                     <input type="checkbox" name="{{ name }}_{{ values[i] }}" id="{{ name }}_{{ values[i] }}" value="{{ values[i] }}"> 
                     {{ texts[i] }}   
-                </label> 
+                </label>
+                <script type="text/javascript">
+                    cheks.push("{{ name }}_{{ values[i] }}");
+                </script>   
                  {% if selected_values %} {% if i in selected_values %}
                               <script type="text/javascript">
                                   qParams["{{ name }}_{{ values[i] }}"] = "checked";
@@ -29,7 +29,10 @@
                         <label>
                             <input type="checkbox" name="{{ name }}_{{ values[colloop.index0*4 + loop.index0] }}" id="{{ name }}_{{ values[colloop.index0*4 + loop.index0] }}" value="{{ values[colloop.index0*4 + loop.index0] }}">
                             {{ texts[colloop.index0*4 + loop.index0] }}
-                        </label>                                                 
+                        </label>
+                        <script type="text/javascript">
+                            cheks.push("{{ name }}_{{ values[colloop.index0*4 + loop.index0] }}");
+                        </script>                                                    
                         {% if selected_values %} {% if colloop.index0*4 + loop.index0 in selected_values %}                         
                               <script type="text/javascript">
                                   qParams["{{ name }}_{{ values[colloop.index0*4 + loop.index0] }}"] = "checked";

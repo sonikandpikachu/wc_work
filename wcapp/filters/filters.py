@@ -38,7 +38,7 @@ class Filter(object):
 				For examples see settings.py 
 	'''
 	def __init__(self, ftype, name = "", title = "", style = "", description = None, cut_function = None,
-	    dss_function = None, dtype = None):
+	    dss_function = None, dtype = None, parent_question = None):
 		self.ftype = ftype
 		self.cut_function = cut_function
 		self.dss_function = dss_function
@@ -47,6 +47,7 @@ class Filter(object):
 		self.name = name
 		self.style = style
 		self.dtype = dtype
+		self.parent_question = parent_question
 
 
 	def get_answers(self, values): 
@@ -57,6 +58,9 @@ class Filter(object):
 
 	def get_names(self):
 		return self.name
+
+	def set_parent_question(self, question):
+		self.parent_question = question
 
 
 class ContainerFilter(Filter):
