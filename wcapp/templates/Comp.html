@@ -12,7 +12,7 @@
 <div id = "header"> <img src="{{ url_for('static', filename='img/main_header.png') }}" alt="What Computer"/> </div>
 <div id = "content">
   <div class="comp">
-    <div class = "image"> <img src="{{ url_for('static', filename='img/computers/'+ small_comp.id +'_img/main.jpg') }}" alt = "Рисунок"/></div>
+    <div class = "image"> <img src="{{ url_for('static', filename='img/' + small_comp.type + 's/'+ small_comp.id +'_img/main.jpg') }}" alt = "Рисунок"/></div>
     <div class = "descriptionSection">
       <div class="title">
         <div class = "name" style="font-size:18px"> {{ small_comp.name }} </div>

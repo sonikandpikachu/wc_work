@@ -16,38 +16,38 @@ class DBWrapper (object):
     '''
     #in this dictionary we defines dsses for every device type
     _device_dss = {
-        u'computer' : {
-                        'price' : -9,
-                        'cpu' : 4, 
-                        'ram' : 3, 
-                        'vga' : 3, 
-                        'hdd' : 2,
-                        'display' : 1,
-                        'os' : 0.5,
-                        'network' : 0.5,
-                        'panel' : 0.5,
-                        'media' : 0.5,
-                        'thunderbolt' : 0.1,
-                        'size' : -0.01
+        u'computer': {
+                        'price': -9,
+                        'cpu': 4,
+                        'ram': 3,
+                        'vga': 3,
+                        'hdd': 2,
+                        'display': 1,
+                        'os': 0.5,
+                        'network': 0.5,
+                        'panel': 0.5,
+                        'media': 0.5,
+                        'thunderbolt': 0.1,
+                        'size': -0.01
         },
 
-        u'notebook' : {
-                        'price' : -12,
-                        'cpu' : 4, 
-                        'ram' : 3, 
-                        'vga' : 3, 
-                        'hdd' : 2,
-                        'display' : 0.7,
-                        'battery' : 0.01,
-                        'com' : 0.7,
-                        'weight' : -1,
-                        'os' : 0.5,                        
-                        'web_camera' : 0.5,
-                        'panel' : 0.5,                        
-                        'common' : 0.3,
-                        'input' : 0.1,
-                        'accoustic' : 0.1,                        
-                        'size' : -0.01
+        u'notebook': {
+                        'price': -12,
+                        'cpu': 4,
+                        'ram': 3,
+                        'vga': 3,
+                        'hdd': 2,
+                        'display': 0.7,
+                        'battery': 0.01,
+                        'com': 0.7,
+                        'weight': -1,
+                        'os': 0.5,
+                        'web_camera': 0.5,
+                        'panel': 0.5,
+                        'common': 0.3,
+                        'input': 0.1,
+                        'accoustic': 0.1,
+                        'size': -0.01
         }
     }
     _device_parameters = {
@@ -123,8 +123,9 @@ class DBWrapper (object):
                 sorted_devices_dss,
                 dss_dict)
 
-    def parameters_by_id(self, ids):
-        return [db.session.query(self.device_table).filter_by(id=id).one() for id in ids]
+    def parameters_by_id(self, ids, device=''):
+        table = self.device_table if not device else self._device_parameters[device][0]
+        return [db.session.query(table).filter_by(id=id).one() for id in ids]
 
     def dss_by_id(self, ids):
         return [db.session.query(self.dss_table).filter_by(id=id).one() for id in ids]

@@ -18,17 +18,17 @@ import sqlorm as sql
 import re
 from support import pkl_to_dict as ptd
 
-workdevice = sql.wc_Computer
-workconcdevice = sql.wc_ConcComputer
-workdss = sql.wc_ComputerDSS
-workpass = "../data/computers"
-workconfig = 'support/config/onlycomputer.config'
+# workdevice = sql.wc_Computer
+# workconcdevice = sql.wc_ConcComputer
+# workdss = sql.wc_ComputerDSS
+# workpass = "../data/computers"
+# workconfig = 'support/config/onlycomputer.config'
 
-# workdevice = sql.wc_Notebook
-# workconcdevice = sql.wc_ConcNotebook
-# workdss = sql.wc_NotebookDSS
-# workpass = "../data/notebooks"
-# workconfig = 'support/config/notebooks.config'
+workdevice = sql.wc_Notebook
+workconcdevice = sql.wc_ConcNotebook
+workdss = sql.wc_NotebookDSS
+workpass = "../data/notebooks"
+workconfig = 'support/config/notebooks.config'
 
 
 def __values_for_dss():
@@ -91,7 +91,6 @@ def __insert_computers(only_new=True):
     Inserts only computers with new urls if only_new = True
     '''
     existed_urls = [d.url for d in db.session.query(workdevice).all()]
-    existed_names = [d.name + d.model for d in db.session.query(workdevice).all()]
     pkldevices = ptd.computers(workpass, workconfig)
     i = 0
     for pkldevice in pkldevices:
@@ -100,15 +99,8 @@ def __insert_computers(only_new=True):
             device = workdevice(**pkldevice)
             print device.model
             i = i + 1
-    print 'New downloaded devices:', len(pkldevices)
-    print 'Devices in base', len(db.session.query(workdevice).all())
-    print i
-    pkl_urls = [pkldevice['url'] for pkldevice in pkldevices]
-    for url in existed_urls:
-        if not url in pkl_urls:
-            print url
-    #     db.session.add(device)
-    # db.session.commit()
+        db.session.add(device)
+    db.session.commit()
 
 
 def __insert_prices():
@@ -176,10 +168,10 @@ def __update_comp_dss():
     ram_dss = {'1':20,'2':40,'3':50,'4':60,'6':70,'8':80,'12':90,'16':100}
 
     def oss_dss_calc(os_name):
-        os_dss_dict = {'FreeDOS':0,'Linux':20,'Windows 7 Starter':30,'Windows 7 Home Basic':40,'Windows 8':80,'Windows 7 Professional':100}
+        os_dss_dict = {'FreeDOS': 0,'Linux': 20,'Windows 7 Starter': 30,'Windows 7 Home Basic': 40,'Windows 8':80,'Windows 7 Professional':100}
         os_dss = 50
         for key in os_dss_dict:
-            if key in os_name: os_dss = os_dss_dict[key] 
+            if key in os_name: os_dss = os_dss_dict[key]
         return os_dss
 
     def display_dss_calc(comp):
@@ -190,9 +182,11 @@ def __update_comp_dss():
 
     def hdd_dss_calc(comp):
         m = re.match(ur"(\d+) Гб", comp.hdd_capacity)
-        rez = int(m.group(1))        
-        if comp.hdd_type == 'HDD/SSD': rez += 500
-        if comp.hdd_speed == 5400: rez -=100
+        rez = int(m.group(1))
+        if comp.hdd_type == 'HDD/SSD':
+            rez += 500
+        if comp.hdd_speed == 5400:
+            rez -= 100
         return rez
 
     def size_dss_calc(comp):
@@ -438,7 +432,7 @@ def __export_dss_notebooks():
 
 def __generate_third_page():
     import codecs
-    f = codecs.open('support/config/onlycomputer.config', encoding='utf-8')
+    f = codecs.open('support/config/notebooks.config', encoding='utf-8')
     names = {}
     for line in f.readlines():
         rus_name = line.split('|')[0].strip()
@@ -447,10 +441,10 @@ def __generate_third_page():
     part_names = set([key.split('.')[0] for key in names])
     # print ', '.join(part_namses)
     for part in part_names:
-        print 'pretty_computer[u"' + part + '"] = OrderedDict ( {'
+        print 'pretty_notebook[u"' + part + '"] = OrderedDict ( {'
         for key in names:
             if part in key:
-                print '\tu"' + key.split('_')[1] + '" : comp.' + names[key] + ','
+                print '\tu"' + key.split('.')[1] + '" : notebook.' + names[key] + ','
         print '})'
 
 
@@ -464,6 +458,46 @@ def __rename_photo_folders():
         os.rename(folder, newname)
 
 
+# def __insert_media_url():
+
+def __correct_notebooks_ram():
+    notebooks = db.session.query(sql.wc_Notebook).all()
+    for notebook in notebooks:
+        if notebook.ram_amount > 40 and notebook.ram_amount != 3096:
+            db.session.query(sql.wc_Notebook).filter_by(id=notebook.id).update({'ram_amount': notebook.ram_amount / 1024})
+        if notebook.ram_amount == 3096:
+            db.session.query(sql.wc_Notebook).filter_by(id=notebook.id).update({'ram_amount': 4})
+    db.session.commit()
+    a = set([notebook.ram_amount for notebook in db.session.query(sql.wc_Notebook).all()])
+    print 'all ram_amount:', a
+
+
+def __correct_computers_hdd():
+    devices = db.session.query(sql.wc_Computer).all()
+    for device in devices:
+        if device.hdd_capacity:
+            new_capacity = re.findall(ur"(\d+) Гб", device.hdd_capacity)[0]
+            print new_capacity
+            db.session.query(sql.wc_Computer).filter_by(id=device.id).update({'hdd_clear_capacity': new_capacity})
+    db.session.commit()
+    a = set([device.hdd_capacity for device in devices])
+    print 'all hdd_capacity:', a
+
+
+def __correct_notebooks_hdd():
+    devices = db.session.query(sql.wc_Notebook).all()
+    for device in devices:
+        new_capacity = 0
+        if device.hdd_capacity:
+            new_capacity += int(re.findall(ur"(\d+) Гб", device.hdd_capacity)[0])
+        if device.hdd_capacity2:
+            new_capacity += int(re.findall(ur"(\d+) Гб", device.hdd_capacity2)[0])
+        db.session.query(sql.wc_Notebook).filter_by(id=device.id).update({'hdd_clear_capacity': new_capacity})
+    db.session.commit()
+    a = set([device.hdd_clear_capacity for device in db.session.query(sql.wc_Notebook).all()])
+    print 'all hdd_clear_capacity:', a
+
+
 # def __grab_device_prices():
 #     for device in workdevice.query(workdevice.url).filter(workdevice.price < 0).all()
 
@@ -471,7 +505,9 @@ def __rename_photo_folders():
 
 if __name__ == '__main__':
     import support.utf8_converter
-    __insert_computers()
+    # __correct_notebooks_ram()
+    # __correct_notebooks_hdd()
+    # __insert_computers()
     # __separete_name()
     # __update_comp_dss()
     # __update_notebook_dss()
@@ -485,8 +521,10 @@ if __name__ == '__main__':
     # __generate_third_page()
     # __rename_photo_folders()
     # __grab_device_prices()
-    #.filter(workdevice.price < 0)
-    #for device in workdevice.query.filter(workdevice.price < 0).all():
-    #    db.session.query(workdevice).filter_by(id=device.id).update({'in_view': False})
-    #    print device.id
-    #db.session.commit()
+    print '1'
+    for conc in db.session.query(workconcdevice).all():
+        newgrn = conc.price_usd
+        newusd = conc.price_grn
+        db.session.query(workconcdevice).filter_by(id=conc.id).update({'price_grn': newgrn, 'price_usd': newusd})
+        print conc.id
+    db.session.commit()

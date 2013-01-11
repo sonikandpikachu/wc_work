@@ -4,7 +4,7 @@
     </div>
     <div id = "menu">
     <ul id = "navigation">
-    {% for name in ('wV1Button', 'qa'), ('wV2Button', 'qa'), ('wHelpButton', '1.html') %}
+    {% for name in ('wV1Button', '/qa'), ('wV2Button', '/qa'), ('wHelpButton', '1.html') %}
         <li>
             <a id = "button" href = {{ name[1] }}> <img src="{{ url_for('static', filename='img/greenButtons/' + name[0] + '1.png') }}" alt="Найти"
                 onMouseOver="this.src='{{ url_for('static', filename='img/greenButtons/' + name[0] + '2.png') }}'" 
