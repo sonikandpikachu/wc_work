@@ -5,16 +5,17 @@ import re
 
 import save_load as sl
 
+
 def shops(pkl_folder, shops_key):
     shops = set()
     for pkl in [pkl for pkl in os.listdir(pkl_folder) if pkl.endswith('.pkl')]:
         for shop in sl.pickle_load(os.path.join(pkl_folder, pkl))[shops_key]:
             shops.add(shop)
     return shops
-    
+
 
 def conccomputers(pkl_folder, shops_key, usd_key, grn_key):
-    computers = [sl.pickle_load(os.path.join(pkl_folder, pkl)) 
+    computers = [sl.pickle_load(os.path.join(pkl_folder, pkl))
             for pkl in [pkl for pkl in os.listdir(pkl_folder) if pkl.endswith('.pkl')]]
     pairs = []
     for c in computers:
@@ -47,12 +48,12 @@ def _config_lines(config):
     config_lines = []
     f = open(config)
     for line in f.xreadlines():
-        rus_name, names, parsers, types =  line.split('|')[:4]
+        rus_name, names, parsers, types = line.split('|')[:4]
         config_line = {
-            'rus_name' : rus_name.strip().replace('_', '.'),
-            'names' : [name.strip().lower() for name in names.split(';')],
-            'parsers' : [parser.strip() for parser in parsers.split(';')],
-            'types' : [type.strip() for type in types.split(';')],
+            'rus_name': rus_name.strip(),
+            'names': [name.strip().lower() for name in names.split(';')],
+            'parsers': [parser.strip() for parser in parsers.split(';')],
+            'types': [type.strip() for type in types.split(';')],
         }
         config_lines.append(config_line)
     return config_lines
@@ -62,17 +63,18 @@ def _parse(parser, value):
     repart = parser.split('$')[0].strip()
     parsed = re.findall(repart, value)
     index = int(parser.split('$')[1].strip()) if '$' in parser else 0
-    try: 
+    try:
         return parsed[index]
     except:
-        return None 
+        return None
 
 
 def _computer(pkl_computer, config_lines):
-    computer = {} 
+    computer = {}
     for line in config_lines:
         if line['rus_name'] in pkl_computer:
             for name, parser, type in zip(line['names'], line['parsers'], line['types']):
                 computer[name] = _parse(parser, pkl_computer[line['rus_name']])
-                if type == 'Boolean': computer[name] = True if '+' in computer[name] else False
+                if type == 'Boolean':
+                    computer[name] = True if '+' in computer[name] else False
     return computer

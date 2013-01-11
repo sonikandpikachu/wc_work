@@ -4,7 +4,6 @@ Created on Sep 18, 2012
 
 @author: Pavel
 '''
-import os
 
 from sqlorm import *
 from flask import render_template, request, abort, session

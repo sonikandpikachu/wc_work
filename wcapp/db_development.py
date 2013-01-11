@@ -18,21 +18,21 @@ import sqlorm as sql
 import re
 from support import pkl_to_dict as ptd
 
-#workdevice = sql.wc_Computer
-#workconcdevice = sql.wc_ConcComputer
-#workdss = sql.wc_ComputerDSS
-#workpass = "../data/computers"
-#workconfig = 'support/config/computers.config'
+workdevice = sql.wc_Computer
+workconcdevice = sql.wc_ConcComputer
+workdss = sql.wc_ComputerDSS
+workpass = "../data/computers"
+workconfig = 'support/config/onlycomputer.config'
 
-workdevice = sql.wc_Notebook
-workconcdevice = sql.wc_ConcNotebook
-workdss = sql.wc_NotebookDSS
-workpass = "../data/notebooks"
-workconfig = 'support/config/notebooks.config'
+# workdevice = sql.wc_Notebook
+# workconcdevice = sql.wc_ConcNotebook
+# workdss = sql.wc_NotebookDSS
+# workpass = "../data/notebooks"
+# workconfig = 'support/config/notebooks.config'
 
 
 def __values_for_dss():
-    ''' export data from db to dss.xls '''
+    ''' Export data from db to dss.xls '''
     import xlwt
     wbk = xlwt.Workbook()
     prefixes = 'cpu', 'vga'
@@ -63,7 +63,7 @@ def __values_for_dss():
 
 
 def __dss_values_to_db():
-    ''' writes dss values from file dss.xls to db. File have to be in the same folder'''
+    ''' Writes dss values from file dss.xls to db. File have to be in the same folder'''
     import xlrd
     wbk = xlrd.open_workbook('dss.xls')
     sheet_names = wbk.sheet_names()
@@ -85,13 +85,30 @@ def __dss_values_to_db():
         db.session.commit()
 
 
-def __insert_computers():
-    ''' inserts .pkl devices to notebooks, as it setted in config file'''
+def __insert_computers(only_new=True):
+    '''
+    Inserts .pkl devices to notebooks, as it setted in config file.
+    Inserts only computers with new urls if only_new = True
+    '''
+    existed_urls = [d.url for d in db.session.query(workdevice).all()]
+    existed_names = [d.name + d.model for d in db.session.query(workdevice).all()]
     pkldevices = ptd.computers(workpass, workconfig)
+    i = 0
     for pkldevice in pkldevices:
-        device = workdevice(**pkldevice)
-        db.session.add(device)
-    db.session.commit()
+        # if not pkldevice['name'] + pkldevice['model'] in existed_names:
+        if not pkldevice['url'] in existed_urls:
+            device = workdevice(**pkldevice)
+            print device.model
+            i = i + 1
+    print 'New downloaded devices:', len(pkldevices)
+    print 'Devices in base', len(db.session.query(workdevice).all())
+    print i
+    pkl_urls = [pkldevice['url'] for pkldevice in pkldevices]
+    for url in existed_urls:
+        if not url in pkl_urls:
+            print url
+    #     db.session.add(device)
+    # db.session.commit()
 
 
 def __insert_prices():
@@ -151,8 +168,10 @@ def __update_devices():
 
 
 def __update_comp_dss():
-    '''inserting dss values, wich is autocalculated, based on deffault parameters. Works only for computers and 
-    notebooks'''
+    '''
+    Inserting dss values, wich is autocalculated, based on deffault parameters.
+    Works only for computers and notebooks
+    '''
 
     ram_dss = {'1':20,'2':40,'3':50,'4':60,'6':70,'8':80,'12':90,'16':100}
 
@@ -163,7 +182,7 @@ def __update_comp_dss():
             if key in os_name: os_dss = os_dss_dict[key] 
         return os_dss
 
-    def display_dss_calc(comp):        
+    def display_dss_calc(comp):
         rez = comp.display_diagonal * int(comp.display_resolution[:2]) / 5
         if comp.display_led_backlight: rez += 5
         if comp.display_sensor: rez += 10
@@ -245,10 +264,8 @@ def __update_comp_dss():
 
 
 def __update_notebook_dss():
-    '''inserting dss values, wich is autocalculated, based on deffault parameters. Works only for computers and 
+    '''Inserting dss values, wich is autocalculated, based on deffault parameters. Works only for computers and 
     notebooks'''
-
-    
 
     def ram_dss_calc(comp):
         ram_dss = {'1024':15,'2048':35,'3072':45,'3096':55,'4096':55,'6144':65,'8192':75,'12288':85,'16384':95}
@@ -324,7 +341,7 @@ def __update_notebook_dss():
             if key in os_name: os_dss = os_dss_dict[key] 
         return os_dss
 
-    def display_dss_calc(comp):        
+    def display_dss_calc(comp):
         rez = comp.display_diagonal * int(comp.disply_resolution[:2]) / 5
         if comp.display_led_backlight: rez += 5
         if comp.display_sensor: rez += 10
@@ -344,7 +361,7 @@ def __update_notebook_dss():
         rez = int(m.group(1))
         if comp.hdd_capacity2:
             m = re.match(ur"(\d+) Гб", comp.hdd_capacity2)
-            rez += int(m.group(1))         
+            rez += int(m.group(1))
         if 'SSD' in comp.hdd_type: rez += 500
         if comp.hdd_speed == 5400: rez -=200
         if comp.hdd_free_fall: rez += 50
@@ -352,25 +369,25 @@ def __update_notebook_dss():
         return rez
 
     def size_dss_calc(comp):
-        return comp.height * comp.length * comp.width  
+        return comp.height * comp.length * comp.width
 
     def panel_dss_calc(comp):
-        rez = 0       
+        rez = 0
         if comp.panel_bluraydrive: rez += 15
         if comp.panel_usb2: rez += 2 * comp.panel_usb2
         if comp.panel_usb3: rez += 4 * comp.panel_usb3
-        return rez   
+        return rez
 
     computers = workdevice.query.all()
     allhdd = [hdd_dss_calc(comp) for comp in computers if comp.hdd_capacity]
-    allcpu = [comp.testcpu_passmark**0.25 for comp in computers if comp.testcpu_passmark]
-    allvga = [comp.testvga_3dmark06**0.25 for comp in computers if comp.testvga_3dmark06]
+    allcpu = [comp.testcpu_passmark ** 0.25 for comp in computers if comp.testcpu_passmark]
+    allvga = [comp.testvga_3dmark06 ** 0.25 for comp in computers if comp.testvga_3dmark06]
     alldisplay = [display_dss_calc(comp) for comp in computers if comp.display_diagonal]
     allsize = [size_dss_calc(comp) for comp in computers if comp.height]
     allbattery = [battery_dss_calc(comp) for comp in computers]
-    allpanel = [panel_dss_calc(comp) for comp in computers]  
-    allweight = [comp.weight for comp in computers if comp.weight]  
-  
+    allpanel = [panel_dss_calc(comp) for comp in computers]
+    allweight = [comp.weight for comp in computers if comp.weight]
+
     hddmin, hddmax = min(allhdd), max(allhdd)
     sizemin, sizemax = min(allsize), max(allsize)
     cpumin, cpumax = min(allcpu), max(allcpu)
@@ -378,30 +395,30 @@ def __update_notebook_dss():
     displaymin, displaymax = min(alldisplay), max(alldisplay)
     batterymin, batterymax = min(allbattery), max(allbattery)
     panelmin, panelmax = min(allpanel), max(allpanel)
-    weightmin, weightmax = min(allweight), max(allweight)    
+    weightmin, weightmax = min(allweight), max(allweight)
 
     for comp in computers:
         values = {
-            'ram' : ram_dss_calc(comp) if comp.ram_amount else 0,
-            'price' : comp.price / 500 if comp.price > 0 else 0,
+            'ram': ram_dss_calc(comp) if comp.ram_amount else 0,
+            'price': comp.price / 500 if comp.price > 0 else 0,
             'os': oss_dss_calc(comp.os),
             'common': common_dss_calc(comp),
             'input': input_dss_calc(comp),
             'com': com_dss_calc(comp),
             'web_camera': webcamera_dss_calc(comp) if comp.web_camera else 0,
             'accoustic': accoustic_dss_calc(comp) if comp.accoustic_format else 0,
-            'hdd' : round(100*(hdd_dss_calc(comp) - hddmin)  / (hddmax - hddmin)) if comp.hdd_capacity else 0,            #
-            'weight' : round(100*(comp.weight - weightmin)  / (weightmax - weightmin)) if comp.weight else 50,
-            'panel' : round(100*(panel_dss_calc(comp) - panelmin)  / (panelmax - panelmin)),
-            'battery' : round(100*(battery_dss_calc(comp) - batterymin)  / (batterymax - batterymin)),
-            'size' : round(100*(size_dss_calc(comp) - sizemin)  / (sizemax - sizemin)) if comp.height else 100, # inverse
-            'cpu' : round(90*(comp.testcpu_passmark**0.25 - cpumin) / (cpumax - cpumin) + 10) if comp.testcpu_passmark else 0,
-            'vga' : round(90*(comp.testvga_3dmark06**0.25 - vgamin) / (vgamax - vgamin) + 10) if comp.testvga_3dmark06 else 0,
-            'display' : round(100*(display_dss_calc(comp) - displaymin) / (displaymax - displaymin)) if comp.display_diagonal else 0 # mean value
+            'hdd': round(100 * (hdd_dss_calc(comp) - hddmin) / (hddmax - hddmin)) if comp.hdd_capacity else 0,
+            'weight': round(100 * (comp.weight - weightmin) / (weightmax - weightmin)) if comp.weight else 50,
+            'panel': round(100 * (panel_dss_calc(comp) - panelmin) / (panelmax - panelmin)),
+            'battery': round(100 * (battery_dss_calc(comp) - batterymin) / (batterymax - batterymin)),
+            'size': round(100 * (size_dss_calc(comp) - sizemin) / (sizemax - sizemin)) if comp.height else 100,  # inverse
+            'cpu': round(90 * (comp.testcpu_passmark ** 0.25 - cpumin) / (cpumax - cpumin) + 10) if comp.testcpu_passmark else 0,
+            'vga': round(90 * (comp.testvga_3dmark06 ** 0.25 - vgamin) / (vgamax - vgamin) + 10) if comp.testvga_3dmark06 else 0,
+            'display': round(100 * (display_dss_calc(comp) - displaymin) / (displaymax - displaymin)) if comp.display_diagonal else 0  # mean value
 
         }
-        db.session.query(workdss).filter_by(id = comp.id).update(values)
-    db.session.commit()    
+        db.session.query(workdss).filter_by(id=comp.id).update(values)
+    db.session.commit()
 
 
 def __separete_name():
@@ -409,7 +426,7 @@ def __separete_name():
     for device in devices:
         newname = device.name.split('$')[0]
         newmodel = device.name.split('$')[1].replace('[', '').replace(']', '')
-        db.session.query(workdevice).filter_by(id = device.id).update({'name' : newname, 'model' : newmodel})
+        db.session.query(workdevice).filter_by(id=device.id).update({'name': newname, 'model': newmodel})
     db.session.commit()
 
 
@@ -427,7 +444,7 @@ def __generate_third_page():
         rus_name = line.split('|')[0].strip()
         eng_name = line.split('|')[1].strip().lower()
         names[rus_name] = eng_name
-    part_names = set([key.split('_')[0] for key in names])
+    part_names = set([key.split('.')[0] for key in names])
     # print ', '.join(part_namses)
     for part in part_names:
         print 'pretty_computer[u"' + part + '"] = OrderedDict ( {'
@@ -449,15 +466,15 @@ def __rename_photo_folders():
 
 # def __grab_device_prices():
 #     for device in workdevice.query(workdevice.url).filter(workdevice.price < 0).all()
-        
+
 # str(comp.height) + str(comp.width) + str(comp.length)
 
 if __name__ == '__main__':
     import support.utf8_converter
-    # __insert_computers()
+    __insert_computers()
     # __separete_name()
-    #__update_comp_dss()
-    __update_notebook_dss()
+    # __update_comp_dss()
+    # __update_notebook_dss()
     # __insert_prices()
     # __insert_shops()
     # __insert_concdevices()
