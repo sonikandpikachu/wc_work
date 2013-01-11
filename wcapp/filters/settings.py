@@ -15,30 +15,6 @@ import filters
 
 
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
-#Type:
-texts = u"Компьютер", u'Ноутбук'
-values =  'computer', 'notebook'
-def type_cut_function(selected_values):	\
-	# WE DON`T NEED THIS FUNCTION BECAUSE WE HAVE DIFERENT TABLES
-	# acceptTypes = []
-	# for s in selected_values:
-	# 	if s == 'computer' : acceptTypes.extend([u"неттоп", u"моноблок", u"игровой", u"настольный" , u"настольный / с монитором /"])
-	# 	if s == 'notebook': acceptTypes.extend([u"ноутбук", u"нетбук", u"ультрабук", u"трансформер"])
-	# 	if s == 'tablet': acceptTypes.extend([u"ноутбук"])
-	# 	if s == 'all': acceptTypes.extend([u"неттоп", u"моноблок", u"игровой", u"настольный" , u"настольный / с монитором /", u"ноутбук", \
-	# 								u"нетбук", u"ультрабук", u"трансформер"])
-	# filters = []	
-	# for aT in acceptTypes:		 
-	# 		filters.append('type LIKE "%' + aT + '%"')
-	# if len(filters) > 1: return '(' + ' OR '.join(filters) + ')'	
-	# return filters[0] if filters else '' 
-	return ''
-
-deviceType = filters.RadioFilter('type', u'Я хочу ...', 
-									texts, values,type = "inline",cut_function = type_cut_function)
-
-
-#----------------------------------------------------------------------------------------------------------------------------------------------------------
 #Price:
 
 def priceC_cut_function(selected_values):
@@ -96,6 +72,7 @@ performanceRamFilter  = filters.SliderDoubleFilter('perfRam', u'Оператив
 performanceCFilter = filters.ContainerFilter([performanceCpuFilter, performanceRamFilter])
 performanceFilter = filters.TwoPartFilter('perf', cPart =  performanceCFilter, nPart =  performanceNFilter)
 
+performanceFilter.set_parent_question(priceFilter)
 
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
 #Video:
@@ -124,6 +101,7 @@ videoSeriyaFilter  = filters.SelectFilter('videoSeriya', u'Серия видео
 									texts, values, cut_function = videoC_cut_function)
 videoFilter = filters.TwoPartFilter('video', cPart =  videoSeriyaFilter, nPart =  videoNFilter, defPart = 1, dtype = 'computer')
 
+videoFilter.set_parent_question(performanceFilter)
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
 #VideoNotebook:
 def videoN_dss_function(selected_values):
@@ -179,8 +157,7 @@ videoSeriyaFilterNotebook  = filters.SelectFilter('videoNoteSeriya', u'Сери�
 									texts, values, cut_function = videoC_cut_function)
 videoFilterNotebook = filters.TwoPartFilter('videoNote', cPart =  videoSeriyaFilterNotebook, nPart =  videoNFilterNotebook, defPart = 1, dtype = 'notebook')
 
-
-
+videoFilterNotebook.set_parent_question(videoFilter)
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
 #Display:
 
@@ -199,7 +176,7 @@ displayDiagonalFilter  = filters.SliderDoubleFilter('dispDiagonal', u'Диаго
 											dimension = u' "', step = 1)
 displayFilter = filters.ContainerFilter([displayCheckFilter, displayDiagonalFilter], 'disp', dtype = 'computer')
 
-
+displayFilter.set_parent_question(videoFilterNotebook)
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
 #DisplayNotebook:
 
@@ -236,7 +213,8 @@ displayDiagonalFilterNotebook  = filters.SliderDoubleFilter('dispDiagonalNote', 
 displayFilterNotebook = filters.ContainerFilter([displayCoverFilter, displayMatrixFilter], 'dispNote', dtype = 'notebook')
 
 
-
+displayDiagonalFilterNotebook.set_parent_question(displayFilter)
+displayFilterNotebook.set_parent_question(displayDiagonalFilterNotebook)
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
 #Hdd:
 
@@ -246,6 +224,7 @@ def hdd_diagonal_cut_function(selected_values):
 hddFilter  = filters.SliderDoubleFilter('hdd', u'Объем памяти:',250, 2000, [500, 1000],
 											dimension = u' Gb', step = 50)
 
+hddFilter.set_parent_question(displayFilterNotebook)
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
 #Battery:
 
@@ -257,7 +236,7 @@ descriptionBatteryN = u'<p style = "text-indent: 10px;">Значение опр�
 batteryFilter = filters.SliderSingleFilter('battery', u'Батарея:', 0, 5, 0,
 									labels = [u'Обычная', u'Максимальная автономность'], description = descriptionBatteryN, dss_function = battery_dss_function, dtype = 'notebook')
 
-
+batteryFilter.set_parent_question(hddFilter)
 
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
 #Compactness:
@@ -281,7 +260,7 @@ weightFilter = filters.SliderSingleFilter('compactWeight', u'Вес', 0, 5, 2,
 
 compactnessFilter = filters.ContainerFilter([weightFilter, sizeFilter], 'compact', dtype = 'notebook')
 
-
+compactnessFilter.set_parent_question(batteryFilter)
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
 #os:
 
@@ -297,6 +276,8 @@ values =  'Windows', 'Mac', 'Linux'
 
 osFilter = filters.CheckboxFilter('osFilter', u'Обязательно с ОС:', 
 									texts, values, type = "inline", cut_function = os_cut_function)
+
+osFilter.set_parent_question(compactnessFilter)
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
 #Required Parameters:
 texts = u"BluRay", u"Wi-Fi", u'Bluetooth', u'картридер',u'USB 3.0', u'веб камера', u'ТВ-тюнер',u'пульт ДУ'
@@ -330,10 +311,44 @@ audioFilter = filters.RadioFilter('audio', u'Аудио:',
 									texts, values, cut_function = audio_cut_function)
 
 commonFilter = filters.ContainerFilter([required_parameters, audioFilter], 'common')
+
+commonFilter.set_parent_question(osFilter)
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
 
+FILTERS = priceFilter, performanceFilter, videoFilter, displayFilter, hddFilter, osFilter, commonFilter, videoFilterNotebook, displayDiagonalFilterNotebook, displayFilterNotebook, batteryFilter, compactnessFilter
 
-COMP_FILTERS = priceFilter, performanceFilter, videoFilter, displayFilter, hddFilter, osFilter, commonFilter
-NOTEBOOK_FILTERS = priceFilter, performanceFilter, videoFilterNotebook, displayDiagonalFilterNotebook, displayFilterNotebook, batteryFilter, compactnessFilter
-# ALL_FILTERS = deviceType, priceFilter, performanceFilter, batteryFilter
+def init_comp_filters(filters):
+	rez = []
+	for filter in filters:
+		if filter.dtype == None or filter.dtype == 'computer':
+			rez.append(filter)
+	return rez
+def init_notebook_filters(filters):
+	rez = []
+	for filter in filters:
+		if filter.dtype == None or filter.dtype == 'notebook':
+			rez.append(filter)
+	return rez
+def init_all_filters(filters):
+	rez = []
+	parent_filter = None
+	for filter in filters:
+		if filter.parent_question == None:
+			parent_filter = filter	
+	has_children = True
+	while has_children:
+		rez.append(parent_filter)
+		has_children = False
+		for filter in filters:
+			if filter.parent_question:
+				if filter.parent_question.name == parent_filter.name:
+					parent_filter = filter
+					has_children = True
+					break
+
+	return rez
+
+COMP_FILTERS = init_comp_filters(FILTERS)
+NOTEBOOK_FILTERS = init_notebook_filters(FILTERS)	
+ALL_FILTERS = init_all_filters(FILTERS)

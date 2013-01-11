@@ -29,7 +29,8 @@ def unique_union(list_a, list_b):
 FILTERS = {
     u'computer': filters.settings.COMP_FILTERS,
     u'notebook': filters.settings.NOTEBOOK_FILTERS,
-    u'all': unique_union(filters.settings.COMP_FILTERS, filters.settings.NOTEBOOK_FILTERS)
+    #u'all': unique_union(filters.settings.COMP_FILTERS, filters.settings.NOTEBOOK_FILTERS)
+    u'all': filters.settings.ALL_FILTERS
 }
 
 
