@@ -118,6 +118,17 @@ def third_computer(id):
                                 conccomps=concdevices)
 
 
+@app.route('/notebook/<id>/')
+def third_notebook(id):
+    dbwrapper = db_queries.DBWrapper(session['type'])
+    concdevices = dbwrapper.concdevices_by_device_id(id)
+    big_pretty_notebook = pretty_data.big_notebook(id, dbwrapper)
+    small_pretty_notebook = pretty_data.small_devices([id], [0], dbwrapper)[0]
+    return render_template('Comp.html', big_comp=big_pretty_notebook,
+                                small_comp=small_pretty_notebook,
+                                conccomps=concdevices)
+
+
 if __name__ == '__main__':
     #app.run(host = '192.168.1.100', port = 80)
     #port = int(os.environ.get('PORT', 5000))
