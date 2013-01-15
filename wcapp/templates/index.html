@@ -3,16 +3,73 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}"/>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-1.7.2.min.js') }}"></script>
 	<title>What Computer</title>
 </head>
-
+<script type="text/javascript" charset="utf-8"> 
+      $(function() {
+       $('#idknow').hover(function() {
+            $("#yid").animate({ left: '+=120' }, 600);
+            $("#oid").animate({ left: '-=120' }, 600);            
+            }, function(){           
+            $("#yid").animate({ left: '-=120' }, 600);
+            $("#oid").animate({ left: '+=120' }, 600);
+        });
+       $('#iknow').hover(function() {
+            $("#oi").animate({ top: '+=51' }, 300);
+            $("#yi").animate({ top: '-=51' }, 300);            
+            }, function(){            
+            $("#oi").animate({ top: '-=51' }, 300);
+            $("#yi").animate({ top: '+=51' }, 300);
+        });
+       });
+</script>
 <body>
 	<div id = "wrapper">
 		<div id = "content">		
             <div id = "logo">
                 <img src="{{ url_for('static', filename='img/mainLogo.png') }}" />			
             </div>
-            {% include 'menu.html' %} 
+            <div id = "menuBlock">
+                <div id = "topSeparator">
+                    <img src="{{ url_for('static', filename='img/separator.jpg') }}" />         
+                </div>
+                <div id = "menu">
+                <ul id = "navigation">
+                    <li class = "block" id = "idknow">
+                        <a href="qa" >
+                            <div class = "image">
+                                <i class = "yellowA arrow" id = "yAid"></i>
+                                <i class = "orangeA arrow" id = "oAid"></i>                                
+                                <i class = "greenLA arrow" ></i>
+                                <i class = "greenRA arrow" ></i>
+                                <i class = "yellow q" id = "yid"></i>
+                                <i class = "green q"></i>
+                                <i class = "orange q" id = "oid"></i>                                
+                            </div>
+                            <div class = "title">Я еще не знаю что я точно хочу</div>
+                            <div class = "text">Вопросы задаються по очереди в зависимости от того как вы отвечаете. Займет 5-7 мин.</div>
+                        </a>
+                    </li>
+                    <li class = "block" id = "iknow">
+                        <a href="qa" >
+                            <div class = "image">                              
+                                <i id = "gAi"></i>
+                                <i id = "arrowsi" ></i>
+                                <i class = "yellow q" id = "yi"></i>
+                                <i class = "green q"></i>
+                                <i class = "orange q" id = "oi"></i> 
+                            </div>
+                            <div class = "title">Я примерно знаю что я хочу</div>
+                            <div class = "text">Вопросы выводяться все сразу списком. Займет не более 2 мин.</div>
+                        </a>
+                    </li>
+                </ul>      
+                </div>
+                <div id = "bottomSeparator">
+                    <img src="{{ url_for('static', filename='img/separator.jpg') }}" />         
+                </div>
+</div>
 		</div>
 		<div id = "footer">
          	Developed by Sonik and Pikachu
