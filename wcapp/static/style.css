@@ -40,9 +40,9 @@ body {
 }
 
 #menu .block:hover{
-	-webkit-box-shadow: 0px 0px 15px #B2F2A1;
-  -moz-box-shadow: 0px 0px 15px #B2F2A1;
-  box-shadow: 0px 0px 15px #B2F2A1;
+	-webkit-box-shadow: 0px 0px 15px #9CEF84;
+  -moz-box-shadow: 0px 0px 15px #9CEF84;
+  box-shadow: 0px 0px 15px #9CEF84;
 }
 
 #menu div{

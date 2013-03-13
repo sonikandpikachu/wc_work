@@ -54,18 +54,17 @@
 
       function recognizeElements(params)
       {
-        rez = {}
+        rez = {};
           for(key in params)
-            {          
-               if ($.inArray(key, cheks) != -1){
-                  rez[key+"_"+params[key]] = "checked";
-                }else{
-                  if ($.inArray(key, selectes) != -1)
-                  {
-                    rez[key+"_select"] = params[key].replace("+"," ");                    
-                  }else{
-                    rez[key] = params[key].replace("%3B",";");
-                  }
+            {
+                if ($.inArray(key, cheks) != -1) {
+                    rez[key + "_" + params[key]] = "checked";
+                } else {
+                    if ($.inArray(key, selectes) != -1) {
+                        rez[key + "_select"] = params[key].replace("+", " ");
+                    } else {
+                        rez[key] = params[key].replace("%3B", ";");
+                    }
                 }
             }
         return rez;
@@ -216,11 +215,14 @@
        $("#ctrigger").click( function(){        
         $(".console").slideToggle();        
       });
-       if (getUrlParams() == null){
+      $( document ).ready( function() {
+        if (getUrlParams() == null){
         setValues(qParams, 'first');
       }else{       
         setValues(recognizeElements(getUrlParams()), 'first');
-      }   
+      } 
+    });
+         
     </script>
     <table  class = "console" style = "width: 100%">
       

@@ -33,5 +33,4 @@ def setup_console(sys_enc="utf-8"):
     except:
         pass
 
-print 'utf8'
 setup_console()
