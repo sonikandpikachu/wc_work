@@ -1,0 +1,16 @@
+<a class="feedback" href="#feedbackBlock" ><img src="{{ url_for('static', filename='img/greenButtons/wFBButton.png') }}" alt="Далее"/></a>
+
+<!-- hidden feedback form -->
+<div id="feedbackBlock">
+  <h2>Помогите нам улучить сервис</h2>
+  <form id="contact" name="contact" action="#" method="post">
+    <label for="c">Ваш E-mail</label>
+    <input type="email" id="email" name="email" class="txt">
+    <br>
+    <label for="msg">Ваши замечания и пожелания</label>
+    <textarea id="msg" name="msg" class="txtarea"></textarea>
+    <a href = "javascript:void(0)" id = "send"> <img src="{{ url_for('static', filename='img/greenButtons/wSendButton.png') }}" alt="Далее" 
+                                onMouseOver="this.src='{{ url_for('static', filename='img/greenButtons/wSendButton2.png') }}'" 
+                                onMouseOut="this.src='{{ url_for('static', filename='img/greenButtons/wSendButton.png') }}'"/></a>
+  </form>
+</div>

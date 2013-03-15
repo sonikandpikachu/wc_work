@@ -6,12 +6,13 @@ Created on Sep 18, 2012
 '''
 
 from sqlorm import *
-from flask import render_template, request, abort, session
+from flask import render_template, request, abort, session, jsonify
 
 from wcconfig import app
 import filters.settings
 import pretty_data
 import db_queries
+import mail
 
 #move to html settings
 COMPUTERS_ON_PAGE = 10
@@ -44,7 +45,7 @@ def second():
     #need refactor dbwrapper calls
     dbwrapper = db_queries.DBWrapper(DEFFAULT_DEVICE_TYPE)
     #getting computers id:
-    print request.args
+    print 'sdf',request.args.keys()
     if 'type' in request.args.keys():
         session['type'] = request.args['type']
         dbwrapper = db_queries.DBWrapper(request.args['type'])
@@ -127,6 +128,14 @@ def third_notebook(id):
     return render_template('Comp.html', big_comp=big_pretty_notebook,
                                 small_comp=small_pretty_notebook,
                                 conccomps=concdevices)
+
+
+@app.route('/feedback/', methods=['GET'])
+def feedback():
+    mail.save_feedback(request.args['msg'], request.args['email'])
+    resp = jsonify({"Send":"true"})
+    resp.status_code = 200
+    return resp
 
 
 if __name__ == '__main__':

@@ -1,427 +1,147 @@
 <!DOCTYPE html>
 <html lang = "ru-RU">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}"/>
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/jslider.css') }}"/>
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/jslider.single.css') }}"/>
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/jquery.tooltip.css') }}"/>
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/jquery.selectbox.css') }}"/>
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/uniform.default.css') }}"/>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/jslider.css') }}"/>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/jslider.single.css') }}"/>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/jquery.tooltip.css') }}"/>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/jquery.selectbox.css') }}"/>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/uniform.default.css') }}"/>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='fancybox/jquery.fancybox.css') }}"/>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}"/>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/feedback.css') }}"/>
 
-<script type="text/javascript" src="{{ url_for('static', filename='js/jquery-1.7.2.min.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/jshashtable-2.1_src.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.numberformatter-1.2.3.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/tmpl.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.dependClass-0.1.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/draggable-0.1.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.slider.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.tooltip.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.selectbox-0.2.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.uniform.min.js') }}"></script>
-<script type="text/javascript" charset="utf-8">
-    $(function(){        
-        $("input, textarea, button").uniform();
-        $(function() {
-          $( "[title]" ).tooltip({
-            track: true,
-            delay: 0,
-            showURL: false,
-            showBody: " - ",
-            extraClass: "pretty",
-            fixPNG: true,
-            left: -120
-          });
-        });
-      });
-      var qParams = {};
-      var sliders;
-      var cheks = new Array();
-      var selectes = new Array();
+  <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-1.7.2.min.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/jshashtable-2.1_src.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.numberformatter-1.2.3.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/tmpl.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.dependClass-0.1.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/draggable-0.1.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.slider.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.tooltip.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.selectbox-0.2.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.uniform.min.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='fancybox/jquery.fancybox.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/QandA.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/feedback.js') }}"></script>
+  <script type=text/javascript>
+      var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+  </script> 
 
-      function getUrlParams(){
-        var rez = {};        
-        var Params = decodeURI(location.search.substring(1)).split("&");
-        if (Params[0] == "")
-          return null;
-        for (var i = 0; i < Params.length; i++){
-            if (Params[i].split("=").length > 1)
-                          rez[Params[i].split("=")[0]] = Params[i].split("=")[1]; 
-        }
-         return rez;
-      }
-
-      function recognizeElements(params)
-      {
-        rez = {};
-          for(key in params)
-            {
-                if ($.inArray(key, cheks) != -1) {
-                    rez[key + "_" + params[key]] = "checked";
-                } else {
-                    if ($.inArray(key, selectes) != -1) {
-                        rez[key + "_select"] = params[key].replace("+", " ");
-                    } else {
-                        rez[key] = params[key].replace("%3B", ";");
-                    }
-                }
-            }
-        return rez;
-      }  
-
-      function setValues(params, type)
-      {
-        //alert(JSON.stringify(params))
-          sliders = new Array();
-          var twoParts = new Array();
-          var inputs = document.qForm.getElementsByTagName("input");
-               for (i = 0; i < inputs.length;i++){
-                if((inputs[i].type == "radio") || (inputs[i].type == "checkbox"))
-                                inputs[i].checked = false; 
-                            }
-          for(key in params)
-            {
-              if (key == "type_computer"){
-                $(".computer").fadeIn();
-                $(".notebook").hide();
-              }
-              if (key == "type_notebook"){
-                $(".notebook").fadeIn();
-                $(".computer").hide();
-              }               
-               var sKey = "#"+key;
-               if (params[key] == "checked") {
-                  $(sKey).attr("checked", true);                                                     
-               }else{               
-                 if (key.split('_')[1] == "hi")
-                 {
-                    twoParts.push(key); 
-                 }else{ 
-                  if (key.split('_')[1] == "select"){
-                      $("#"+key.split('_')[0]).selectbox("change", 'value', params[key]);
-                  } else{              
-                     var param = params[key].split(';');                   
-                     if (param.length > 1){                        
-                        $(sKey).slider("value", param[0], param[1]);
-                      }
-                      else     
-                        $(sKey).slider("value", param[0]);                   
-                     sliders.push(sKey);
-                   }
-                 }
-               }                      
-            }
-            for (i = 0; i < sliders.length;i++){
-              $(sliders[i]).slider().update();
-            }
-          for (j = 0; j < twoParts.length;j++){
-              var key = twoParts[j];
-              var sKey = "#"+key;
-              if(params[key] == 1){                
-                      if (type == 'first') {$("#" + key.split('_')[0]).css('marginLeft','-800px');}
-                      else {$("#" + key.split('_')[0]).animate({ marginLeft: '-800px' }, 800);}
-                      $(sKey).val(1);
-                      $("#rArrow"+ key.split('_')[0]).hide();
-                      $("#lArrow"+ key.split('_')[0]).show();
-                    }
-                    else{
-                      if (type == 'first') {$("#" + key.split('_')[0]).css('marginLeft','0');}
-                      else {$("#" + key.split('_')[0]).animate({ marginLeft: '0' }, 800);}
-                      $(sKey).val(0);
-                      $("#lArrow"+ key.split('_')[0]).hide();
-                      $("#rArrow"+ key.split('_')[0]).show();
-                    }
-            }  
-            
-          $.uniform.update();       
-      }      
-      function restoreDefValues()
-      {            
-          setValues(qParams);          
-      }       
-    </script>
-<title>What Computer</title>
+  <title>What Computer</title>
 </head>
 
 <body>
-<div id = "wrapper">
-  <div id = "header"> <img src="{{ url_for('static', filename='img/main_header.png') }}" alt="What Computer"/> </div>
-  <div id = "content">
-    {% include 'menu.html' %}         
-    <form method = 'get' action = '/qa/' name = "qForm">
-      <ul id = "questions">
-        <a href = "javascript:void(0)" onclick="restoreDefValues()" id="defaultButton" >Востановить начальные значения</a>
-        <li>    
-            <div id = "mainQuestion" class="question question-radio inline" style = "">       
-            <p class = "qText">Я хочу ... </p>
-                <label>
-                    <input type="radio" name="type" value="computer" id="type_computer">
-                    Компьютер                   
-                </label>          
-                              <script type="text/javascript">
-                                  qParams["type_computer"] = "checked";
-                                  cheks.push("type");
-                              </script>
-                <label>
-                    <input type="radio" name="type" value="notebook" id="type_notebook">
-                    Ноутбук                   
-                </label>
-                <script>
-                  $("#type_computer").click(function() {
-                    $(".notebook").fadeOut();                    
-                    $(".computer").fadeIn();
-                    for (i = 0; i < sliders.length;i++){
-                                  $(sliders[i]).slider().update();
-                                              }
-                  });
-                  $("#type_notebook").click(function() {
-                    $(".computer").fadeOut();                    
-                    $(".notebook").fadeIn();
-                    for (i = 0; i < sliders.length;i++){
-                                  $(sliders[i]).slider().update();
-                                              }
-                  });
-                </script>
-            </div>
-        </li>
-        {% include 'filters.html' %}
-        <a href = "javascript:void(0)" id = "goButton" onclick="document.qForm.submit();return false;"> <img src="{{ url_for('static', filename='img/greenButtons/wGoButton1.jpg') }}" alt="Далее" 
-                              onMouseOver="this.src='{{ url_for('static', filename='img/greenButtons/wGoButton2.jpg') }}'" 
-                              onMouseOut="this.src='{{ url_for('static', filename='img/greenButtons/wGoButton1.jpg') }}'"
-                              onMouseDown="this.src='{{ url_for('static', filename='img/greenButtons/wGoButton3.jpg') }}'"
-                              />  </a>
-      </ul> 
-    </form>
-    <a href = "#questions" id="trigger">Show/Hide</a>    
-    <a href = "javascript:void(0)" id="ctrigger" style="
-    position: fixed;
-    left: 1px;
-    padding: 10px;
-    background:#fff;
- 
-  border-radius:10px;
-  border-top: solid 2px #79E95D;  
-  border-bottom: solid 2px #79E95D;
-  border-right: solid 2px #79E95D;
-  -webkit-border-radius: 0 10px 10px 0;
-  -moz-border-radius: 0 10px 10px 0;
-  border-radius: 0 10px 10px 0;
-">C</a>
-    <script type="text/javascript" charset="utf-8"> 
-      $("#trigger").click( function(){        
-        $("#questions").slideToggle("middle");        
-      });
-       $("#ctrigger").click( function(){        
-        $(".console").slideToggle();        
-      });
-      $( document ).ready( function() {
-        if (getUrlParams() == null){
-        setValues(qParams, 'first');
-      }else{       
-        setValues(recognizeElements(getUrlParams()), 'first');
-      } 
-    });
-         
-    </script>
-    <table  class = "console" style = "width: 100%">
-      
-                {% for col in dss_dict.iteritems()|slice(4) %}
-                   <tr style = "width: 100%">                    
-                    {%- for k , v in col -%}                    
-                        <td style = "padding-left: 20px;">
-                            {{ k }}&emsp;{{ v }}
-                        </td>                   
-                    {%- endfor -%}
-                    </tr>
-                {%- endfor -%}
-      
-    </table>    
-    <ul id = "answerList">
-     {% for comp in computers %}      
-      <li class="answer">
-        <div class = "image"> 
-          <img src="{{ url_for('static', filename='img/' + comp.type + 's/'+ comp.id +'_img/main.jpg') }}" alt = "Рисунок"/>
-        </div>
-        <div class = "descriptionSection">
-          <div class="title">
-            <div class = "name"> {{ comp.name }} &nbsp; {{ comp.model }}</div>
-            <div class="classification">
-              <div class="cover"></div>
-              <div class="progress" style="width: {{ comp.comp_dss }}%;"></div>
-            </div>
-          </div>
-          <ul class = "description">
-            <li>
-              <div class="paramName">Процессор:</div>
-              <div class="paramValue"> {{ comp.cpu_name }} {{ comp.cpu_model }}, {{ comp.cpu_frequency }} Ггц</div>
-              <div class="paramStars">
-                <div class="cover"></div>
-                <div class="progress" style="width: {{ comp.cpu_dss }}%;"></div>
-              </div>
-            </li>
-            <li>
-              <div class="paramName">Оперативная память:</div>
-              <div class="paramValue"> {{ comp.ram_amount }} Gb </div>
-              <div class="paramStars">
-                <div class="cover"></div>
-                <div class="progress" style="width: {{ comp.ram_dss }}%;"></div>
-              </div>
-            </li>
-            <li>
-              <div class="paramName">Жесткий диск:</div>
-              <div class="paramValue"> {{ comp.hdd_capacity }} Gb</div>
-              <div class="paramStars">
-                <div class="cover"></div>
-                <div class="progress" style="width: {{ comp.hdd_dss }}%;"></div>
-              </div>
-            </li>
-            <li>
-              <div class="paramName">Видеокарта:</div>
-              <div class="paramValue"> {{ comp.vga }} {{ comp.vga_amount }} </div>
-              <div class="paramStars">
-                <div class="cover"></div>
-                <div class="progress" style="width: {{ comp.vga_dss }}%;"></div>
-              </div>
-            </li>
-            <li>
-              <div class="paramName"> Операционная система </div>
-              <div class="paramValue"> {{ comp.os }}</div>
-              <div class="paramStars">
-                <div class="cover"></div>
-                <div class="progress" style="width: {{ comp.os_dss }}%;"></div>
-              </div>
-            </li>
-          </ul>
-        </div>
-        <ul class = "answerButtons">
-          <li> 
-            <div class = "price">{{ comp.price }} грн</div> 
-            <div class = "priceRange">{{ comp.max_price }} - {{ comp.min_price }} </div>
+  <div id = "wrapper">
+    {% include 'header.html' %}
+    <div id = "content">
+      {% include 'menu.html' %}
+      <form method = 'get' action = '/qa/' name = "qForm">
+        <ul id = "questions">
+          <a href = "javascript:void(0)" onclick="restoreDefValues()" id="defaultButton" >Востановить начальные значения</a>
+          <li>    
+            {% include 'mainQuestion.html' %} 
           </li>
-          <li> <a  href = "/{{ comp.type }}/{{ comp.id }}/"> <img src="{{ url_for('static', filename='img/greenButtons/wNextButton1.png') }}" alt="Далее" 
-                                onMouseOver="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton2.png') }}'" 
-                                onMouseOut="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton1.png') }}'"
-                                onMouseDown="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton3.png') }}'"
-                                /> </a> </li>
-        </ul>
-        <table class = "console" style = "width: 100%">
-           {% if comp.type != 'notebook' %}
-                   <tr style = "width: 100%"> 
-                        <td style = "padding-left: 20px;">
-                          price&emsp;{{ comp.dss.price }}
-                        </td>
-                        <td style = "padding-left: 20px;">
-                          cpu&emsp;{{ comp.dss.cpu }}
-                        </td> 
-                        <td style = "padding-left: 20px;">
-                          vga&emsp;{{ comp.dss.vga }}
-                        </td>   
-                    </tr>
-                     <tr style = "width: 100%"> 
-                        <td style = "padding-left: 20px;">
-                          ram&emsp;{{ comp.dss.ram }}
-                        </td>
-                        <td style = "padding-left: 20px;">
-                          hdd&emsp;{{ comp.dss.hdd }}
-                        </td>
-                        <td style = "padding-left: 20px;">
-                          display&emsp;{{ comp.dss.display }}
-                        </td>                                                
-                    </tr>
-                    <tr style = "width: 100%"> 
-                        <td style = "padding-left: 20px;">
-                          os&emsp;{{ comp.dss.os }}
-                        </td>
-                        <td style = "padding-left: 20px;">
-                          size&emsp;{{ comp.dss.size }}
-                        </td>
-                        <td style = "padding-left: 20px;">
-                          panel&emsp;{{ comp.dss.panel }}
-                        </td>                      
-                    </tr>
-                    <tr style = "width: 100%"> 
-                        <td style = "padding-left: 20px;">
-                          media&emsp;{{ comp.dss.media }}
-                        </td>
-                        <td style = "padding-left: 20px;">
-                          thunderbolt&emsp;{{ comp.dss.thunderbolt }}
-                        </td>
-                        <td style = "padding-left: 20px;">
-                          network&emsp;{{ comp.dss.network }}
-                        </td>                      
-                    </tr>
-          {% else %}
-            <tr style = "width: 100%"> 
-                        <td style = "padding-left: 20px;">
-                          price&emsp;{{ comp.dss.price }}
-                        </td>
-                        <td style = "padding-left: 20px;">
-                          cpu&emsp;{{ comp.dss.cpu }}
-                        </td> 
-                        <td style = "padding-left: 20px;">
-                          vga&emsp;{{ comp.dss.vga }}
-                        </td>   
-                    </tr>
-                     <tr style = "width: 100%"> 
-                        <td style = "padding-left: 20px;">
-                          ram&emsp;{{ comp.dss.ram }}
-                        </td>
-                        <td style = "padding-left: 20px;">
-                          hdd&emsp;{{ comp.dss.hdd }}
-                        </td>
-                        <td style = "padding-left: 20px;">
-                          display&emsp;{{ comp.dss.display }}
-                        </td>                                                
-                    </tr>
-                    <tr style = "width: 100%"> 
-                        <td style = "padding-left: 20px;">
-                          os&emsp;{{ comp.dss.os }}
-                        </td>
-                        <td style = "padding-left: 20px;">
-                          size&emsp;{{ comp.dss.size }}
-                        </td>
-                        <td style = "padding-left: 20px;">
-                          weight&emsp;{{ comp.dss.weight }}
-                        </td>                      
-                    </tr>
-                    <tr style = "width: 100%"> 
-                        <td style = "padding-left: 20px;">
-                          battery&emsp;{{ comp.dss.battery}}
-                        </td>
-                        <td style = "padding-left: 20px;">
-                          com&emsp;{{ comp.dss.com }}
-                        </td>
-                        <td style = "padding-left: 20px;">
-                          web_camera&emsp;{{ comp.dss.web_camera }}
-                        </td>                      
-                    </tr>
-                    <tr style = "width: 100%"> 
-                        <td style = "padding-left: 20px;">
-                          panel&emsp;{{ comp.dss.panel}}
-                        </td>
-                        <td style = "padding-left: 20px;">
-                          common&emsp;{{ comp.dss.common }}
-                        </td>
-                        <td style = "padding-left: 20px;">
-                          input&emsp;{{ comp.dss.input}}
-                        </td>                      
-                    </tr>
-                    <tr style = "width: 100%"> 
-                        <td style = "padding-left: 20px;">
-                          accoustic&emsp;{{ comp.dss.accoustic}}
-                        </td>                        
-                    </tr>
-         {% endif %}
-    </table>   
-      </li>
-      {% endfor %} 
-    </ul>
-    <div id = "pagination">
-            {% include 'pagination.html' %}
+          {% include 'filters.html' %}
+          <a href = "javascript:void(0)" id = "goButton" onclick="document.qForm.submit();return false;"> <img src="{{ url_for('static', filename='img/greenButtons/wGoButton1.jpg') }}" alt="Далее" 
+                                onMouseOver="this.src='{{ url_for('static', filename='img/greenButtons/wGoButton2.jpg') }}'" 
+                                onMouseOut="this.src='{{ url_for('static', filename='img/greenButtons/wGoButton1.jpg') }}'"
+                                onMouseDown="this.src='{{ url_for('static', filename='img/greenButtons/wGoButton3.jpg') }}'"
+                                />  </a>
+        </ul> 
+      </form>
+  <a href = "#questions" id="trigger">Show/Hide</a>
+      <table  class = "console" style = "width: 100%">
+        
+                  {% for col in dss_dict.iteritems()|slice(4) %}
+                     <tr style = "width: 100%">                    
+                      {%- for k , v in col -%}                    
+                          <td style = "padding-left: 20px;">
+                              {{ k }}&emsp;{{ v }}
+                          </td>                   
+                      {%- endfor -%}
+                      </tr>
+                  {%- endfor -%}      
+      </table>    
+      <ul id = "answerList">
+       {% for comp in computers %}      
+        <li class="answer">
+          <div class = "image"> 
+            <img src="{{ url_for('static', filename='img/' + comp.type + 's/'+ comp.id +'_img/main.jpg') }}" alt = "Рисунок"/>
+          </div>
+          <div class = "descriptionSection">
+            <div class="title">
+              <div class = "name"> {{ comp.name }} &nbsp; {{ comp.model }}</div>
+              <div class="classification">
+                <div class="cover"></div>
+                <div class="progress" style="width: {{ comp.comp_dss }}%;"></div>
+              </div>
+            </div>
+            <ul class = "description">
+              <li>
+                <div class="paramName">Процессор:</div>
+                <div class="paramValue"> {{ comp.cpu_name }} {{ comp.cpu_model }}, {{ comp.cpu_frequency }} Ггц</div>
+                <div class="paramStars">
+                  <div class="cover"></div>
+                  <div class="progress" style="width: {{ comp.cpu_dss }}%;"></div>
+                </div>
+              </li>
+              <li>
+                <div class="paramName">Оперативная память:</div>
+                <div class="paramValue"> {{ comp.ram_amount }} Gb </div>
+                <div class="paramStars">
+                  <div class="cover"></div>
+                  <div class="progress" style="width: {{ comp.ram_dss }}%;"></div>
+                </div>
+              </li>
+              <li>
+                <div class="paramName">Жесткий диск:</div>
+                <div class="paramValue"> {{ comp.hdd_capacity }} Gb</div>
+                <div class="paramStars">
+                  <div class="cover"></div>
+                  <div class="progress" style="width: {{ comp.hdd_dss }}%;"></div>
+                </div>
+              </li>
+              <li>
+                <div class="paramName">Видеокарта:</div>
+                <div class="paramValue"> {{ comp.vga }} {{ comp.vga_amount }} </div>
+                <div class="paramStars">
+                  <div class="cover"></div>
+                  <div class="progress" style="width: {{ comp.vga_dss }}%;"></div>
+                </div>
+              </li>
+              <li>
+                <div class="paramName"> Операционная система </div>
+                <div class="paramValue"> {{ comp.os }}</div>
+                <div class="paramStars">
+                  <div class="cover"></div>
+                  <div class="progress" style="width: {{ comp.os_dss }}%;"></div>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <ul class = "answerButtons">
+            <li> 
+              <div class = "price">{{ comp.price }} грн</div> 
+              <div class = "priceRange">{{ comp.max_price }} - {{ comp.min_price }} </div>
+            </li>
+            <li> <a  href = "/{{ comp.type }}/{{ comp.id }}/"> <img src="{{ url_for('static', filename='img/greenButtons/wNextButton1.png') }}" alt="Далее" 
+                                  onMouseOver="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton2.png') }}'" 
+                                  onMouseOut="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton1.png') }}'"
+                                  onMouseDown="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton3.png') }}'"
+                                  /> </a> </li>
+          </ul>
+        {% include 'compParams.html' %}
+        </li>
+        {% endfor %} 
+      </ul>
+      <div id = "pagination">
+              {% include 'pagination.html' %}
+      </div>
     </div>
+    {% include 'feedback.html' %}
+    {% include 'footer.html' %}
   </div>
-  <div id = "footer"> Developed by Sonik and Pikachu </div>
-</div>
 </body>
 </html>

@@ -1,0 +1,71 @@
+.feedback{
+    position: fixed;
+    left: 1px;
+    background:#fff;
+    padding: 3px 5px 3px 1px;
+    border-top: solid 2px #79E95D;  
+    border-bottom: solid 2px #79E95D;
+    border-right: solid 2px #79E95D;
+    -webkit-border-radius: 0 10px 10px 0;
+    -moz-border-radius: 0 10px 10px 0;
+    border-radius: 0 10px 10px 0;
+    margin-left: -3px;
+}
+.feedback:hover{
+    margin-left: 0px;
+}
+
+#feedbackBlock { display: none; width: 600px; height: 320px;}
+
+#feedbackBlock label { margin-right: 12px; margin-bottom: 9px; width:800px;
+    font-family: Myriad Pro Light, Myriad Pro,Verdana, Tahoma, Arial, Helvetica, sans-serif; 
+    color: #646464; font-size: 1.2em; }
+
+.txt { 
+display: inline-block; 
+color: #444;
+width: 420px; 
+font-family: Arial, Tahoma, sans-serif; 
+margin-bottom: 10px; 
+border: 1px dotted #ccc; 
+padding: 5px 9px;
+font-size: 1.2em;
+line-height: 1.4em;
+}
+
+.txtarea { 
+display: block; 
+resize: none;
+color: #676767;
+font-family: Myriad Pro,Verdana, Tahoma, Arial, Helvetica, sans-serif;
+margin-bottom: 10px; 
+width: 500px; 
+height: 150px;
+border: 1px dotted #ccc;
+padding: 5px 9px; 
+font-size: 1em;
+line-height: 1.4em;
+}
+
+.txt:focus, .txtarea:focus { border-style: solid; border-color: #bababa; color: #444; }
+
+input.error, textarea.error { border-color: #973d3d; border-style: solid; color: #a35959; }
+input.error:focus, textarea.error:focus { border-color: #973d3d; color: #a35959; }
+
+#feedbackBlock img{
+  padding: 5px 11px;
+  cursor: pointer;  
+}
+
+#feedbackBlock h2{
+    margin-right: 12px; margin-bottom: 9px;
+    font-family: Myriad Pro Light, Myriad Pro,Verdana, Tahoma, Arial, Helvetica, sans-serif; 
+    color: #145571; font-size: 1.2em; 
+}
+
+#feedbackBlock p{
+    font-family: Myriad Pro,Verdana, Tahoma, Arial, Helvetica, sans-serif; 
+    color: #39A91D; font-size: 1em;
+    font-style: italic; 
+}
+
