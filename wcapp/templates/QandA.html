@@ -123,8 +123,8 @@
           </div>
           <ul class = "answerButtons">
             <li> 
-              <div class = "price">{{ comp.price }} грн</div> 
-              <div class = "priceRange">{{ comp.max_price }} - {{ comp.min_price }} </div>
+              <div class = "price">{{ '%d' % comp.price }} грн</div> 
+              <div class = "priceRange">{{ '%d' % comp.max_price }} - {{ '%d' % comp.min_price }} </div>
             </li>
             <li> <a  href = "/{{ comp.type }}/{{ comp.id }}/"> <img src="{{ url_for('static', filename='img/greenButtons/wNextButton1.png') }}" alt="Далее" 
                                   onMouseOver="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton2.png') }}'" 

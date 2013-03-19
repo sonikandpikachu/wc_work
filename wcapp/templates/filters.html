@@ -1,5 +1,5 @@
 {% macro titlePart(title, description) -%}
-   <p class = "qText">{{ title }} {% if description %}<a href="javascript:void(0)" title="{{ description|e }}"> ?</a> {% endif %}</p>
+   <p class = "qText">{{ title }} {% if description %}<a href="javascript:void(0)" class = "tooltip" title="{{ description|e }}"> ?</a> {% endif %}</p>
 {%- endmacro %}
 {% macro checkbox(title, name, texts, values, selected_values, description, style, type) -%}                     
           <div class="question question-checkbox {{ type }}" style = "{{ style }}">       

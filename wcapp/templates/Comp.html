@@ -1,3 +1,6 @@
+{% macro description(text) -%}
+   {% if text %}<a href="javascript:void(0)" class = "tooltip" title="{{ text|e }}"> ?</a> {% endif %}
+{%- endmacro %}
 <!DOCTYPE html>
 <html lang = "ru-RU">
 <head>
@@ -74,14 +77,9 @@
     </div>
     <ul class = "answerButtons">
       <li> 
-            <div class = "price">{{ small_comp.price }} грн</div> 
-            <div class = "priceRange">{{ small_comp.max_price }} - {{ small_comp.min_price }} </div>
+            <div class = "price">{{ '%d' % small_comp.price }} грн</div> 
+            <div class = "priceRange">{{ '%d' % small_comp.max_price }} - {{ '%d' % small_comp.min_price }} </div>
       </li>
-      <li> <a  href = "Comp.html"> <img src="{{ url_for('static', filename='img/greenButtons/wNextButton1.png') }}" alt="Далее" 
-                                onMouseOver="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton2.png') }}'" 
-                                onMouseOut="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton1.png') }}'"
-                                onMouseDown="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton3.png') }}'"
-                                /> </a> </li>
     </ul>
   </div>
   <div id="tabContainer">
@@ -95,16 +93,16 @@
       <div class="tabpage" id="parametrs_content">
         <table cellspacing="0" id="parametrs">
           {% for part in big_comp %}
-            <tr class = "green">
-              <td class="paramName">{{ part }}</td>
-              <td class="paramSeparator"></td>
-              <td class="paramValue"></td>
+            <tr class = "part">
+              <td class="tableName">{{ part }} {{ description("sdsdd") }}</td>
+              <td class="tableSeparator"></td>
+              <td class="tableValue"></td>
             </tr>
-            {% for key in big_comp[part] %}
-              <tr class = "gray">
-                <td class="paramName">{{ key }}</td>
-                <td class="paramSeparator"></td>
-                <td class="paramValue"> {{ big_comp[part][key] }}</td>
+            {% for key in big_comp[part].keys() %}
+              <tr class = "key">
+                <td class="tableName">{{ key }}</td>
+                <td class="tableSeparator"></td>
+                <td class="tableValue"> {{ big_comp[part][key] }}</td>
               </tr>
             {% endfor %}
           {% endfor %}
@@ -113,11 +111,11 @@
       <div class="tabpage" id="stores_content">
         <table cellspacing="0" id="stores">
           {% for cc in conccomps %}
-            <tr class = "gray">
+            <tr class = "key">
               <td class="storeLogo"><img src="{{ url_for('static', filename='img/7276.png') }}" /></td>
-              <td class="paramSeparator"></td>
+              <td class="tableSeparator"></td>
               <td class="storeInfo"> <a  href = "#"> <span class = "storeName"> {{ cc.shop.name }}</td>
-              <td class="paramSeparator"></td>
+              <td class="tableSeparator"></td>
               <td class="storePrice">{{ cc.price_grn }} Грн</td> 
             </tr>
           {% endfor %}

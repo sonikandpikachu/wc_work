@@ -48,6 +48,46 @@ def small_devices(computers_id, computers_dss, dbwrapper):
 def big_computer(id, dbwrapper):
     comp = dbwrapper.parameters_by_id([id], device=u'computer')[0]
     pretty_computer = OrderedDict()
+    pretty_computer[u"Компьютер"] = OrderedDict({
+       u"Имя": comp.name,       
+       u"Тип": comp.type,
+       u"Предустановленная ОС": comp.os
+    })
+    pretty_computer[u"Процессор"] = OrderedDict({
+       u"Процессор": comp.cpu_name,
+       u"Модель": comp.cpu_model,
+       u"Частота процессора": comp.cpu_frequency, 
+       u"Кол-во ядер": comp.cpu_kernel_count             
+    })
+
+    pretty_computer[u"Видеокарта"] = OrderedDict({
+       u"Модель видеокарты": comp.vga_model,
+       u"Объем видеопамяти": comp.vga_amount,
+       u"Тип видеокарты": comp.vga_type,
+    })
+
+    pretty_computer[u"Оперативная память"] = OrderedDict({
+       u"Тип памяти": comp.ram_type,
+       u"Тактовая частота": comp.ram_frequency,
+       u"Кол-во слотов": comp.ram_jacks,
+       u"Объем ОЗУ": comp.ram_amount,
+    })
+
+    pretty_computer[u"Дисплей"] = OrderedDict({
+       u"Разрешение": comp.display_resolution,
+       u"LED подсветка": comp.display_led_backlight,
+       u"Диагональ экрана": comp.display_diagonal,
+       u"Сенсорный экран": comp.display_sensor,
+       u"Яркость": comp.display_brightness,
+    })
+
+    pretty_computer[u"Накопитель"] = OrderedDict({
+       u"Внутренних отсеков 3": comp.hdd_cell,
+       u"Емкость накопителя": comp.hdd_capacity,
+       u"Тип накопителя": comp.hdd_type,
+       u"Обороты шпинделя": comp.hdd_speed,
+    })
+
     pretty_computer[u"Мультимедиа"] = OrderedDict({
        u"Встроенные динамики": comp.media_builtin_dinamics,
        u"Встроенная Вэб-камера": comp.media_web_camera,
@@ -57,52 +97,20 @@ def big_computer(id, dbwrapper):
        u"Разъемов 3": comp.media_jacks3,
        u"Встроенный микрофон": comp.media_microphone,
     })
+
     pretty_computer[u"Аппаратная часть"] = OrderedDict({
        u"Чипсет": comp.chipset,
     })
+
     pretty_computer[u"Устройство"] = OrderedDict({
        u"Сеть": comp.network,
        u"PS/2": comp.ps2,
-       u"имя": comp.name,
-       u"url": comp.url,
-       u"Тип": comp.type,
        u"Thunderbolt": comp.thunderbolt,
        u"Разъемы": comp.jacks,
        u"USB 3": comp.panel_usb3,
        u"USB 2": comp.panel_usb2,
     })
-    pretty_computer[u"Накопитель"] = OrderedDict({
-       u"Внутренних отсеков 3": comp.hdd_cell,
-       u"Емкость накопителя": comp.hdd_capacity,
-       u"Тип накопителя": comp.hdd_type,
-       u"Обороты шпинделя": comp.hdd_speed,
-    })
-    pretty_computer[u"Процессор"] = OrderedDict({
-       u"Кол-во ядер": comp.cpu_kernel_count,
-       u"Модель": comp.cpu_model,
-       u"Частота процессора": comp.cpu_frequency,
-       u"Процессор": comp.cpu_name,
-    })
-    pretty_computer[u"Видеокарта"] = OrderedDict({
-       u"Модель видеокарты": comp.vga_model,
-       u"Объем видеопамяти": comp.vga_amount,
-       u"Тип видеокарты": comp.vga_type,
-    })
-    pretty_computer[u"Общее"] = OrderedDict({
-       u"Вес": comp.weight,
-       u"Мощность БП": comp.pb_power,
-       u"Материал корпуса": comp.material,
-       u"Габариты  (ВхШхГ)": str(comp.height) + str(comp.width) + str(comp.length),
-       u"Предустановленная ОС": comp.os,
-       u"Цвет": comp.color,
-    })
-    pretty_computer[u"Дисплей"] = OrderedDict({
-       u"Разрешение": comp.display_resolution,
-       u"LED подсветка": comp.display_led_backlight,
-       u"Диагональ экрана": comp.display_diagonal,
-       u"Сенсорный экран": comp.display_sensor,
-       u"Яркость": comp.display_brightness,
-    })
+
     pretty_computer[u"Передняя панель"] = OrderedDict({
        u"Отсеков 5": comp.panel_cell5,
        u"Кардридер": comp.panel_cardreader,
@@ -113,12 +121,15 @@ def big_computer(id, dbwrapper):
        u"Разъемов USB 2": comp.panel_usb2,
        u"Привод": comp.panel_drive,
     })
-    pretty_computer[u"Оперативная память"] = OrderedDict({
-       u"Тип памяти": comp.ram_type,
-       u"Тактовая частота": comp.ram_frequency,
-       u"Кол-во слотов": comp.ram_jacks,
-       u"Объем ОЗУ": comp.ram_amount,
+    
+    pretty_computer[u"Общее"] = OrderedDict({
+       u"Вес": comp.weight,
+       u"Мощность БП": comp.pb_power,
+       u"Материал корпуса": comp.material,
+       u"Габариты  (ВхШхГ)": u'%dx%dx%d (мм)' % (comp.height,comp.width,comp.length),
+       u"Цвет": comp.color
     })
+
 
     for part in pretty_computer.iterkeys():
         for key in pretty_computer[part].iterkeys():
@@ -213,7 +224,7 @@ def big_notebook(id, dbwrapper):
         u"Комплектность": notebook.completeness,
         u"Ударопрочный корпус": notebook.shockproof,
         u"Предустановленная ОС": notebook.os,
-        u"Габариты (ШхГхТ)": str(notebook.height) + str(notebook.width) + str(notebook.length),
+        u"Габариты (ШхГхТ)": '%dx%dx%d' % (notebook.height,notebook.width,notebook.length),
         u"Вес": notebook.weight,
         u"Влагозащищенный корпус": notebook.waterproof,
         u"Цвет": notebook.color,
@@ -256,6 +267,18 @@ def big_notebook(id, dbwrapper):
         u"Кол-во слотов": notebook.ram_jacks,
         u"Тип": notebook.ram_type,
     })
+
+    for part in pretty_notebook.iterkeys():
+        for key in pretty_notebook[part].iterkeys():
+            if isinstance(pretty_notebook[part][key], bool):
+                pretty_notebook[part][key] = '+' if pretty_notebook[part][key] else '-'
+            if not pretty_notebook[part][key]:
+                del pretty_notebook[part][key]
+
+    for part in pretty_notebook.iterkeys():
+        if not pretty_notebook[part]:
+            del pretty_notebook[part]
+
     return pretty_notebook
 
 #I think this function code is bad, but no ideas how to make it better :(
