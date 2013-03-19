@@ -1,7 +1,17 @@
 from flask.ext.mail import Message
 from wcconfig import app, ADMINS, mail
+from decorators import async
+
+@async
+def send_async_email(msg):
+    mail.send(msg)
+
+def send_email(subject, sender, recipients, text_body, html_body = ""):
+    msg = Message(subject, sender = sender, recipients = recipients)
+    msg.body = text_body
+    msg.html = html_body
+    send_async_email(msg)
 
 def save_feedback(message, email):
-    msg = Message(email, sender = email, recipients = ADMINS)
-    msg.body = message
-    mail.send(msg)
+    send_email(email, email, ADMINS, message)
+
