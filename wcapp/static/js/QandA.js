@@ -22,16 +22,16 @@ $(function(){
     $("#type_computer").click(function() {
       $(".notebook").fadeOut();                    
       $(".computer").fadeIn();
-      for (i = 0; i < sliders.length;i++){
+      for (var i = 0, max = sliders.length; i < max ;i++){
                     $(sliders[i]).slider().update();
-                                }
+                                }    
     });
     $("#type_notebook").click(function() {
       $(".computer").fadeOut();                    
       $(".notebook").fadeIn();
-      for (i = 0; i < sliders.length;i++){
+      for (var i = 0, max = sliders.length; i < max ;i++){
                     $(sliders[i]).slider().update();
-                                }
+                                }    
     });
 
     //Show/hide trigger
@@ -119,9 +119,7 @@ function setValues(params, type)
            }
          }                      
       }
-      for (i = 0; i < sliders.length;i++){
-        $(sliders[i]).slider().update();
-      }
+    
     for (j = 0; j < twoParts.length;j++){
         var key = twoParts[j];
         var sKey = "#"+key;
@@ -141,7 +139,12 @@ function setValues(params, type)
               }
       }  
       
-    $.uniform.update();       
+    $.uniform.update();
+    if (type != "first"){
+    for (var i = 0, max = sliders.length; i < max ;i++){
+                    $(sliders[i]).slider().update();
+                                }
+    }       
 }      
 function restoreDefValues()
 {            
