@@ -43,16 +43,11 @@ body {
 #question {
 	background:#fff;
 }
-#answerList {
+#answerList, #comp {
 	float:left;
 	background:#fff;
 	width: 110%;
 	margin-left: -5%;
-}
-.comp {
-	background:#fff;
-	float:left;
-	width: 100%;
 }
 .answer {
 	margin: 10px 0px;
