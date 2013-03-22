@@ -1,5 +1,5 @@
 {% macro description(text) -%}
-   {% if text %}<a href="javascript:void(0)" class = "tooltip" title="{{ text|e }}"> ?</a> {% endif %}
+   {% if text %}<a href="javascript:void(0)" class = "tooltip" rel="/tooltip/{{ text }}/" text = "{{ text }}"> ?</a> {% endif %}
 {%- endmacro %}
 <!DOCTYPE html>
 <html lang = "ru-RU">
@@ -12,8 +12,10 @@
 
 <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-1.7.2.min.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='fancybox/jquery.fancybox.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/feedback.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.qtip-1.0.0-rc3.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/helpers.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/tabs.js') }}"></script>
+
 
 <title>What Computer</title>
 </head>
@@ -29,7 +31,7 @@
         <div class = "name" style="font-size:18px"> {{ small_comp.name }} </div>
         <div class="classification" style="clear:left; top:0px">
           <div class="cover"></div>
-          <div class="progress" style="width: 100%;"></div>
+          <div class="progress" style="width: {{ small_comp.comp_dss }}%;"></div>
         </div>
       </div>
       <ul class = "description">
@@ -80,6 +82,11 @@
             <div class = "price">{{ '%d' % small_comp.price }} грн</div> 
             <div class = "priceRange">{{ '%d' % small_comp.max_price }} - {{ '%d' % small_comp.min_price }} </div>
       </li>
+      <li> <a  href = "/qa"> <img src="{{ url_for('static', filename='img/greenButtons/wNextButton1.png') }}" alt="Далее" 
+                                  onMouseOver="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton2.png') }}'" 
+                                  onMouseOut="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton1.png') }}'"
+                                  onMouseDown="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton3.png') }}'"
+                                  /> </a> </li>
     </ul>
   </div>
   <div id="tabContainer">
@@ -94,15 +101,15 @@
         <table cellspacing="0" id="parametrs">
           {% for part in big_comp %}
             <tr class = "part">
-              <td class="tableName">{{ part }} {{ description("sdsdd") }}</td>
+              <td class="tableName">{{ part }} </td>
               <td class="tableSeparator"></td>
               <td class="tableValue"></td>
             </tr>
             {% for key in big_comp[part].keys() %}
               <tr class = "key">
-                <td class="tableName">{{ key }}</td>
+                <td class="tableName">{{ key }}{% if tooltips[key] %} {{ description(key) }} {% endif %}</td>
                 <td class="tableSeparator"></td>
-                <td class="tableValue"> {{ big_comp[part][key] }}</td>
+                <td class="tableValue"> {{ big_comp[part][key] }} </td>
               </tr>
             {% endfor %}
           {% endfor %}

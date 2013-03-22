@@ -8,15 +8,6 @@ var selectes = new Array();
 //Init function
 $(function(){        
     $("input[type=radio],input[type=checkbox]").uniform();
-    $( "[title]" ).tooltip({
-      track: true,
-      delay: 0,
-      showURL: false,
-      showBody: " - ",
-      extraClass: "pretty",
-      fixPNG: true,
-      left: -120
-    });
 
     //Change questions depending on the device type
     $("#type_computer").click(function() {

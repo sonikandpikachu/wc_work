@@ -69,6 +69,7 @@ body {
 }
 .descriptionSection {
 	float:left;
+	width: 49%;
 }
 .title {
 	display:block;
@@ -482,3 +483,20 @@ a:hover {
 	color:#4CE126;
 }
 
+/* Tooltips*/
+.qtip-content p{
+	text-indent: 10px;
+}
+.qtip-content i{
+	font-style: italic;
+}
+.qtip-content b{
+	font-weight: 700;
+}
+.qtip-content .tooltip-text{
+	float: right;
+	width: 50%;
+	height: 130px;
+	padding: 20px 10px;
+	margin-top: 10px;
+}

@@ -6,7 +6,8 @@ Created on Sep 18, 2012
 '''
 
 from sqlorm import *
-from flask import render_template, request, abort, session, jsonify
+from flask import render_template, request, abort, session, jsonify, render_template_string
+from tooltips import TOOLTIPS_DICT
 
 from wcconfig import app
 import filters.settings
@@ -14,23 +15,15 @@ import pretty_data
 import db_queries
 import mail
 
+
 #move to html settings
 COMPUTERS_ON_PAGE = 10
 DEFFAULT_DEVICE_TYPE = u'computer'
 
 
-def unique_union(list_a, list_b):
-    union = list(list_a)
-    for el in list_b:
-        if el not in list_a:
-            union.append(el)
-    return union
-
-
 FILTERS = {
     u'computer': filters.settings.COMP_FILTERS,
     u'notebook': filters.settings.NOTEBOOK_FILTERS,
-    #u'all': unique_union(filters.settings.COMP_FILTERS, filters.settings.NOTEBOOK_FILTERS)
     u'all': filters.settings.ALL_FILTERS
 }
 
@@ -116,6 +109,7 @@ def third_computer(id):
     small_pretty_comp = pretty_data.small_devices([id], [0], dbwrapper)[0]
     return render_template('Comp.html', big_comp=big_pretty_comp,
                                 small_comp=small_pretty_comp,
+                                tooltips = TOOLTIPS_DICT,
                                 conccomps=concdevices)
 
 
@@ -126,7 +120,8 @@ def third_notebook(id):
     big_pretty_notebook = pretty_data.big_notebook(id, dbwrapper)
     small_pretty_notebook = pretty_data.small_devices([id], [0], dbwrapper)[0]
     return render_template('Comp.html', big_comp=big_pretty_notebook,
-                                small_comp=small_pretty_notebook,
+                                small_comp=small_pretty_notebook,                                
+                                tooltips = TOOLTIPS_DICT,
                                 conccomps=concdevices)
 
 
@@ -136,6 +131,10 @@ def feedback():
     resp = jsonify({"Send":"true"})
     resp.status_code = 200
     return resp
+
+@app.route('/tooltip/<key>/')
+def tooltip(key):        
+    return render_template_string(TOOLTIPS_DICT[key])
 
 
 if __name__ == '__main__':
