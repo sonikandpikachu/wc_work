@@ -38,7 +38,6 @@ def second():
     #need refactor dbwrapper calls
     dbwrapper = db_queries.DBWrapper(DEFFAULT_DEVICE_TYPE)
     #getting computers id:
-    print 'sdf',request.args.keys()
     if 'type' in request.args.keys():
         session['type'] = request.args['type']
         dbwrapper = db_queries.DBWrapper(request.args['type'])
