@@ -150,10 +150,10 @@ class DBWrapper (object):
 
 def add_user(devices_id, devices_dss):
     key = uuid.uuid4()
-    p = redis.pipeline()
+    # p = redis.pipeline()
     redis_data = json.dumps({'devices_id': list(devices_id), 'devices_dss': list(devices_dss)})
-    p.set(key, redis_data)
-    p.execute()
+    redis.set(key, redis_data)
+    redis.expire(key, 60*30)
     return key
 
 

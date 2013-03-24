@@ -148,3 +148,4 @@ if __name__ == '__main__':
     # components =  wc_RAM, wc_HD, wc_CPU, wc_OS, wc_ODD, wc_Screen, wc_Type, wc_Chipset
     # query = session.query(wc_Computer).join(*components)
     # print query.filter('wc_HD.id = 1 and wc_CPU.id > 2').all()
+
