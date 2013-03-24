@@ -5,7 +5,6 @@
 
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/jslider.css') }}"/>
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/jslider.single.css') }}"/>
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/jquery.tooltip.css') }}"/>
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/jquery.selectbox.css') }}"/>
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/uniform.default.css') }}"/>
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='fancybox/jquery.fancybox.css') }}"/>
@@ -19,12 +18,12 @@
   <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.dependClass-0.1.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='js/draggable-0.1.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.slider.js') }}"></script>
-  <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.tooltip.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.selectbox-0.2.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.uniform.min.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='fancybox/jquery.fancybox.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.qtip-1.0.0-rc3.min.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='js/QandA.js') }}"></script>
-  <script type="text/javascript" src="{{ url_for('static', filename='js/feedback.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/helpers.js') }}"></script>
   <script type=text/javascript>
       var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
   </script> 
@@ -126,13 +125,12 @@
               <div class = "price">{{ '%d' % comp.price }} грн</div> 
               <div class = "priceRange">{{ '%d' % comp.max_price }} - {{ '%d' % comp.min_price }} </div>
             </li>
-            <li> <a  href = "/{{ comp.type }}/{{ comp.id }}/"> <img src="{{ url_for('static', filename='img/greenButtons/wNextButton1.png') }}" alt="Далее" 
+            <li> <a  href = "/{{ comp.type }}/{{ comp.id }}/" target="_blank"> <img src="{{ url_for('static', filename='img/greenButtons/wNextButton1.png') }}" alt="Далее" 
                                   onMouseOver="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton2.png') }}'" 
                                   onMouseOut="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton1.png') }}'"
                                   onMouseDown="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton3.png') }}'"
                                   /> </a> </li>
           </ul>
-        {% include 'compParams.html' %}
         </li>
         {% endfor %} 
       </ul>

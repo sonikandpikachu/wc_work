@@ -1,0 +1,1 @@
+TOOLTIPS_DICT['video'] = 3

@@ -26,8 +26,7 @@ priceCFilter = filters.SliderDoubleFilter('priceC', u'Цена:',1000, 50000, [4
 def priceN_dss_function(selected_values):
 	return {'price' : int(selected_values[0])}
 
-priceDescription = u'<p style = "text-indent: 10px;">Значение определяет на сколько увеличиться важность цены </br>\
-в подбираемой модели в ущерб остальным параметрам. </br>  В точке 0 &mdash; &Prime;разумная цена&Prime;</p>'
+priceDescription = 'price'
 priceNFilter = filters.SliderSingleFilter('priceN', u'Важность цены:', -3, 3, 0, scale = '[-3,-2,-1, 0, 1, 2, 3]',
 									labels = [u'Не имеет значения', u'Максимальная економия'], description = priceDescription, 
 									dss_function = priceN_dss_function)
@@ -40,8 +39,7 @@ def performanceN_dss_function(selected_values):
 	return {'cpu' : int(selected_values[0])*1.5,'ram' : int(selected_values[0])}
 
 
-descriptionPerformanceN = u'<p style = "text-indent: 10px;">Значение определяет на сколько увеличиться важность производительности </br>\
-в подбираемой модели в ущерб остальным параметрам</p>'
+descriptionPerformanceN = 'performance'
 performanceNFilter = filters.SliderSingleFilter('perfN', u'Производительность:', 0, 5, 0,
 									labels = [u'Нормальная', u'Очень высокая'], description = descriptionPerformanceN, dss_function = performanceN_dss_function)
 
@@ -80,8 +78,7 @@ def videoN_dss_function(selected_values):
 	return {'vga' : int(selected_values[0])*1.5}
 	
 
-descriptionVideoN = u'<p style = "text-indent: 10px;">Значение определяет на сколько увеличиться важность видео </br>\
-в подбираемой модели в ущерб остальным параметрам</p>'
+descriptionVideoN = 'video'
 videoNFilter = filters.SliderSingleFilter('videoN', u'Видео:', 0, 5, 0,
 									labels = [u'Нормальная', u'Очень высокая'], description = descriptionVideoN, dss_function = videoN_dss_function)
 
@@ -108,8 +105,6 @@ def videoN_dss_function(selected_values):
 	return {'vga' : int(selected_values[0])*1.5}
 	
 
-descriptionVideoN= u'<p style = "text-indent: 10px;">Значение определяет на сколько увеличиться важность видео </br>\
-в подбираемой модели в ущерб остальным параметрам</p>'
 videoNFilterNotebook = filters.SliderSingleFilter('videoNoteN', u'Видео:', 0, 5, 0,
 									labels = [u'Нормальная', u'Очень высокая'], description = descriptionVideoN, dss_function = videoN_dss_function)
 
@@ -231,8 +226,7 @@ hddFilter.set_parent_question(displayFilterNotebook)
 
 def battery_dss_function(selected_values):
 	return {'battery' : int(selected_values[0])}	
-descriptionBatteryN = u'<p style = "text-indent: 10px;">Значение определяет на сколько увеличиться важность батареии </br>\
-в подбираемой модели в ущерб остальным параметрам</p>'
+descriptionBatteryN = 'battery'
 batteryFilter = filters.SliderSingleFilter('battery', u'Батарея:', 0, 5, 0,
 									labels = [u'Обычная', u'Максимальная автономность'], description = descriptionBatteryN, dss_function = battery_dss_function, dtype = 'notebook')
 
@@ -244,16 +238,14 @@ batteryFilter.set_parent_question(hddFilter)
 
 def size_dss_function(selected_values):
 	return {'size' : -int(selected_values[0])}	
-descriptionSize = u'<p style = "text-indent: 10px;">Значение определяет на сколько увеличиться важность батареии </br>\
-в подбираемой модели в ущерб остальным параметрам</p>'
+descriptionSize = "size"
 sizeFilter = filters.SliderSingleFilter('compactSize', u'Размер:', 0, 5, 0,
 									labels = [u'Не имеет значения', u'Максимально компактный'], description = descriptionSize,
 									 dss_function = size_dss_function, style = "width: 40%")
 
 def weight_dss_function(selected_values):
 	return {'weight' : -int(selected_values[0])}	
-descriptionWeight = u'<p style = "text-indent: 10px;">Значение определяет на сколько увеличиться важность батареии </br>\
-в подбираемой модели в ущерб остальным параметрам</p>'
+descriptionWeight = "weight"
 weightFilter = filters.SliderSingleFilter('compactWeight', u'Вес', 0, 5, 2,
 									labels = [u'Не имеет значения', u'Максимально легкий'], description = descriptionWeight, 
 									dss_function = weight_dss_function, style = "width: 40%")

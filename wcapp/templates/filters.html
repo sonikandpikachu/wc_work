@@ -1,5 +1,5 @@
 {% macro titlePart(title, description) -%}
-   <p class = "qText">{{ title }} {% if description %}<a href="javascript:void(0)" class = "tooltip" title="{{ description|e }}"> ?</a> {% endif %}</p>
+   <p class = "qText">{{ title }} {% if description %}<a href="javascript:void(0)" class = "tooltip" rel="/tooltip/{{ description }}/" text = "{{ title }}"> ?</a> {% endif %}</p>
 {%- endmacro %}
 {% macro checkbox(title, name, texts, values, selected_values, description, style, type) -%}                     
           <div class="question question-checkbox {{ type }}" style = "{{ style }}">       
@@ -7,11 +7,11 @@
             {% if type != 'table' %}  
                 {% for i in range(values|length) %}
                 <label>
-                    <input type="checkbox" name="{{ name }}_{{ values[i] }}" id="{{ name }}_{{ values[i] }}" value="{{ values[i] }}"> 
+                    <input type="checkbox" name="{{ name }}" id="{{ name }}_{{ values[i] }}" value="{{ values[i] }}"> 
                     {{ texts[i] }}   
                 </label>
                 <script type="text/javascript">
-                    cheks.push("{{ name }}_{{ values[i] }}");
+                    cheks.push("{{ name }}");
                 </script>   
                  {% if selected_values %} {% if i in selected_values %}
                               <script type="text/javascript">
@@ -27,11 +27,11 @@
                    {% set colloop = loop %} 
                     {%- for post in col -%}                                        
                         <label>
-                            <input type="checkbox" name="{{ name }}_{{ values[colloop.index0*4 + loop.index0] }}" id="{{ name }}_{{ values[colloop.index0*4 + loop.index0] }}" value="{{ values[colloop.index0*4 + loop.index0] }}">
+                            <input type="checkbox" name="{{ name }}" id="{{ name }}_{{ values[colloop.index0*4 + loop.index0] }}" value="{{ values[colloop.index0*4 + loop.index0] }}">
                             {{ texts[colloop.index0*4 + loop.index0] }}
                         </label>
                         <script type="text/javascript">
-                            cheks.push("{{ name }}_{{ values[colloop.index0*4 + loop.index0] }}");
+                            cheks.push("{{ name }}");
                         </script>                                                    
                         {% if selected_values %} {% if colloop.index0*4 + loop.index0 in selected_values %}                         
                               <script type="text/javascript">
