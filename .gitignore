@@ -4,10 +4,10 @@ libs
 Comp elements
 venv
 data
-wcapp/wcconfig.py
+
+wcapp/local_config.py
 wcapp/static/img/computers/
 wcapp/static/img/notebooks/
-wcapp/wcconfig.py
 *.pyc
 
 wc_work.sublime-project
