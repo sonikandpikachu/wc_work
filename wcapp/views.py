@@ -45,7 +45,6 @@ def second():
     #need refactor dbwrapper calls
     dbwrapper = db_queries.DBWrapper(DEFFAULT_DEVICE_TYPE)
     #getting computers id:
-    print 'sdf',request.args.keys()
     if 'type' in request.args.keys():
         session['type'] = request.args['type']
         dbwrapper = db_queries.DBWrapper(request.args['type'])
@@ -75,7 +74,7 @@ def second():
     except ValueError:
         abort(404)
     # if page > last_page or page < 1:
-    #     abort(404)
+    # abort(404)
 
     first_comp_index = (page - 1) * COMPUTERS_ON_PAGE
     last_comp_index = min(page * COMPUTERS_ON_PAGE, len(devices_id))
@@ -85,7 +84,8 @@ def second():
     pretty_devices = pretty_data.small_devices(devices_id_on_page, devices_dss_on_page, dbwrapper)
 
     return render_template('QandA.html', computers=pretty_devices, filters=FILTERS[u'all'],
-        current_page=page, pagination_pages=pretty_data.pagination_pages(page, last_page), dss_dict=dss_dict)
+                           current_page=page, pagination_pages=pretty_data.pagination_pages(page, last_page),
+                           dss_dict=dss_dict)
 
 
 def filtered_devices_id(filters, args, dbwrapper):
@@ -115,8 +115,8 @@ def third_computer(id):
     big_pretty_comp = pretty_data.big_computer(id, dbwrapper)
     small_pretty_comp = pretty_data.small_devices([id], [0], dbwrapper)[0]
     return render_template('Comp.html', big_comp=big_pretty_comp,
-                                small_comp=small_pretty_comp,
-                                conccomps=concdevices)
+                           small_comp=small_pretty_comp,
+                           conccomps=concdevices)
 
 
 @app.route('/notebook/<id>/')
@@ -126,14 +126,14 @@ def third_notebook(id):
     big_pretty_notebook = pretty_data.big_notebook(id, dbwrapper)
     small_pretty_notebook = pretty_data.small_devices([id], [0], dbwrapper)[0]
     return render_template('Comp.html', big_comp=big_pretty_notebook,
-                                small_comp=small_pretty_notebook,
-                                conccomps=concdevices)
+                           small_comp=small_pretty_notebook,
+                           conccomps=concdevices)
 
 
 @app.route('/feedback/', methods=['GET'])
 def feedback():
     mail.save_feedback(request.args['msg'], request.args['email'])
-    resp = jsonify({"Send":"true"})
+    resp = jsonify({"Send": "true"})
     resp.status_code = 200
     return resp
 
