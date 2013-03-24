@@ -9,3 +9,7 @@ wcapp/static/img/computers/
 wcapp/static/img/notebooks/
 wcapp/wcconfig.py
 *.pyc
+
+wc_work.sublime-project
+wc_work.sublime-workspace
+.ropeproject

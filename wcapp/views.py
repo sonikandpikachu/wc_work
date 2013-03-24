@@ -43,16 +43,15 @@ def second():
         dbwrapper = db_queries.DBWrapper(request.args['type'])
         devices_id, devices_dss, dss_dict = filtered_devices_id(FILTERS[dbwrapper.device], request.args, dbwrapper)
         if 'user_id' in session:
-            dbwrapper.delete_user(session['user_id'])
+            db_queries.delete_user(session['user_id'])
             del session['user_id']
-        user_id = dbwrapper.add_user(devices_id, devices_dss)
+        user_id = db_queries.add_user(devices_id, devices_dss)
         session['user_id'] = user_id
     else:
         if 'user_id' in session:
-            dbwrapper = db_queries.DBWrapper(session['type'])
-            user = dbwrapper.get_user(session['user_id'])
+            user = db_queries.get_user(session['user_id'])
             if user:
-                devices_id, devices_dss = user.devices_id, user.devices_dss
+                devices_id, devices_dss = user['devices_id'], user['devices_dss']
                 dss_dict = {}  # ????
             else:  # there is no such user in our db
                 del session['user_id']
@@ -83,7 +82,8 @@ def second():
 
 def filtered_devices_id(filters, args, dbwrapper):
     '''
-    Gets parameters from request args, executes filters functions and finally returns filtered computers id
+    Gets parameters from request args, executes filters functions
+    and finally returns filtered computers id
     '''
     #choosing with what device we are working
     print 'ARGS', args

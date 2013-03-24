@@ -2,8 +2,12 @@
 '''
 This module gets data from database, cuts it, sorts it
 '''
+import uuid
 import operator
 import sqlalchemy
+import json
+
+from wcconfig import redis
 
 from wcconfig import db
 import sqlorm as sql
@@ -17,42 +21,42 @@ class DBWrapper (object):
     #in this dictionary we defines dsses for every device type
     _device_dss = {
         u'computer': {
-                        'price': -9,
-                        'cpu': 4,
-                        'ram': 3,
-                        'vga': 3,
-                        'hdd': 2,
-                        'display': 1,
-                        'os': 0.5,
-                        'network': 0.5,
-                        'panel': 0.5,
-                        'media': 0.5,
-                        'thunderbolt': 0.1,
-                        'size': -0.01
+            'price': -9,
+            'cpu': 4,
+            'ram': 3,
+            'vga': 3,
+            'hdd': 2,
+            'display': 1,
+            'os': 0.5,
+            'network': 0.5,
+            'panel': 0.5,
+            'media': 0.5,
+            'thunderbolt': 0.1,
+            'size': -0.01
         },
 
         u'notebook': {
-                        'price': -12,
-                        'cpu': 4,
-                        'ram': 3,
-                        'vga': 3,
-                        'hdd': 2,
-                        'display': 0.7,
-                        'battery': 0.01,
-                        'com': 0.7,
-                        'weight': -1,
-                        'os': 0.5,
-                        'web_camera': 0.5,
-                        'panel': 0.5,
-                        'common': 0.3,
-                        'input': 0.1,
-                        'accoustic': 0.1,
-                        'size': -0.01
+            'price': -12,
+            'cpu': 4,
+            'ram': 3,
+            'vga': 3,
+            'hdd': 2,
+            'display': 0.7,
+            'battery': 0.01,
+            'com': 0.7,
+            'weight': -1,
+            'os': 0.5,
+            'web_camera': 0.5,
+            'panel': 0.5,
+            'common': 0.3,
+            'input': 0.1,
+            'accoustic': 0.1,
+            'size': -0.01
         }
     }
     _device_parameters = {
-            u'computer': [sql.wc_Computer, sql.wc_ComputerDSS, sql.wc_ConcComputer],
-            u'notebook': [sql.wc_Notebook, sql.wc_NotebookDSS, sql.wc_ConcNotebook],
+        u'computer': [sql.wc_Computer, sql.wc_ComputerDSS, sql.wc_ConcComputer],
+        u'notebook': [sql.wc_Notebook, sql.wc_NotebookDSS, sql.wc_ConcNotebook],
     }
 
     def __init__(self, device):
@@ -143,24 +147,21 @@ class DBWrapper (object):
         concdevices = device.concretes.all()
         return concdevices
 
-    # mb opertions with user shouldn`t be in this class
-    def add_user(self, devices_id, devices_dss):
-        user = sql.wc_User(devices_id=devices_id, devices_dss=devices_dss)
-        db.session.add(user)
-        db.session.commit()
-        return user.id
 
-    def delete_user(self, id):
-        try:
-            user = db.session.query(sql.wc_User).filter_by(id=id).one()
-            db.session.delete(user)
-            db.session.commit()
-        except (sqlalchemy.orm.exc.NoResultFound):
-            pass
+def add_user(devices_id, devices_dss):
+    key = uuid.uuid4()
+    p = redis.pipeline()
+    redis_data = json.dumps({'devices_id': list(devices_id), 'devices_dss': list(devices_dss)})
+    p.set(key, redis_data)
+    p.execute()
+    return key
 
-    def get_user(self, id):
-        try:
-            user = db.session.query(sql.wc_User).filter_by(id=id).one()
-        except (sqlalchemy.orm.exc.NoResultFound):
-            user = None
-        return user
+
+def delete_user(id):
+    redis.delete(id)
+
+
+def get_user(id):
+    json_data = redis.get(id)
+    user = json.loads(str(json_data))
+    return user
