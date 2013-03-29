@@ -1,5 +1,11 @@
 /* CSS Document */
 @import url("reset.css");
+@import url(http://fonts.googleapis.com/css?family=Ubuntu);
+@font-face
+{
+font-family: main_font;
+src: url('font.ttf');
+}
 html {
 	width:100%;
 	height: 100%
@@ -16,8 +22,7 @@ body {
 	position:relative;
 	margin:0 auto;
 	width:800px;
-	font-family: Myriad Pro Light, Myriad Pro,Verdana, Tahoma, Arial, Helvetica, sans-serif;
-	font-weight: 400; 
+	font-family: main_font;
 	font-size:14px;
 	line-height: 1.2;
 }
@@ -269,7 +274,8 @@ body {
 
 .key > .tableName{
 	padding-left: 20px;
-	font-family: Myriad Pro,Verdana, Tahoma, Arial, Helvetica, sans-serif;
+	font-family:'Ubuntu',sans-serif;
+	font-size: 13px;
 
 }
 
@@ -377,7 +383,7 @@ body {
 
 .question-slider label{
 	font-size: 12px;
-	font-family: Myriad Pro, Verdana, Tahoma, Arial, Helvetica, sans-serif; 
+	font-family: 'Ubuntu',sans-serif;  
 	color: #4CE126;
 }
 
@@ -399,6 +405,7 @@ body {
 
 a.tooltip{
 	font-size: 10px;
+	font-weight: bold;
 	color: #FFA92B;	
 	vertical-align: super;
 }
@@ -410,7 +417,7 @@ a:hover.tooltip{
 }
 
 #mainQuestion label{  
-    font-family: Myriad Pro Light, Myriad Pro,Verdana, Tahoma, Arial, Helvetica, sans-serif;
+    font-family: main_font;
     margin-left: 40px; 
 }
 
@@ -428,14 +435,11 @@ a:hover.tooltip{
 	margin-left: 20px;
 }
 
-.question-radio label{
-    color: #145571;    
-    font-family: Myriad Pro, Verdana, Tahoma, Arial, Helvetica, sans-serif; 
-}
 
-.question-checkbox label{
+.question-radio label, .question-checkbox label{
     color: #145571;    
-    font-family: Myriad Pro, Verdana, Tahoma, Arial, Helvetica, sans-serif; 
+    font-family: 'Ubuntu', sans-serif;
+
 }
 
 .inline label{
@@ -486,6 +490,8 @@ a:hover {
 /* Tooltips*/
 .qtip-content p{
 	text-indent: 10px;
+	font-size: 14px;
+	font-family: 'Ubuntu', sans-serif;
 }
 .qtip-content i{
 	font-style: italic;

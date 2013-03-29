@@ -35,21 +35,20 @@ $(function(){
          hide: 'unfocus',
          style: {
             title: {
-              'font-family': "\'Myriad Pro Light\', \'Myriad Pro\',\'Verdana\',\'sans-serif\'",
-               color: '#3399CC'
+              'font-family': "'Ubuntu',sans-serif",
+               color: '#3399CC',
+               'font-size' : '14px'
             },
             button: {
-               'font-family': "\'Myriad Pro Light\', \'Myriad Pro\',\'Verdana\',\'sans-serif\'"
+               'font-family': "'Ubuntu',sans-serif"
             },
             tip: true, // Apply a speech bubble tip to the tooltip at the designated tooltip corner
             border: {
                width: 0,
                radius: 4
             },
-            color: '#145571',
-            'font-size': '14px',
+            color: '#145571',            
             name: 'light', // Use the default light style
-            'font-family': "\'Myriad Pro\',\'Verdana\',\'sans-serif\'",
             width: 570 // Set the tooltip width
          }
       })

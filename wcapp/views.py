@@ -30,6 +30,7 @@ FILTERS = {
 
 @app.route('/')
 def first():
+    #return app.root_path
     return render_template('index.html')
 
 
