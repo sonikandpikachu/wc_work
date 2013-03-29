@@ -52,19 +52,7 @@
         </ul> 
       </form>
   <a href = "#questions" id="trigger">Show/Hide</a>
-      <table  class = "console" style = "width: 100%">
-        
-                  {% for col in dss_dict.iteritems()|slice(4) %}
-                     <tr style = "width: 100%">                    
-                      {%- for k , v in col -%}                    
-                          <td style = "padding-left: 20px;">
-                              {{ k }}&emsp;{{ v }}
-                          </td>                   
-                      {%- endfor -%}
-                      </tr>
-                  {%- endfor -%}      
-      </table>    
-      <ul id = "answerList">
+    <ul id = "answerList">
        {% for comp in computers %}      
         <li class="answer">
           <div class = "image"> 

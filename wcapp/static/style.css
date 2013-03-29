@@ -1,11 +1,10 @@
 /* CSS Document */
 @import url("reset.css");
-@import url(http://fonts.googleapis.com/css?family=Ubuntu:400,500,700);
+@import url(http://fonts.googleapis.com/css?family=Ubuntu:400,700);
 @font-face
 {
 font-family: main_font;
 src: url('font.ttf');
-font-size:15px;	
 }
 html {
 	width:100%;
@@ -19,6 +18,7 @@ body {
 	background:#fff;
 }
 #wrapper {
+	font-size:14px;
 	min-height:100%;
 	position:relative;
 	margin:0 auto;
@@ -81,9 +81,10 @@ body {
 	float:left;
 }
 .name {
-	padding: 10px 5px 10px;
+	padding: 10px 5px 0px;
 	float:left;
 	color:#3399CC;
+	font-size:16px;
 }
 .description {
 	clear:left;
@@ -93,7 +94,7 @@ body {
 }
 .description li {
 	float:left;
-	clear: left; /* Отменяем действие float */
+	clear: left;
 }
 .paramName {
 	float:left;
@@ -140,6 +141,7 @@ body {
 	position: relative;
 	width: 114px;
 	height: 22px;
+	margin-bottom: 5px;
 }
 .classification .cover {
 	position: absolute;
@@ -211,7 +213,7 @@ body {
 	float:left;
 }
 .tabs {
-	height:36px;
+	height:32px;
 	border-bottom: 2px solid #3399CC;
 }
 .tabs > ul {
@@ -220,7 +222,7 @@ body {
 	list-style:none;
 }
 .tabs > ul > li {
-	height:16px;
+	height:12px;
 	margin:0 10px 0 0;
 	padding:9px 20px;
 	display:block;
@@ -252,11 +254,10 @@ body {
 	border-bottom: 2px solid #fff;
 }
 .tabscontent {
-	font-size:14px;
 	float:left;
 	width:98%;
 	padding:1% 1% 25px;
-	background: #FFFFFF; /* old browsers */	
+	background: #FFFFFF;
 	color: #145571;
 	border-bottom: 2px solid #3399CC;
 }
@@ -275,7 +276,7 @@ body {
 .key > .tableName{
 	padding-left: 20px;
 	font-family:'Ubuntu',sans-serif;
-	font-size:14px;
+	font-size:13px;
 
 }
 
@@ -319,7 +320,7 @@ body {
 }
 .part {
 	background: #F0F6EF;
-	font-size:15px;
+	font-size:14px;
 }
 
 /* Questions */
@@ -333,6 +334,7 @@ body {
 #trigger{
 	margin-left: 20px;
 	float: left;
+	font-size: 15px;
 }
 
 #questions > li{
