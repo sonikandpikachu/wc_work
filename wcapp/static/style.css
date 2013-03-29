@@ -1,10 +1,11 @@
 /* CSS Document */
 @import url("reset.css");
-@import url(http://fonts.googleapis.com/css?family=Ubuntu);
+@import url(http://fonts.googleapis.com/css?family=Ubuntu:400,500,700);
 @font-face
 {
 font-family: main_font;
 src: url('font.ttf');
+font-size:15px;	
 }
 html {
 	width:100%;
@@ -22,8 +23,7 @@ body {
 	position:relative;
 	margin:0 auto;
 	width:800px;
-	font-family: main_font;
-	font-size:14px;
+	font-family: main_font;	
 	line-height: 1.2;
 }
 #content {
@@ -211,19 +211,18 @@ body {
 	float:left;
 }
 .tabs {
-	height:30px;
+	height:36px;
 	border-bottom: 2px solid #3399CC;
 }
 .tabs > ul {
 	float:left;
 	margin-left:150px;
-	font-size: 14px;
 	list-style:none;
 }
 .tabs > ul > li {
-	height:14px;
+	height:16px;
 	margin:0 10px 0 0;
-	padding:7px 20px;
+	padding:9px 20px;
 	display:block;
 	float:left;
 	color:#3399CC;
@@ -253,6 +252,7 @@ body {
 	border-bottom: 2px solid #fff;
 }
 .tabscontent {
+	font-size:14px;
 	float:left;
 	width:98%;
 	padding:1% 1% 25px;
@@ -275,7 +275,7 @@ body {
 .key > .tableName{
 	padding-left: 20px;
 	font-family:'Ubuntu',sans-serif;
-	font-size: 13px;
+	font-size:14px;
 
 }
 
@@ -319,6 +319,7 @@ body {
 }
 .part {
 	background: #F0F6EF;
+	font-size:15px;
 }
 
 /* Questions */
@@ -400,7 +401,8 @@ body {
 
 #questions .qText{
 	padding: 5px 0px 10px 10px;
-	color: #3399CC;	
+	color: #3399CC;
+	font-size:15px;	
 }
 
 a.tooltip{
@@ -439,6 +441,7 @@ a:hover.tooltip{
 .question-radio label, .question-checkbox label{
     color: #145571;    
     font-family: 'Ubuntu', sans-serif;
+    font-size:14px;
 
 }
 
@@ -491,7 +494,7 @@ a:hover {
 .qtip-content p{
 	text-indent: 10px;
 	font-size: 14px;
-	font-family: 'Ubuntu', sans-serif;
+	font-family: 'Ubuntu', sans-serif;	
 }
 .qtip-content i{
 	font-style: italic;
