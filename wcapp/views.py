@@ -8,6 +8,7 @@ Created on Sep 18, 2012
 from sqlorm import *
 from flask import render_template, request, abort, session, jsonify, render_template_string
 from tooltips import TOOLTIPS_DICT
+import json
 
 from wcconfig import app
 import filters.settings
@@ -101,29 +102,52 @@ def filtered_devices_id(filters, args, dbwrapper):
     return dbwrapper.sorted_devices_id(cut_values, dss_values)
 
 
-@app.route('/computer/<id>/')
-def third_computer(id):
+@app.route('/computer/<id>/<dss>/')
+def third_computer(id, dss):
     dbwrapper = db_queries.DBWrapper(session['type'])
     concdevices = dbwrapper.concdevices_by_device_id(id)
     big_pretty_comp = pretty_data.big_computer(id, dbwrapper)
-    small_pretty_comp = pretty_data.small_devices([id], [0], dbwrapper)[0]
+    small_pretty_comp = pretty_data.small_devices([id], [float(dss)], dbwrapper)[0]
     return render_template('Comp.html', big_comp=big_pretty_comp,
                                 small_comp=small_pretty_comp,
                                 tooltips = TOOLTIPS_DICT,
                                 conccomps=concdevices)
 
 
-@app.route('/notebook/<id>/')
-def third_notebook(id):
+@app.route('/notebook/<id>/<dss>/')
+def third_notebook(id, dss):
     dbwrapper = db_queries.DBWrapper(session['type'])
     concdevices = dbwrapper.concdevices_by_device_id(id)
     big_pretty_notebook = pretty_data.big_notebook(id, dbwrapper)
-    small_pretty_notebook = pretty_data.small_devices([id], [0], dbwrapper)[0]
+    small_pretty_notebook = pretty_data.small_devices([id], [float(dss)], dbwrapper)[0]
     return render_template('Comp.html', big_comp=big_pretty_notebook,
                                 small_comp=small_pretty_notebook,
                                 
                                 tooltips = TOOLTIPS_DICT,
                                 conccomps=concdevices)
+
+
+@app.route('/getPage/<page>/<type>/')
+def getPage(page, type):
+    dbwrapper = db_queries.DBWrapper(type)
+    user = db_queries.get_user(session['user_id'])
+    if user:
+        devices_id, devices_dss = user['devices_id'], user['devices_dss']
+        dss_dict = {}  # ????
+    else:  # there is no such user in our db
+        del session['user_id']
+        devices_id, devices_dss, dss_dict = [], [], {}  # nothing to return
+    first_comp_index = (int(page) - 1) * COMPUTERS_ON_PAGE
+    last_comp_index = min(int(page) * COMPUTERS_ON_PAGE, len(devices_id))
+    devices_id_on_page = devices_id[first_comp_index: last_comp_index]
+    devices_dss_on_page = devices_dss[first_comp_index: last_comp_index]
+
+    pretty_devices = pretty_data.small_devices(devices_id_on_page, devices_dss_on_page, dbwrapper)
+    print 'pretty_devices', pretty_devices[0]
+    resp = jsonify({"pretty_devices": pretty_devices})
+    resp.status_code = 200
+    print "sffg"
+    return resp
 
 
 @app.route('/feedback/', methods=['GET'])

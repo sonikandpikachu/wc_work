@@ -4,6 +4,7 @@ var qParams = {};
 var sliders;
 var cheks = new Array();
 var selectes = new Array();
+var dType;
 
 //Init function
 $(function(){        
@@ -35,8 +36,83 @@ $(function(){
       setValues(qParams, 'first');
     }else{       
       setValues(recognizeElements(getUrlParams()), 'first');
-    }     
+    }
+
+   
 });
+
+
+function getCompsOnPage(page){
+    if (page == 1) 
+      return null;
+    var url = $SCRIPT_ROOT + '/getPage/' + page + '/' + dType + '/';
+    $.getJSON(url, function(data){
+      var html = "";
+      alert(data);
+      $.each(data["pretty_devices"], function(key, comp){
+        html += tmpl("<li class=\"answer\">" +
+        "<div class = \"descriptionSection\">" +
+          "<div class=\"title\">" +
+            "<div class = \"name\"> <%=comp.name%> &nbsp; <%=comp.model%></div>" +
+            "<div class=\"classification\">" +
+              "<div class=\"cover\"></div>" +
+              "<div class=\"progress\" style=\"width: <%=comp.comp_dss%>%;\"></div>" +
+            "</div>" +
+          "</div>" +
+          "<ul class = \"description\">" +
+            "<li>" +
+              "<div class=\"paramName\">Процессор:</div>" +
+              "<div class=\"paramValue\"> <%=comp.cpu_name%> <%=comp.cpu_model%>, <%=comp.cpu_frequency%> Ггц</div>" +
+              "<div class=\"paramStars\">" +
+                "<div class=\"cover\"></div>" +
+                "<div class=\"progress\" style=\"width: <%=comp.cpu_dss%>%;\"></div>" +
+              "</div>" +
+            "</li>" +
+            "<li>" +
+              "<div class=\"paramName\">Оперативная память:</div>" +
+              "<div class=\"paramValue\"> <%=comp.ram_amount%> Gb </div>" +
+              "<div class=\"paramStars\">" +
+                "<div class=\"cover\"></div>" +
+                "<div class=\"progress\" style=\"width: <%=comp.ram_dss%>%;\"></div>" +
+              "</div>" +
+            "</li>" +
+            "<li>" +
+              "<div class=\"paramName\">Жесткий диск:</div>" +
+              "<div class=\"paramValue\"> <%=comp.hdd_capacity%> Gb</div>" +
+              "<div class=\"paramStars\">" +
+                "<div class=\"cover\"></div>" +
+                "<div class=\"progress\" style=\"width: <%=comp.hdd_dss%>%;\"></div>" +
+              "</div>" +
+            "</li>" +
+            "<li>" +
+              "<div class=\"paramName\">Видеокарта:</div>" +
+              "<div class=\"paramValue\"> <%=comp.vga }} <%=comp.vga_amount%> </div>" +
+              "<div class=\"paramStars\">" +
+                "<div class=\"cover\"></div>" +
+                "<div class=\"progress\" style=\"width: <%=comp.vga_dss%>%;\"></div>" +
+              "</div>" +
+            "</li>" +
+            "<li>" +
+              "<div class=\"paramName\"> Операционная система </div>" +
+              "<div class=\"paramValue\"> <%=comp.os%></div>" +
+              "<div class=\"paramStars\">" +
+                "<div class=\"cover\"></div>" +
+                "<div class=\"progress\" style=\"width: <%=comp.os_dss%>%;\"></div>" +
+              "</div>" +
+            "</li>" +
+          "</ul>" +
+        "</div>" +
+        "<ul class = \"answerButtons\">" +
+          "<li> " +
+            "<div class = \"price\"><%=comp.price%> грн</div> " +
+            "<div class = \"priceRange\"><%=comp.max_price%> - <%=comp.min_price%> </div>" +
+          "</li>" +          
+        "</ul>" +
+      "</li>", comp);
+      });
+      $('.answerlist').replaceWith(html);
+    });
+}     
 
 function getUrlParams(){
   var rez = {};        
@@ -55,6 +131,9 @@ function recognizeElements(params)
   rez = {};
     for(key in params)
       {
+          if (key == "type"){
+            dType = params[key];
+          }
           if ($.inArray(key, cheks) != -1) {
               rez[key + "_" + params[key]] = "checked";
           } else {

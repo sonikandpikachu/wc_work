@@ -3,6 +3,7 @@
 this module converts database data to data witch is going to be showm to user
 '''
 from collections import OrderedDict
+import math
 
 
 def small_devices(computers_id, computers_dss, dbwrapper):
@@ -21,7 +22,7 @@ def small_devices(computers_id, computers_dss, dbwrapper):
             'id': str(computer.id),
             'name': computer.name,
             'model': computer.model,
-            'comp_dss': computers_dss[index],
+            'comp_dss': int(round(computers_dss[index])),
             'cpu_name': computer.cpu_name,
             'cpu_model': computer.cpu_model,
             'cpu_frequency': computer.cpu_frequency,
@@ -39,7 +40,7 @@ def small_devices(computers_id, computers_dss, dbwrapper):
             'price_dss': dss.price,
             'min_price': min_price,
             'max_price': max_price,
-            'dss': dss
+            # 'dss': dss.__dict__,
         }
         pretty_devices.append(pretty_computer)
     return pretty_devices

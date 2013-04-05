@@ -131,7 +131,7 @@ class DBWrapper (object):
         table = self.device_table if not device else self._device_parameters[device][0]
         return [db.session.query(table).filter_by(id=id).one() for id in ids]
 
-    def dss_by_id(self, ids):
+    def dss_by_id(self, ids):  # rewrite
         return [db.session.query(self.dss_table).filter_by(id=id).one() for id in ids]
 
     def max_and_min_price(self, device):

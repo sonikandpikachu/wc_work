@@ -1,6 +1,6 @@
 /* CSS Document */
 @import url("reset.css");
-@import url(http://fonts.googleapis.com/css?family=Ubuntu);
+@import url(http://fonts.googleapis.com/css?family=Ubuntu:400,700);
 @font-face
 {
 font-family: main_font;
@@ -18,12 +18,12 @@ body {
 	background:#fff;
 }
 #wrapper {
+	font-size:14px;
 	min-height:100%;
 	position:relative;
 	margin:0 auto;
 	width:800px;
-	font-family: main_font;
-	font-size:14px;
+	font-family: main_font;	
 	line-height: 1.2;
 }
 #content {
@@ -81,9 +81,10 @@ body {
 	float:left;
 }
 .name {
-	padding: 10px 5px 10px;
+	padding: 10px 5px 0px;
 	float:left;
 	color:#3399CC;
+	font-size:16px;
 }
 .description {
 	clear:left;
@@ -93,7 +94,7 @@ body {
 }
 .description li {
 	float:left;
-	clear: left; /* Отменяем действие float */
+	clear: left;
 }
 .paramName {
 	float:left;
@@ -140,6 +141,7 @@ body {
 	position: relative;
 	width: 114px;
 	height: 22px;
+	margin-bottom: 5px;
 }
 .classification .cover {
 	position: absolute;
@@ -211,19 +213,18 @@ body {
 	float:left;
 }
 .tabs {
-	height:30px;
+	height:32px;
 	border-bottom: 2px solid #3399CC;
 }
 .tabs > ul {
 	float:left;
 	margin-left:150px;
-	font-size: 14px;
 	list-style:none;
 }
 .tabs > ul > li {
-	height:14px;
+	height:12px;
 	margin:0 10px 0 0;
-	padding:7px 20px;
+	padding:9px 20px;
 	display:block;
 	float:left;
 	color:#3399CC;
@@ -256,7 +257,7 @@ body {
 	float:left;
 	width:98%;
 	padding:1% 1% 25px;
-	background: #FFFFFF; /* old browsers */	
+	background: #FFFFFF;
 	color: #145571;
 	border-bottom: 2px solid #3399CC;
 }
@@ -275,7 +276,7 @@ body {
 .key > .tableName{
 	padding-left: 20px;
 	font-family:'Ubuntu',sans-serif;
-	font-size: 13px;
+	font-size:13px;
 
 }
 
@@ -319,6 +320,7 @@ body {
 }
 .part {
 	background: #F0F6EF;
+	font-size:14px;
 }
 
 /* Questions */
@@ -332,6 +334,7 @@ body {
 #trigger{
 	margin-left: 20px;
 	float: left;
+	font-size: 15px;
 }
 
 #questions > li{
@@ -400,7 +403,8 @@ body {
 
 #questions .qText{
 	padding: 5px 0px 10px 10px;
-	color: #3399CC;	
+	color: #3399CC;
+	font-size:15px;	
 }
 
 a.tooltip{
@@ -439,6 +443,7 @@ a:hover.tooltip{
 .question-radio label, .question-checkbox label{
     color: #145571;    
     font-family: 'Ubuntu', sans-serif;
+    font-size:14px;
 
 }
 
@@ -491,7 +496,7 @@ a:hover {
 .qtip-content p{
 	text-indent: 10px;
 	font-size: 14px;
-	font-family: 'Ubuntu', sans-serif;
+	font-family: 'Ubuntu', sans-serif;	
 }
 .qtip-content i{
 	font-style: italic;

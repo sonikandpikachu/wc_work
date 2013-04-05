@@ -4,7 +4,7 @@
 			{% if page == current_page %}
 				<li><a class = 'select' href="/qa/?page={{ page }}"> {{ page }} </a></b></li>
 			{% else %}
-				<li><a href="/qa/?page={{ page }}"> {{ page }} </a></li>
+				<li><a href="javascript:void(0)" onclick="getCompsOnPage(2)"> {{ page }} </a></li>
 			{% endif %}
 		{% else %}
 			<li> ... </li>
