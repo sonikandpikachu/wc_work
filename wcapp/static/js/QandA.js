@@ -55,7 +55,8 @@ $(function () {
             url = $SCRIPT_ROOT + '/getPage/' + currentPage + '/' + dType + '/';
 
         $.getJSON(url, function (data) {
-            var html = "";
+            var html = "",
+                picture = "<li> <a href = \"/<%=type%>/<%=id%>/<%=comp_dss%>\" target=\"_blank\"><div class=\"compOpenButton\"></div></a></li>";
             var compTmplate = tmpl("<li class=\"answer\">" +
                 "<div class = \"image\">" +
                 "<img src=\"../static/img/<%=type%>s/<%=id%>_img/main.jpg\" alt = \"Рисунок\"/>" +
@@ -116,6 +117,7 @@ $(function () {
                 "<div class = \"price\"><%=price%> грн</div> " +
                 "<div class = \"priceRange\"><%=max_price%> - <%=min_price%> </div>" +
                 "</li>" +
+                picture +
                 "</ul>" +
                 "</li>");
             $.each(data["pretty_devices"], function (key, comp) {

@@ -122,6 +122,22 @@ body {
 .answerButtons li {
 	padding-top: 30px;
 }
+
+.compOpenButton{
+	height: 42px;
+	width: 60px;
+	margin-left: 55px;
+	background-image:url(img/greenButtons/wNextButton1.png); 
+}
+
+.compOpenButton:hover{
+	background-image:url(img/greenButtons/wNextButton2.png); 
+}
+
+.compOpenButton:active{
+	background-image:url(img/greenButtons/wNextButton3.png); 
+}
+
 #footer {
 	width:100%;
 	/*position: absolute;*/

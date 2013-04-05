@@ -114,11 +114,7 @@
               <div class = "price">{{ '%d' % comp.price }} грн</div> 
               <div class = "priceRange">{{ '%d' % comp.max_price }} - {{ '%d' % comp.min_price }} </div>
             </li>
-            <li> <a  href = "/{{ comp.type }}/{{ comp.id }}/{{ comp.comp_dss }}" target="_blank"> <img src="{{ url_for('static', filename='img/greenButtons/wNextButton1.png') }}" alt="Далее" 
-                                  onMouseOver="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton2.png') }}'" 
-                                  onMouseOut="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton1.png') }}'"
-                                  onMouseDown="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton3.png') }}'"
-                                  /> </a> </li>
+            <li> <a  href = "/{{ comp.type }}/{{ comp.id }}/{{ comp.comp_dss }}" target="_blank"> <div class="compOpenButton"></div></a> </li>
           </ul>
         </li>
         {% endfor %} 
