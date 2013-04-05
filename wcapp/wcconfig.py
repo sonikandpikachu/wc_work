@@ -9,7 +9,7 @@ from flask import Flask
 
 from flask.ext.mail import Mail
 from flask.ext.sqlalchemy import SQLAlchemy
-from flask.ext.redis import init_redis
+
 
 #database configurations:
 DATABASE = 'mysql://'
@@ -28,7 +28,7 @@ MAIL_PASSWORD = 'ilovecloude'
 # administrator list
 ADMINS = ['whatcompute@gmail.com']
 
-from local_config import *
+
 
 #flask configurations:
 app = Flask('wcapp')
