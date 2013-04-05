@@ -30,7 +30,6 @@ FILTERS = {
 
 @app.route('/')
 def first():
-    #return app.root_path
     return render_template('index.html')
 
 
@@ -39,20 +38,22 @@ def second():
     #need refactor dbwrapper calls
     dbwrapper = db_queries.DBWrapper(DEFFAULT_DEVICE_TYPE)
     #getting computers id:
+    print 'sdf',request.args.keys()
     if 'type' in request.args.keys():
         session['type'] = request.args['type']
         dbwrapper = db_queries.DBWrapper(request.args['type'])
         devices_id, devices_dss, dss_dict = filtered_devices_id(FILTERS[dbwrapper.device], request.args, dbwrapper)
         if 'user_id' in session:
-            db_queries.delete_user(session['user_id'])
+            dbwrapper.delete_user(session['user_id'])
             del session['user_id']
-        user_id = db_queries.add_user(devices_id, devices_dss)
+        user_id = dbwrapper.add_user(devices_id, devices_dss)
         session['user_id'] = user_id
     else:
         if 'user_id' in session:
-            user = db_queries.get_user(session['user_id'])
+            dbwrapper = db_queries.DBWrapper(session['type'])
+            user = dbwrapper.get_user(session['user_id'])
             if user:
-                devices_id, devices_dss = user['devices_id'], user['devices_dss']
+                devices_id, devices_dss = user.devices_id, user.devices_dss
                 dss_dict = {}  # ????
             else:  # there is no such user in our db
                 del session['user_id']
@@ -67,7 +68,7 @@ def second():
     except ValueError:
         abort(404)
     # if page > last_page or page < 1:
-    # abort(404)
+    #     abort(404)
 
     first_comp_index = (page - 1) * COMPUTERS_ON_PAGE
     last_comp_index = min(page * COMPUTERS_ON_PAGE, len(devices_id))
@@ -77,14 +78,12 @@ def second():
     pretty_devices = pretty_data.small_devices(devices_id_on_page, devices_dss_on_page, dbwrapper)
 
     return render_template('QandA.html', computers=pretty_devices, filters=FILTERS[u'all'],
-                           current_page=page, pagination_pages=pretty_data.pagination_pages(page, last_page),
-                           dss_dict=dss_dict)
+        current_page=page, pagination_pages=pretty_data.pagination_pages(page, last_page), dss_dict=dss_dict)
 
 
 def filtered_devices_id(filters, args, dbwrapper):
     '''
-    Gets parameters from request args, executes filters functions
-    and finally returns filtered computers id
+    Gets parameters from request args, executes filters functions and finally returns filtered computers id
     '''
     #choosing with what device we are working
     print 'ARGS', args
@@ -109,9 +108,9 @@ def third_computer(id):
     big_pretty_comp = pretty_data.big_computer(id, dbwrapper)
     small_pretty_comp = pretty_data.small_devices([id], [0], dbwrapper)[0]
     return render_template('Comp.html', big_comp=big_pretty_comp,
-                           small_comp=small_pretty_comp,
-                           tooltips=TOOLTIPS_DICT,
-                           conccomps=concdevices)
+                                small_comp=small_pretty_comp,
+                                tooltips = TOOLTIPS_DICT,
+                                conccomps=concdevices)
 
 
 @app.route('/notebook/<id>/')
@@ -121,21 +120,21 @@ def third_notebook(id):
     big_pretty_notebook = pretty_data.big_notebook(id, dbwrapper)
     small_pretty_notebook = pretty_data.small_devices([id], [0], dbwrapper)[0]
     return render_template('Comp.html', big_comp=big_pretty_notebook,
-                           small_comp=small_pretty_notebook,
-                           tooltips=TOOLTIPS_DICT,
-                           conccomps=concdevices)
+                                small_comp=small_pretty_notebook,
+                                
+                                tooltips = TOOLTIPS_DICT,
+                                conccomps=concdevices)
 
 
 @app.route('/feedback/', methods=['GET'])
 def feedback():
     mail.save_feedback(request.args['msg'], request.args['email'])
-    resp = jsonify({"Send": "true"})
+    resp = jsonify({"Send":"true"})
     resp.status_code = 200
     return resp
 
-
 @app.route('/tooltip/<key>/')
-def tooltip(key):
+def tooltip(key):        
     return render_template_string(TOOLTIPS_DICT[key])
 
 
@@ -149,4 +148,3 @@ if __name__ == '__main__':
     # components =  wc_RAM, wc_HD, wc_CPU, wc_OS, wc_ODD, wc_Screen, wc_Type, wc_Chipset
     # query = session.query(wc_Computer).join(*components)
     # print query.filter('wc_HD.id = 1 and wc_CPU.id > 2').all()
-
