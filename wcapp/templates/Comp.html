@@ -1,17 +1,22 @@
 {% macro description(text) -%}
-   {% if text %}<a href="javascript:void(0)" class = "tooltip" rel="/tooltip/{{ text }}/" text = "{{ text }}"> ?</a> {% endif %}
+   {% if text %}<a href="javascript:void(0)" class = "tooltip" tooltip="/tooltip/{{ text }}/" text = "{{ text }}"> ?</a> {% endif %}
 {%- endmacro %}
 <!DOCTYPE html>
 <html lang = "ru-RU">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
+<link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.png') }}" type="image/x-icon" />
+<link rel="icon" href="{{ url_for('static', filename='img/favicon.png') }}" type="image/x-icon" />
+
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='fancybox/jquery.fancybox.css') }}"/>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='fancybox/helpers/jquery.fancybox-thumbs.css') }}"/>
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}"/>
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/feedback.css') }}"/>
 
 <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-1.7.2.min.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='fancybox/jquery.fancybox.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='fancybox/helpers/jquery.fancybox-thumbs.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.qtip-1.0.0-rc3.min.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/helpers.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/tabs.js') }}"></script>
@@ -25,10 +30,19 @@
 <div id = "header"> <img src="{{ url_for('static', filename='img/main_header.png') }}" alt="What Computer"/> </div>
 <div id = "content">
   <div id="comp">
-    <div class = "image"> <img src="{{ url_for('static', filename='img/' + small_comp.type + 's/'+ small_comp.id +'_img/main.jpg') }}" alt = "Рисунок"/></div>
+    <div class = "image">            
+      <a class = "fancybox" rel = "gallery{{ small_comp.id }}" href = "{{ url_for('static', filename='img/' + small_comp.type + 's/'+ small_comp.id +'_img/' + small_comp.gallery|first) }}"> 
+        <img src="{{ url_for('static', filename='img/' + small_comp.type + 's/'+ small_comp.id +'_img/main.jpg') }}" alt = "Рисунок"/>
+      </a>
+      <div style = "display:none;">
+        {% for img in small_comp.gallery %}
+            {% if loop.index != 1 %} <a class = "fancybox" rel = "gallery{{ small_comp.id }}" href = "{{ url_for('static', filename='img/' + small_comp.type + 's/'+ small_comp.id +'_img/' + img) }}"><img src="{{ url_for('static', filename='img/' + small_comp.type + 's/'+ small_comp.id +'_img/' + img) }}" alt = "Рисунок"></a>{% endif %}
+        {% endfor %}
+      </div>
+    </div>
     <div class = "descriptionSection">
       <div class="title">
-        <div class = "name" style="font-size:18px"> {{ small_comp.name }} </div>
+        <div class = "name" style="font-size:18px"> {{ small_comp.name }} &nbsp; {{ small_comp.model }}  </div>
         <div class="classification" style="clear:left; top:0px">
           <div class="cover"></div>
           <div class="progress" style="width: {{ small_comp.comp_dss }}%;"></div>
@@ -53,7 +67,7 @@
             </li>
             <li>
               <div class="paramName">Жесткий диск:</div>
-              <div class="paramValue"> {{ small_comp.hdd_capacity }} Gb</div>
+              <div class="paramValue"> {{ small_comp.hdd_capacity }} Gb {{ small_comp.hdd_type }}</div>
               <div class="paramStars">
                 <div class="cover"></div>
                 <div class="progress" style="width: {{ small_comp.hdd_dss }}%;"></div>
@@ -61,18 +75,27 @@
             </li>
             <li>
               <div class="paramName">Видеокарта:</div>
-              <div class="paramValue"> {{ small_comp.vga }} {{ small_comp.vga_amount }} </div>
+              <div class="paramValue"> {{ small_comp.vga }} {% if small_comp.vga_amount %} {{ small_comp.vga_amount }} {% endif %} </div>
               <div class="paramStars">
                 <div class="cover"></div>
                 <div class="progress" style="width: {{ small_comp.vga_dss }}%;"></div>
               </div>
             </li>
             <li>
-              <div class="paramName"> Операционная система </div>
+              <div class="paramName"> Операционная система: </div>
               <div class="paramValue"> {{ small_comp.os }}</div>
+            </li>
+            {% if small_comp.display %}
+            <li>
+              <div class="paramName">Дисплей:</div>
+              <div class="paramValue"> {{ small_comp.display }} " {{ small_comp.resolution }}</div>
+            </li>
+            {% endif %}
+            <li>
+              <div class="paramName">Другие параметры</div>
               <div class="paramStars">
                 <div class="cover"></div>
-                <div class="progress" style="width: {{ small_comp.os_dss }}%;"></div>
+                <div class="progress" style="width: {{ small_comp.other_dss }}%;"></div>
               </div>
             </li>
           </ul>
@@ -82,10 +105,10 @@
             <div class = "price">{{ '%d' % small_comp.price }} грн</div> 
             <div class = "priceRange">{{ '%d' % small_comp.max_price }} - {{ '%d' % small_comp.min_price }} </div>
       </li>
-      <li> <a  href = "/qa"> <img src="{{ url_for('static', filename='img/greenButtons/wNextButton1.png') }}" alt="Далее" 
-                                  onMouseOver="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton2.png') }}'" 
-                                  onMouseOut="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton1.png') }}'"
-                                  onMouseDown="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton3.png') }}'"
+      <li> <a  href = "/qa"> <img src="{{ url_for('static', filename='img/greenButtons/wBackButton1.png') }}" alt="Далее" 
+                                  onMouseOver="this.src='{{ url_for('static', filename='img/greenButtons/wBackButton2.png') }}'" 
+                                  onMouseOut="this.src='{{ url_for('static', filename='img/greenButtons/wBackButton1.png') }}'"
+                                  onMouseDown="this.src='{{ url_for('static', filename='img/greenButtons/wBackButton3.png') }}'"
                                   /> </a> </li>
     </ul>
   </div>

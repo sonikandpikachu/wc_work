@@ -27,7 +27,6 @@ $(function () {
         }
     });
 
-
     //Default button
     $("#defaultButton").click(function () {
         setValues(qParams);
@@ -39,10 +38,11 @@ $(function () {
     });
 
     //Set checked values
-    if (getUrlParams() == null) {
+    var urlParams = getUrlParams();
+    if (urlParams === null) {
         setValues(qParams, 'first');
     } else {
-        setValues(recognizeElements(getUrlParams()), 'first');
+        setValues(recognizeElements(urlParams), 'first');
     }
 
     function doPagination(event){
@@ -57,13 +57,17 @@ $(function () {
         $.getJSON(url, function (data) {
             var html = "",
                 picture = "<li> <a href = \"/<%=type%>/<%=id%>/<%=comp_dss%>\" target=\"_blank\"><div class=\"compOpenButton\"></div></a></li>";
-            var compTmplate = tmpl("<li class=\"answer\">" +
+            var compImageTmplate = tmpl("<li class=\"answer\">" +
                 "<div class = \"image\">" +
-                "<img src=\"../static/img/<%=type%>s/<%=id%>_img/main.jpg\" alt = \"Рисунок\"/>" +
+                "<a class = \"fancybox\" rel = \"gallery<%=id%>\" href = \"../static/img/<%=type%>s/<%=id%>_img/<%=gallery[0]%>\">" +
+                "<img src=\"../static/img/<%=type%>s/<%=id%>_img/main.jpg\" alt = \"Рисунок\"/></a>")
+            var compImagesTmplate = tmpl("<a class = \"fancybox\" rel = \"gallery<%=id%>\"" +
+                "href = \"../static/img/<%=type%>s/<%=id%>_img/<%=img%>\"></a>")
+            var compTmplate = tmpl(
                 "</div>" +
                 "<div class = \"descriptionSection\">" +
                 "<div class=\"title\">" +
-                "<div class = \"name\"> <%=name%> &nbsp; <%=model%></div>" +
+                "<div class = \"name\"><a href = \"/<%=type%>/<%=id%>/<%=comp_dss%>\" target=\"_blank\"> <%=name%> &nbsp; <%=model%> </a></div>" +
                 "<div class=\"classification\">" +
                 "<div class=\"cover\"></div>" +
                 "<div class=\"progress\" style=\"width: <%=comp_dss%>%;\"></div>" +
@@ -88,7 +92,7 @@ $(function () {
                 "</li>" +
                 "<li>" +
                 "<div class=\"paramName\">Жесткий диск:</div>" +
-                "<div class=\"paramValue\"> <%=hdd_capacity%> Gb</div>" +
+                "<div class=\"paramValue\"> <%=hdd_capacity%> Gb <%=hdd_type%></div>" +
                 "<div class=\"paramStars\">" +
                 "<div class=\"cover\"></div>" +
                 "<div class=\"progress\" style=\"width: <%=hdd_dss%>%;\"></div>" +
@@ -103,11 +107,20 @@ $(function () {
                 "</div>" +
                 "</li>" +
                 "<li>" +
-                "<div class=\"paramName\"> Операционная система </div>" +
-                "<div class=\"paramValue\"> <%=os%></div>" +
+                "<div class=\"paramName\"> Операционная система: </div>" +
+                "<div class=\"paramValue\"> <%=os%></div>" +                
+                "</li>")
+            var compDisplay = tmpl(
+                "<li>" +
+                "<div class=\"paramName\">Дисплей:</div>" +
+                "<div class=\"paramValue\"> <%=display%> \" <%=resolution%> </div>" +
+                "</li>")
+            var compTmplateEnd = tmpl(    
+                "<li>" +
+                "<div class=\"paramName\">Другие параметры:</div>" +
                 "<div class=\"paramStars\">" +
                 "<div class=\"cover\"></div>" +
-                "<div class=\"progress\" style=\"width: <%=os_dss%>%;\"></div>" +
+                "<div class=\"progress\" style=\"width: <%=other_dss%>%;\"></div>" +
                 "</div>" +
                 "</li>" +
                 "</ul>" +
@@ -121,7 +134,14 @@ $(function () {
                 "</ul>" +
                 "</li>");
             $.each(data["pretty_devices"], function (key, comp) {
+                html += compImageTmplate(comp);
+                for(var i = 1; i < comp.gallery.length; i++){
+                    img = comp.gallery[i];
+                    html += compImagesTmplate(comp,img);
+                }
                 html += compTmplate(comp);
+                if(comp.display) html += compDisplay(comp);
+                html += compTmplateEnd(comp);
             });
             $('#answerList').fadeOut("slow", function () {
                 $('#answerList').html(html);
@@ -180,8 +200,9 @@ $(function () {
         if (Params[0] == "")
             return null;
         for (var i = 0; i < Params.length; i++) {
-            if (Params[i].split("=").length > 1)
+            if (Params[i].split("=").length > 1){
                 rez[Params[i].split("=")[0]] = Params[i].split("=")[1];
+            }
         }
         return rez;
     }
@@ -193,7 +214,11 @@ $(function () {
                 dType = params[key];
             }
             if ($.inArray(key, cheks) != -1) {
-                rez[key + "_" + params[key]] = "checked";
+                if (key.indexOf(params[key]) != -1){
+                    rez[key] = "checked";
+                } else {
+                    rez[key + "_" + params[key]] = "checked";
+                }
             } else {
                 if ($.inArray(key, selectes) != -1) {
                     rez[key + "_select"] = params[key].replace("+", " ");
@@ -231,7 +256,7 @@ $(function () {
                     twoParts.push(key);
                 } else {
                     if (key.split('_')[1] == "select") {
-                        $("#" + key.split('_')[0]).selectbox("change", 'value', params[key]);
+                        $("#" + key.split('_')[0]).selectbox("change", params[key], params[key]);
                     } else {
                         var param = params[key].split(';');
                         if (param.length > 1) {
@@ -279,7 +304,6 @@ $(function () {
             }
         }
     }
-
 });
 
 

@@ -5,15 +5,28 @@ function validateEmail(email) {
 
 
 $(function(){
+//Gallery
+  $(".fancybox").fancybox({
+    padding : 20,
+    index : 2,
+    prevEffect  : 'fade',
+    nextEffect  : 'fade',
+    helpers : {
+        thumbs  : {
+            width   : 50,
+            height  : 50
+        }
+    }
+    });
 //Tooltips
-  $('a[rel]').each(function()
+  $('a[tooltip]').each(function()
    {
       $(this).qtip(
       {
          content: {
             // Set the text to an image HTML string with the correct src URL to the loading image you want to use
-            text: '<img class="throbber" src="../static/img/throbber.gif" alt="Loading..." />',
-            url: $(this).attr('rel'), // Use the rel attribute of each element for the url to load
+            text: '<img class="throbber" src="../../../static/img/throbber.gif" alt="Loading..." />',
+            url: $(this).attr('tooltip'), // Use the rel attribute of each element for the url to load
             title: {
                text: $(this).attr('text'), // Give the tooltip a title using each elements text
                button: 'Закрыть' // Show a close link in the title
@@ -30,7 +43,7 @@ $(function(){
          },
          show: { 
             when: 'click', 
-            solo: true // Only show one tooltip at a time
+            solo: true // Only show one tooltip at a tie
          },
          hide: 'unfocus',
          style: {
@@ -56,13 +69,7 @@ $(function(){
 
 //Feedback
   $(".feedback").fancybox({
-        helpers : {
-            overlay : {
-                css : {
-                    'background' : 'rgba(255, 255, 255, 0.98)'
-                }
-            }
-        }
+        
     });
   $("#contact").submit(function() { return false; });
 

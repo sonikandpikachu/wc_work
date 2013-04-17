@@ -9,12 +9,13 @@ from flask import Flask
 
 from flask.ext.mail import Mail
 from flask.ext.sqlalchemy import SQLAlchemy
+from flask.ext.redis import init_redis
 
 
 #database configurations:
 DATABASE = 'mysql://'
 USERNAME = 'root'
-PASSWORD = 'root'
+PASSWORD = '123'
 HOST = '127.0.0.1:3306'
 DB_SCHEME = 'wc'
 SQLALCHEMY_DATABASE_URI = DATABASE + USERNAME + ':' + PASSWORD + '@' + HOST + '/' + DB_SCHEME + '?charset=utf8'

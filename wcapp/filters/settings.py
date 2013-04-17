@@ -24,7 +24,10 @@ priceCFilter = filters.SliderDoubleFilter('priceC', u'Цена:',1000, 50000, [4
 											dimension = u' грн', step = 50)
 
 def priceN_dss_function(selected_values):
-	return {'price' : int(selected_values[0])}
+	if int(selected_values[0]) > 0:
+		return {'price' : -int(selected_values[0])*7}
+	else:
+		return {'price' : -int(selected_values[0])*5}
 
 priceDescription = 'price'
 priceNFilter = filters.SliderSingleFilter('priceN', u'Важность цены:', -3, 3, 0, scale = '[-3,-2,-1, 0, 1, 2, 3]',
@@ -59,9 +62,7 @@ performanceCpuFilter = filters.RadioFilter('perfCpu', u'Производител
 
 def ram_cut_function(selected_values):
 	#return 'ram_amount >= ' + selected_values[0].split(';')[0]  + ' AND ' + 'ram_amount <= ' + selected_values[0].split(';')[1]
-	maxValue = (int(selected_values[0].split(';')[1]) + 1)*1000
-	minValue = int(selected_values[0].split(';')[0])*1000
-	return '((ram_amount >= ' +  str(minValue)  + ' AND ' + 'ram_amount <= ' + str(maxValue) + ') OR ( ram_amount >= ' + selected_values[0].split(';')[0]  + ' AND ' + 'ram_amount <= ' + selected_values[0].split(';')[1] + "))" 
+	return '(ram_amount >= ' + selected_values[0].split(';')[0]  + ' AND ' + 'ram_amount <= ' + selected_values[0].split(';')[1] + ")" 
 performanceRamFilter  = filters.SliderDoubleFilter('perfRam', u'Оперативная память:',0, 16, [4, 8], 
 											cut_function = ram_cut_function,
 											heterogeneity = [6, 8], 
@@ -175,37 +176,43 @@ displayFilter.set_parent_question(videoFilterNotebook)
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
 #DisplayNotebook:
 
-texts = [u'глянцевое',u'глянцевое антибликовое',u'матовое']
-values = ['glyancevoe','glyancevoeAB','matovoe']
+texts = [u'всё равно',u'глянцевое',u'матовое']
+values = ['all', 'glyancevoe','matovoe']
 def display_cover_cut_function(selected_values):
-	filters = []
-	for s in selected_values:
-		if s == 'glyancevoe': filters.append('display_cover LIKE "%' + u'глянцевое'+ '%"')
-		if s == 'glyancevoeAB': filters.append('display_cover LIKE "%' + u'глянцевое (антибликовое)'+ '%"')
-		if s == 'matovoe': filters.append('display_cover LIKE "%' + u'матовое' + '%"')
-	if len(filters) > 1: return ' AND '.join(filters)
-	return filters[0] if filters else ''
-displayCoverFilter = filters.CheckboxFilter('dispCover', u'Покрытие дисплея', 
-									texts, values, [0,1,2],cut_function = display_cover_cut_function)
+	if selected_values[0] == 'all': return ''
+	if selected_values[0] == 'glyancevoe': return 'display_cover LIKE "%' + u'глянцевое'+ '%"'
+	if selected_values[0] == 'matovoe': return 'display_cover LIKE "%' + u'матовое' + '%"'
+	return ''
+
+displayCoverFilter = filters.RadioFilter('dispNoteCover', u'Покрытие дисплея', 
+									texts, values, cut_function = display_cover_cut_function)
 
 texts = u'всё равно', u'TN+Film', u'IPS'
 values =  'all', 'TN+Film', 'IPS'
 def matrix_cut_function(selected_values):
 	if 'all' in selected_values: return ""
-	if 'TN+Film' in selected_values : return'display_matrix = TN+Film'
-	if 'IPS' in selected_values : return'display_matrix = IPS'		
+	if 'TN+Film' in selected_values : return"'display_matrix = 'TN+Film'"
+	if 'IPS' in selected_values : return"display_matrix = 'IPS'"		
 	if len(filters) > 1: return ' AND '.join(filters)
 	return ''
-displayMatrixFilter = filters.RadioFilter('dispMatrix', u'Тип матрицы:', 
-									texts, values, cut_function = matrix_cut_function)
+displayMatrixFilter = filters.RadioFilter('dispNoteMatrix', u'Тип матрицы:', 
+									texts, values, cut_function = matrix_cut_function, style = "width: 20%")
 
 def display_diagonal_cut_function(selected_values):
 	return '(display_diagonal IS NULL OR (display_diagonal >= ' + selected_values[0].split(';')[0]  + ' AND ' + 'display_diagonal <= ' + selected_values[0].split(';')[1] + "))"
-displayDiagonalFilterNotebook  = filters.SliderDoubleFilter('dispDiagonalNote', u'Диагональ экрана дисплея:',15, 27, [14, 24], 
+displayDiagonalFilterNotebook  = filters.SliderDoubleFilter('dispDiagonalNote', u'Диагональ экрана дисплея:',7, 18, [11, 18], 
 											cut_function = display_diagonal_cut_function, 
 											dimension = u' "', step = 1, dtype = 'notebook')
 
-displayFilterNotebook = filters.ContainerFilter([displayCoverFilter, displayMatrixFilter], 'dispNote', dtype = 'notebook')
+texts = [u'обязательно']
+values = ['musthave']
+def display_sensor_cut_function(selected_values):
+	return u"display_sensor IS NOT NULL"
+
+displaySensorFilter = filters.CheckboxFilter('dispNoteSensor', u'Сенсорный экран', 
+									texts, values, cut_function = display_sensor_cut_function )
+
+displayFilterNotebook = filters.ContainerFilter([displayCoverFilter, displayMatrixFilter, displaySensorFilter], 'dispNote', dtype = 'notebook')
 
 
 displayDiagonalFilterNotebook.set_parent_question(displayFilter)
@@ -215,44 +222,35 @@ displayFilterNotebook.set_parent_question(displayDiagonalFilterNotebook)
 
 
 def hdd_diagonal_cut_function(selected_values):
-	return 'diagonal >= ' + selected_values[0].split(';')[0]  + ' AND ' + 'display_diagonal <= ' + selected_values[0].split(';')[1] + "))"
-hddFilter  = filters.SliderDoubleFilter('hdd', u'Объем памяти:',250, 2000, [500, 1000],
-											dimension = u' Gb', step = 50)
+	return 'hdd_clear_capacity >= ' + selected_values[0].split(';')[0]  + ' AND ' + 'hdd_clear_capacity <= ' + selected_values[0].split(';')[1]
+hddFilter  = filters.SliderDoubleFilter('hdd', u'Объем памяти:',50, 2000, [100, 2000],
+											dimension = u' Gb', step = 50, cut_function = hdd_diagonal_cut_function)
 
 hddFilter.set_parent_question(displayFilterNotebook)
+
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
-#Battery:
+#Battery + Weight:
 
 
 def battery_dss_function(selected_values):
 	return {'battery' : int(selected_values[0])}	
 descriptionBatteryN = 'battery'
-batteryFilter = filters.SliderSingleFilter('battery', u'Батарея:', 0, 5, 0,
-									labels = [u'Обычная', u'Максимальная автономность'], description = descriptionBatteryN, dss_function = battery_dss_function, dtype = 'notebook')
-
-batteryFilter.set_parent_question(hddFilter)
-
-#----------------------------------------------------------------------------------------------------------------------------------------------------------
-#Compactness:
+batteryFilter = filters.SliderSingleFilter('compactbattery', u'Батарея:', 0, 5, 0,
+									labels = [u'Обычная', u'Максимальная автономность'], description = descriptionBatteryN,
+									 dss_function = battery_dss_function, style = "width: 40%")
 
 
-def size_dss_function(selected_values):
-	return {'size' : -int(selected_values[0])}	
-descriptionSize = "size"
-sizeFilter = filters.SliderSingleFilter('compactSize', u'Размер:', 0, 5, 0,
-									labels = [u'Не имеет значения', u'Максимально компактный'], description = descriptionSize,
-									 dss_function = size_dss_function, style = "width: 40%")
 
 def weight_dss_function(selected_values):
-	return {'weight' : -int(selected_values[0])}	
+	return {'weight' : -int(selected_values[0])*1.6}	
 descriptionWeight = "weight"
 weightFilter = filters.SliderSingleFilter('compactWeight', u'Вес', 0, 5, 2,
 									labels = [u'Не имеет значения', u'Максимально легкий'], description = descriptionWeight, 
 									dss_function = weight_dss_function, style = "width: 40%")
 
-compactnessFilter = filters.ContainerFilter([weightFilter, sizeFilter], 'compact', dtype = 'notebook')
+compactnessFilter = filters.ContainerFilter([batteryFilter, weightFilter], 'compact', dtype = 'notebook')
 
-compactnessFilter.set_parent_question(batteryFilter)
+compactnessFilter.set_parent_question(hddFilter)
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
 #os:
 
@@ -270,10 +268,52 @@ osFilter = filters.CheckboxFilter('osFilter', u'Обязательно с ОС:'
 									texts, values, type = "inline", cut_function = os_cut_function)
 
 osFilter.set_parent_question(compactnessFilter)
+
+
+#----------------------------------------------------------------------------------------------------------------------------------------------------------
+#color:
+
+def color_cut_function(selected_values):
+	if selected_values[0] == u"Всё равно":
+		return ''
+	if selected_values[0] == u'другие яркие цвета': 
+		other_colors = u"бордовый", u"оранжевый", u"фиолетовый"
+		filters = []
+		for s in other_colors:
+			filters.append('color LIKE "%' + s + '%"')
+		return '(' + ' OR '.join(filters) + ')'
+	return 'color LIKE "%' + selected_values[0] + '%"'
+	
+
+texts = u"Всё равно", u"чёрный", u'серебристый',u'серый',u'коричневый', u'белый',\
+u'синий', u'красный' , u'розовый',  u'золотистый',  u'другие яркие цвета',
+values = texts[:]
+
+colorFilter = filters.SelectFilter('colorFilter', u'Цвет:', 
+									texts, values, cut_function = color_cut_function, dtype = 'notebook')
+
+colorFilter.set_parent_question(osFilter)
+
+#----------------------------------------------------------------------------------------------------------------------------------------------------------
+#Web camera:
+
+def web_camera_dss_function(selected_values):
+	return {'web_camera' : int(selected_values[0])}	
+
+def web_camera_cut_function(selected_values):
+	if int(selected_values[0]) > 0: return 'web_camera LIKE "%' + u'МПикс'+ '%"'
+	return ""
+
+webCameraFilter = filters.SliderSingleFilter('webCamera', u'Веб камера:', 0, 3, 0,
+									labels = [u'Всё равно', u'Максимально лучшая'],cut_function = web_camera_cut_function,
+									 dss_function = web_camera_dss_function, scale = '[0, 1, 2, 3]', style = "width: 40%", dtype = 'notebook')
+
+webCameraFilter.set_parent_question(colorFilter)
+
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
 #Required Parameters:
-texts = u"BluRay", u"Wi-Fi", u'Bluetooth', u'картридер',u'USB 3.0', u'веб камера', u'ТВ-тюнер',u'пульт ДУ'
-values =  'bluray', 'wifi', 'bluetooth', 'cardreader', 'usb3','media_web_camera', 'media_tv_tunner', 'remote'
+texts = u"BluRay", u"Wi-Fi", u'Bluetooth',u'USB 3.0', u'картридер', u'веб камера', u'ТВ-тюнер',u'пульт ДУ'
+values =  'bluray', 'wifi', 'bluetooth','usb3', 'cardreader', 'media_web_camera', 'media_tv_tunner', 'remote'
 def required_parameters_cut_function(selected_values):
 	filters = []
 	for s in selected_values:
@@ -287,7 +327,7 @@ def required_parameters_cut_function(selected_values):
 		if s == 'remote': filters.append('media_remote = 1')
 	if len(filters) > 1: return ' AND '.join(filters)
 	return filters[0] if filters else '' 
-required_parameters = filters.CheckboxFilter('rp', u'Я хочу чтоб обязательно был:', 
+required_parameters = filters.CheckboxFilter('rpComp', u'Я хочу чтоб обязательно был:', 
 									texts, values, type = "table", cut_function = required_parameters_cut_function)
 
 texts = u'всё равно', u'звук 5.1', u'звук 7.1'
@@ -302,13 +342,41 @@ def audio_cut_function(selected_values):
 audioFilter = filters.RadioFilter('audio', u'Аудио:', 
 									texts, values, cut_function = audio_cut_function)
 
-commonFilter = filters.ContainerFilter([required_parameters, audioFilter], 'common')
+commonFilter = filters.ContainerFilter([required_parameters, audioFilter], 'common', dtype = 'computer')
 
-commonFilter.set_parent_question(osFilter)
+commonFilter.set_parent_question(webCameraFilter)
+
+#----------------------------------------------------------------------------------------------------------------------------------------------------------
+#Required Parameters Notebook: 
+texts = u"BluRay", u"LAN", u'Bluetooth', u'USB 3.0', u'Thunderbolt', u'кардридер', u'GPS-модуль', u'Wi-Fi стандарта 802.11n', u'подсветка клавиатуры', u'доп. вход для наушников', u'подключение к док-станции', u'влагозащищенный корпус'
+values =  'bluray', 'lan',  'bluetooth','usb3', 'thunderbolt','cardreader','gps', 'wifi', 'keyboardBacklight','additionalHeadphones', 'docStation', 'waterproof'
+def required_parameters_note_cut_function(selected_values):
+	filters = []
+	for s in selected_values:
+		if s == 'wifi': filters.append('com_wifi LIKE "%' + '802.11n'+ '%"')
+		if s == 'bluray': filters.append('panel_bluraydrive IS NOT NULL')
+		if s == 'bluetooth': filters.append('com_bluetooth IS NOT NULL')
+		if s == 'usb3': filters.append('panel_usb3 IS NOT NULL')
+		if s == 'cardreader': filters.append('multimedia LIKE "%' + u'Картридер' + '%"')
+		if s == 'lan': filters.append('lan LIKE "%' + u'10/100' + '%"')
+		if s == 'gps': filters.append('multimedia LIKE "%' + u'GPS-модуль' + '%"')
+		if s == 'thunderbolt': filters.append('thunderbolt IS NOT NULL')
+		if s == 'keyboardBacklight': filters.append('input_keyboard_backlight LIKE "%' + '+' + '%"')
+		if s == 'additionalHeadphones': filters.append('additional_headphones_port IS NOT NULL')
+		if s == 'docStation': filters.append('doc_station_connection IS NOT NULL')
+		if s == 'waterproof': filters.append('waterproof IS NOT NULL')
+		
+	if len(filters) > 1: return ' AND '.join(filters)
+	return filters[0] if filters else '' 
+required_parameters_notebook = filters.CheckboxFilter('rpNote', u'Я хочу чтоб обязательно был:', 
+									texts, values, type = "table", cut_function = required_parameters_note_cut_function, dtype = 'notebook')
+required_parameters_notebook.set_parent_question(commonFilter)
+
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
 
-FILTERS = priceFilter, performanceFilter, videoFilter, displayFilter, hddFilter, osFilter, commonFilter, videoFilterNotebook, displayDiagonalFilterNotebook, displayFilterNotebook, batteryFilter, compactnessFilter
+FILTERS = priceFilter, performanceFilter, videoFilter, displayFilter, hddFilter, osFilter, commonFilter, webCameraFilter, \
+videoFilterNotebook, displayDiagonalFilterNotebook, displayFilterNotebook, compactnessFilter, required_parameters_notebook, colorFilter
 
 def init_comp_filters(filters):
 	rez = []

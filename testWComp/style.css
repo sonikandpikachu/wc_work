@@ -1,20 +1,29 @@
 /* CSS Document */
 @import url("reset.css");
+@import url(http://fonts.googleapis.com/css?family=Open+Sans&subset=latin,cyrillic);
+@font-face
+{
+font-family: main_font;
+src: url('font.ttf');
+}
 html {
 	width:100%;
 	height: 100%
 }
 body {
 	height: 100%;
-	background:url(img/bg.jpg);
+	background:url(img/bg.png);
+}
+#header {
+	background:#fff;
 }
 #wrapper {
+	font-size:14px;
 	min-height:100%;
 	position:relative;
 	margin:0 auto;
 	width:800px;
-	font-family: Myriad Pro Light, Myriad Pro, Verdana, Tahoma, Arial, Helvetica, sans-serif;
-	font-size:14px;
+	font-family: main_font;	
 	line-height: 1.2;
 }
 #content {
@@ -23,58 +32,59 @@ body {
 	background:#fff;
 	width: 100%;
 }
+
 #menu ul {
 	text-align: center;
 	background:#fff;
 }
 #menu ul li {
 	display: inline;
-	padding: 0px 15px;
+	margin: 0px 15px;
 }
 #menu ul li a {
 	text-decoration: none;
+	outline: none; 
 }
 #question {
 	background:#fff;
 }
-#answerList {
+#answerList, #comp {
 	float:left;
 	background:#fff;
-	width: 100%;
-}
-.comp {
-	background:#fff;
-	float:left;
-	width: 100%;
+	width: 110%;
+	margin-left: -5%;
 }
 .answer {
 	margin: 10px 0px;
 	display:inline;
 	background:#FBFBFB;
+	/*background:#fff;*/
 	float:left;
 	width: 99%;
 	padding: 10px 0px;
 	border: 3px solid #ECF2F5; /* C8DEE7 B5D3DF*/
 	border-radius:10px;
-	-moz-border-radius:10px; /* Firefox 3.6 and earlier */
+	-moz-border-radius:10px;
 }
 .image {
 	float:left;
 	padding: 2px;
 	text-align: center;
-	width:20%;
+	width:30%;
 }
 .descriptionSection {
 	float:left;
+	width: 49%;
 }
 .title {
 	display:block;
 	float:left;
 }
 .name {
-	padding: 10px 5px 10px;
+	padding: 10px 5px 0px;
 	float:left;
 	color:#3399CC;
+	font-size:16px;
 }
 .description {
 	clear:left;
@@ -84,7 +94,7 @@ body {
 }
 .description li {
 	float:left;
-	clear: left; /* Отменяем действие float */
+	clear: left;
 }
 .paramName {
 	float:left;
@@ -131,10 +141,11 @@ body {
 	position: relative;
 	width: 114px;
 	height: 22px;
+	margin-bottom: 5px;
 }
 .classification .cover {
 	position: absolute;
-	background: transparent url(img/stars.jpg) top left no-repeat;
+	background: transparent url(img/stars.png) top left no-repeat;
 	top: 0px;
 	left: 0px;
 	width: 114px;
@@ -143,7 +154,7 @@ body {
 }
 .classification .progress {
 	position: absolute;
-	background: transparent url(img/stars_full.jpg) top left no-repeat;
+	background: transparent url(img/stars_full.png) top left no-repeat;
 	top: 0px;
 	left: 0px;
 	height: 22px;
@@ -157,7 +168,7 @@ body {
 }
 .paramStars .cover {
 	position: absolute;
-	background: transparent url(img/small_stars.jpg) top left no-repeat;
+	background: transparent url(img/small_stars.png) top left no-repeat;
 	top: 0px;
 	left: 0px;
 	width: 83px;
@@ -166,7 +177,7 @@ body {
 }
 .paramStars .progress {
 	position: absolute;
-	background: transparent url(img/small_stars_full.jpg) top left no-repeat;
+	background: transparent url(img/small_stars_full.png) top left no-repeat;
 	top: 0px;
 	left: 0px;
 	height: 16px;
@@ -202,19 +213,18 @@ body {
 	float:left;
 }
 .tabs {
-	height:30px;
+	height:32px;
 	border-bottom: 2px solid #3399CC;
 }
 .tabs > ul {
 	float:left;
 	margin-left:150px;
-	font-size: 14px;
 	list-style:none;
 }
 .tabs > ul > li {
-	height:14px;
+	height:12px;
 	margin:0 10px 0 0;
-	padding:7px 20px;
+	padding:9px 20px;
 	display:block;
 	float:left;
 	color:#3399CC;
@@ -233,9 +243,7 @@ body {
 	background: #fff;
 }
 .tabs > ul > li:hover {
-	background: #FFFFFF; /* old browsers */
-	background: -moz-linear-gradient(top, #FFFFFF 0%, #F5F9F4 10%, #F5F9F4 50%, #FFFFFF 100%); /* firefox */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #FFFFFF), color-stop(10%, #F5F9F4), color-stop(50%, #F5F9F4), color-stop(100%, #FFFFFF)); /* webkit */
+	background: #FFFFFF; 
 	cursor:pointer;
 	color: #4CE126;
 }
@@ -248,51 +256,46 @@ body {
 .tabscontent {
 	float:left;
 	width:98%;
-	-moz-border-radius-topleft: 0px;
-	-moz-border-radius-topright: 4px;
-	-moz-border-radius-bottomright: 4px;
-	-moz-border-radius-bottomleft: 4px;
-	border-top-left-radius: 0px;
-	border-top-right-radius: 4px;
-	border-bottom-right-radius: 4px;
-	border-bottom-left-radius: 4px;
 	padding:1% 1% 25px;
-	background: #FFFFFF; /* old browsers */
-	background: -moz-linear-gradient(top, #FFFFFF 0%, #FFFFFF 98%, #e4e9ed 100%); /* firefox */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #FFFFFF), color-stop(98%, #FFFFFF), color-stop(100%, #e4e9ed)); /* webkit */
+	background: #FFFFFF;
 	color: #145571;
+	border-bottom: 2px solid #3399CC;
 }
 .tabpage table{
 	width: 100%;
 }
 .tabpage  TD {
+	vertical-align: middle;
 	padding: 3px 2px;
 	border-top: 4px solid #fff;
 }
-#parametrs #paramName {
+#parametrs .tableName {
 	width: 30%;
 }
-.tabpage #paramSeparator {
+
+.key > .tableName{
+	padding-left: 20px;
+	font-family:'Open Sans', sans-serif;
+	font-size:13px;
+
+}
+
+.tabpage .tableSeparator{
 	padding: 3px 0px;
 	width: 2px;
 	background:#B3B3B3;
 	border-right: 4px solid #fff;
 	border-left: 4px solid #fff;
 }
-#stores TD {
-	vertical-align: middle;
-	padding: 3px 2px;
-	border-top: 4px solid #fff;
-}
-#stores #storeLogo {
+#stores .storeLogo {
 	width: 20%;
 	padding-left:20px;
 }
-#stores #storeInfo  {
+#stores .storeInfo  {
 	width: 50%;
 	padding-left:10px;
 }
-#stores #storeInfo #storeName {
+#stores .storeInfo .storeName {
 	font-size:16px;
 }
 #stores a {
@@ -303,7 +306,7 @@ body {
 	text-decoration:none;
 	color:#4CE126;
 }
-#stores #storePrice  {
+#stores .storePrice  {
 	padding-left:10px;
 	font-size:18px;
 	color:#D9742B; /*FFA92B;*/
@@ -312,11 +315,12 @@ body {
 }
 
 /* Colors */
-.gray {
+.key {
 	background: #FBFBFB;
 }
-.green {
+.part {
 	background: #F0F6EF;
+	font-size:14px;
 }
 
 /* Questions */
@@ -330,6 +334,7 @@ body {
 #trigger{
 	margin-left: 20px;
 	float: left;
+	font-size: 15px;
 }
 
 #questions > li{
@@ -358,6 +363,7 @@ body {
 
 .question-select {
 	width: 200px;
+	height: 80px;
 }
 
 .question-select .sbHolder{
@@ -374,18 +380,13 @@ body {
 	
 }
 
-
-/* V cod*/
 .question-slider {
 	width: 50%;
 }
-/* V cod*/
-
-
 
 .question-slider label{
 	font-size: 12px;
-	font-family: Myriad Pro, Verdana, Tahoma, Arial, Helvetica, sans-serif; 
+	font-family: 'Open Sans', sans-serif;  
 	color: #4CE126;
 }
 
@@ -402,13 +403,31 @@ body {
 
 #questions .qText{
 	padding: 5px 0px 10px 10px;
-	color: #3399CC;	
+	color: #3399CC;
+	font-size:15px;	
 }
 
-#questions .qText a{
+a.tooltip{
+	font-size: 10px;
+	font-weight: bold;
+	color: #FFA92B;	
+	vertical-align: super;
+}
+a:hover.tooltip{
+	text-decoration:underline;
 	font-size: 10px;
 	color: #FFA92B;	
 	vertical-align: super;
+}
+
+#mainQuestion label{  
+    font-family: main_font;
+    margin-left: 40px; 
+}
+
+#mainQuestion .qText{
+	padding: 5px 0px 20px 20px;
+	font-size: 16px;	
 }
 
 .question{
@@ -420,9 +439,12 @@ body {
 	margin-left: 20px;
 }
 
-.question-checkbox label, .question-radio label{
+
+.question-radio label, .question-checkbox label{
     color: #145571;    
-    font-family: Myriad Pro, Verdana, Tahoma, Arial, Helvetica, sans-serif; 
+    font-family: 'Open Sans', sans-serif;
+    font-size:14px;
+
 }
 
 .inline label{
@@ -459,6 +481,7 @@ body {
 #goButton{
 	float: left;
 }
+
 /* Hrefs*/
 a {
 	text-decoration:none;
@@ -467,4 +490,24 @@ a {
 a:hover {
 	text-decoration:underline;
 	color:#4CE126;
+}
+
+/* Tooltips*/
+.qtip-content p{
+	text-indent: 10px;
+	font-size: 14px;
+	font-family: 'Open Sans', sans-serif;	
+}
+.qtip-content i{
+	font-style: italic;
+}
+.qtip-content b{
+	font-weight: 700;
+}
+.qtip-content .tooltip-text{
+	float: right;
+	width: 50%;
+	height: 130px;
+	padding: 20px 10px;
+	margin-top: 10px;
 }
