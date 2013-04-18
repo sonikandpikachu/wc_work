@@ -79,27 +79,6 @@ body {
 .offset11 { margin-left: 860px;}
 .offset12 { margin-left: 940px;}
 
-/*=======Colors========*/
-.blue{
-    color: #3399CC;
-}
-
-.darkblue{
-    color: #145571;
-}
-
-.darkorange{
-    color: #D9742B;
-}
-
-.orange{
-    color: #FFA92B;
-}
-
-.green{
-    color: #4CE126;
-}
-
 /*=======Content========*/
 
 hr{
@@ -121,12 +100,13 @@ hr{
 .title{
     margin-top: 20px;
     margin-bottom: 20px;
-    font-size: 1.5em;
+    font-size: 1.3em;
 }
 
 .idea p{
     float: left;
     font-family:'Open Sans', sans-serif;
+    font-size: 0.95em;
 }
 
 a.link{
