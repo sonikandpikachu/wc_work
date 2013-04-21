@@ -1,10 +1,10 @@
 <ul>
 	{% for page in pagination_pages %}
 		{% if page != '...' %}
-			{% if page == current_page %}
-				<li><a class = 'select' href="/qa/?page={{ page }}"> {{ page }} </a></b></li>
+			{% if page == 1 %}
+				<li><a href="javascript:void(0)" class = 'select paginationHref'> {{ page }} </a></li>
 			{% else %}
-				<li><a href="javascript:void(0)" onclick="getCompsOnPage(2)"> {{ page }} </a></li>
+				<li><a href="javascript:void(0)" class = "paginationHref"> {{ page }} </a></li>
 			{% endif %}
 		{% else %}
 			<li> ... </li>

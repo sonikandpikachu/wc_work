@@ -3,12 +3,15 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
+  <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.png') }}" type="image/x-icon" />
+  <link rel="icon" href="{{ url_for('static', filename='img/favicon.png') }}" type="image/x-icon" />
 
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/jslider.css') }}"/>
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/jslider.single.css') }}"/>
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/jquery.selectbox.css') }}"/>
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/uniform.default.css') }}"/>
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='fancybox/jquery.fancybox.css') }}"/>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='fancybox/helpers/jquery.fancybox-thumbs.css') }}"/>
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}"/>
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/feedback.css') }}"/>
 
@@ -22,6 +25,7 @@
   <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.selectbox-0.2.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.uniform.min.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='fancybox/jquery.fancybox.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='fancybox/helpers/jquery.fancybox-thumbs.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.qtip-1.0.0-rc3.min.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='js/QandA.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='js/helpers.js') }}"></script>
@@ -29,7 +33,7 @@
       var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
   </script> 
 
-  <title>What Computer</title>
+  <title>WhatComputer - пару ответов на вопросы и ты получаешь свой оптимальный ноутбук или компьютер</title>
 </head>
 
 <body>
@@ -39,7 +43,7 @@
       {% include 'menu.html' %}
       <form method = 'get' action = '/qa/' name = "qForm">
         <ul id = "questions">
-          <a href = "javascript:void(0)" onclick="restoreDefValues()" id="defaultButton" >Востановить начальные значения</a>
+          <a href = "javascript:void(0)" id="defaultButton" >Востановить начальные значения</a>
           <li>    
             {% include 'mainQuestion.html' %} 
           </li>
@@ -52,20 +56,40 @@
         </ul> 
       </form>
   <a href = "#questions" id="trigger">Show/Hide</a>
+  <table  class = "console" style = "width: 100%">
+-        
+-                  {% for col in dss_dict.iteritems()|slice(4) %}
+-                     <tr style = "width: 100%">                    
+-                      {%- for k , v in col -%}                    
+-                          <td style = "padding-left: 20px;">
+-                              {{ k }}&emsp;{{ v }}
+-                          </td>                   
+-                      {%- endfor -%}
+-                      </tr>
+-                  {%- endfor -%}      
+-      </table>
     <ul id = "answerList">
        {% for comp in computers %}      
         <li class="answer">
-          <div class = "image"> 
+          <div class = "image">            
+          <a class = "fancybox" rel = "gallery{{ comp.id }}" href = "{{ url_for('static', filename='img/' + comp.type + 's/'+ comp.id +'_img/' + comp.gallery|first) }}"> 
             <img src="{{ url_for('static', filename='img/' + comp.type + 's/'+ comp.id +'_img/main.jpg') }}" alt = "Рисунок"/>
+          </a>
+          <div style = "display:none;">
+            {% for img in comp.gallery %}
+                {% if loop.index != 1 %} <a class = "fancybox" rel = "gallery{{ comp.id }}" href = "{{ url_for('static', filename='img/' + comp.type + 's/'+ comp.id +'_img/' + img) }}"><img src="{{ url_for('static', filename='img/' + comp.type + 's/'+ comp.id +'_img/' + img) }}" alt = "Рисунок"></a>{% endif %}
+            {% endfor %}
+            </div>
           </div>
           <div class = "descriptionSection">
             <div class="title">
-              <div class = "name"> {{ comp.name }} &nbsp; {{ comp.model }}</div>
+              <div class = "name"><a  href = "/{{ comp.type }}/{{ comp.id }}/{{ comp.comp_dss }}" target="_blank"> {{ comp.name }} &nbsp; {{ comp.model }} </a></div>
               <div class="classification">
                 <div class="cover"></div>
                 <div class="progress" style="width: {{ comp.comp_dss }}%;"></div>
               </div>
             </div>
+            
             <ul class = "description">
               <li>
                 <div class="paramName">Процессор:</div>
@@ -85,7 +109,7 @@
               </li>
               <li>
                 <div class="paramName">Жесткий диск:</div>
-                <div class="paramValue"> {{ comp.hdd_capacity }} Gb</div>
+                <div class="paramValue"> {{ comp.hdd_capacity }} Gb {{ comp.hdd_type }}</div>
                 <div class="paramStars">
                   <div class="cover"></div>
                   <div class="progress" style="width: {{ comp.hdd_dss }}%;"></div>
@@ -93,18 +117,27 @@
               </li>
               <li>
                 <div class="paramName">Видеокарта:</div>
-                <div class="paramValue"> {{ comp.vga }} {{ comp.vga_amount }} </div>
+                <div class="paramValue"> {{ comp.vga }} {% if comp.vga_amount %} {{ comp.vga_amount }} {% endif %}</div>
                 <div class="paramStars">
                   <div class="cover"></div>
                   <div class="progress" style="width: {{ comp.vga_dss }}%;"></div>
                 </div>
               </li>
               <li>
-                <div class="paramName"> Операционная система </div>
+                <div class="paramName"> Операционная система: </div>
                 <div class="paramValue"> {{ comp.os }}</div>
+              </li>
+              {% if comp.display %}
+              <li>
+                <div class="paramName">Дисплей:</div>
+                <div class="paramValue"> {{ comp.display }} " {{ comp.resolution }}</div>
+              </li>
+              {% endif %}
+              <li>
+                <div class="paramName">Другие параметры</div>
                 <div class="paramStars">
                   <div class="cover"></div>
-                  <div class="progress" style="width: {{ comp.os_dss }}%;"></div>
+                  <div class="progress" style="width: {{ comp.other_dss }}%;"></div>
                 </div>
               </li>
             </ul>
@@ -114,11 +147,7 @@
               <div class = "price">{{ '%d' % comp.price }} грн</div> 
               <div class = "priceRange">{{ '%d' % comp.max_price }} - {{ '%d' % comp.min_price }} </div>
             </li>
-            <li> <a  href = "/{{ comp.type }}/{{ comp.id }}/{{ comp.comp_dss }}" target="_blank"> <img src="{{ url_for('static', filename='img/greenButtons/wNextButton1.png') }}" alt="Далее" 
-                                  onMouseOver="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton2.png') }}'" 
-                                  onMouseOut="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton1.png') }}'"
-                                  onMouseDown="this.src='{{ url_for('static', filename='img/greenButtons/wNextButton3.png') }}'"
-                                  /> </a> </li>
+            <li> <a  href = "/{{ comp.type }}/{{ comp.id }}/{{ comp.comp_dss }}" target="_blank"> <div class="compOpenButton"></div></a> </li>
           </ul>
         </li>
         {% endfor %} 
@@ -130,5 +159,18 @@
     {% include 'feedback.html' %}
     {% include 'footer.html' %}
   </div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-40243760-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
 </body>
 </html>

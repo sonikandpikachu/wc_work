@@ -5,6 +5,7 @@ Created on Sep 18, 2012
 @author: Pavel
 '''
 
+import os
 from sqlorm import *
 from flask import render_template, request, abort, session, jsonify, render_template_string
 from tooltips import TOOLTIPS_DICT
@@ -39,47 +40,29 @@ def second():
     #need refactor dbwrapper calls
     dbwrapper = db_queries.DBWrapper(DEFFAULT_DEVICE_TYPE)
     #getting computers id:
-    print 'sdf',request.args.keys()
     if 'type' in request.args.keys():
         session['type'] = request.args['type']
         dbwrapper = db_queries.DBWrapper(request.args['type'])
         devices_id, devices_dss, dss_dict = filtered_devices_id(FILTERS[dbwrapper.device], request.args, dbwrapper)
         if 'user_id' in session:
-            dbwrapper.delete_user(session['user_id'])
+            db_queries.delete_user(session['user_id'])
             del session['user_id']
-        user_id = dbwrapper.add_user(devices_id, devices_dss)
+        user_id = db_queries.add_user(devices_id, devices_dss)
         session['user_id'] = user_id
     else:
-        if 'user_id' in session:
-            dbwrapper = db_queries.DBWrapper(session['type'])
-            user = dbwrapper.get_user(session['user_id'])
-            if user:
-                devices_id, devices_dss = user.devices_id, user.devices_dss
-                dss_dict = {}  # ????
-            else:  # there is no such user in our db
-                del session['user_id']
-                devices_id, devices_dss, dss_dict = [], [], {}  # nothing to return
-        else:
-            devices_id, devices_dss, dss_dict = [], [], {}  # nothing to return
+        devices_id, devices_dss, dss_dict = None, None, {}  # nothing to return
 
-    last_page = int(round(float(len(devices_id)) / COMPUTERS_ON_PAGE + 0.49))
-    # pagination test(if bad or wrong page) - REWRITE!!!
-    try:
-        page = int(request.args.get('page', '')) if 'page' in request.args else 1
-    except ValueError:
-        abort(404)
-    # if page > last_page or page < 1:
-    #     abort(404)
+    if devices_id:
+        last_page = int(round(float(len(devices_id)) / COMPUTERS_ON_PAGE + 0.49))
+        first_comp_index = 0
+        last_comp_index = min(COMPUTERS_ON_PAGE, len(devices_id))
+        devices_id_on_page = devices_id[first_comp_index: last_comp_index]
+        devices_dss_on_page = devices_dss[first_comp_index: last_comp_index]
+        pretty_devices = pretty_data.small_devices(devices_id_on_page, devices_dss_on_page, dbwrapper)
+        return render_template('QandA.html', computers=pretty_devices, filters=FILTERS[u'all'],
+            pagination_pages=pretty_data.pagination_pages(last_page), dss_dict=dss_dict)
 
-    first_comp_index = (page - 1) * COMPUTERS_ON_PAGE
-    last_comp_index = min(page * COMPUTERS_ON_PAGE, len(devices_id))
-    devices_id_on_page = devices_id[first_comp_index: last_comp_index]
-    devices_dss_on_page = devices_dss[first_comp_index: last_comp_index]
-
-    pretty_devices = pretty_data.small_devices(devices_id_on_page, devices_dss_on_page, dbwrapper)
-
-    return render_template('QandA.html', computers=pretty_devices, filters=FILTERS[u'all'],
-        current_page=page, pagination_pages=pretty_data.pagination_pages(page, last_page), dss_dict=dss_dict)
+    return render_template('QandA.html', computers=[], filters=FILTERS[u'all'], pagination_pages=[], dss_dict=dss_dict)
 
 
 def filtered_devices_id(filters, args, dbwrapper):
@@ -87,24 +70,25 @@ def filtered_devices_id(filters, args, dbwrapper):
     Gets parameters from request args, executes filters functions and finally returns filtered computers id
     '''
     #choosing with what device we are working
-    print 'ARGS', args
+    #print 'args', args
     dss_values, cut_values = [], []
     for filt in filters:
-        values_dict = dict((key, args[key]) for key in args.keys() if key.startswith(filt.name))
+        print filt.name
+        names = filt.get_names()
+        values_dict = dict((key, args[key]) for key in args.keys() if key.split('_')[0] in names)
+        print 'values_dict', values_dict        
         if values_dict:
             dss, cut = filt.get_answers(values_dict)
             if dss:
                 dss_values.append(dss)
             if cut:
-                cut_values.append(cut)
-    print 'cut_values', cut_values, 'dss_values', dss_values
-    print dbwrapper.sorted_devices_id(cut_values, dss_values)
+                cut_values.append(cut)    
     return dbwrapper.sorted_devices_id(cut_values, dss_values)
 
 
 @app.route('/computer/<id>/<dss>/')
 def third_computer(id, dss):
-    dbwrapper = db_queries.DBWrapper(session['type'])
+    dbwrapper = db_queries.DBWrapper("computer")
     concdevices = dbwrapper.concdevices_by_device_id(id)
     big_pretty_comp = pretty_data.big_computer(id, dbwrapper)
     small_pretty_comp = pretty_data.small_devices([id], [float(dss)], dbwrapper)[0]
@@ -116,7 +100,7 @@ def third_computer(id, dss):
 
 @app.route('/notebook/<id>/<dss>/')
 def third_notebook(id, dss):
-    dbwrapper = db_queries.DBWrapper(session['type'])
+    dbwrapper = db_queries.DBWrapper("notebook")
     concdevices = dbwrapper.concdevices_by_device_id(id)
     big_pretty_notebook = pretty_data.big_notebook(id, dbwrapper)
     small_pretty_notebook = pretty_data.small_devices([id], [float(dss)], dbwrapper)[0]
@@ -143,10 +127,8 @@ def getPage(page, type):
     devices_dss_on_page = devices_dss[first_comp_index: last_comp_index]
 
     pretty_devices = pretty_data.small_devices(devices_id_on_page, devices_dss_on_page, dbwrapper)
-    print 'pretty_devices', pretty_devices[0]
     resp = jsonify({"pretty_devices": pretty_devices})
     resp.status_code = 200
-    print "sffg"
     return resp
 
 
@@ -160,6 +142,13 @@ def feedback():
 @app.route('/tooltip/<key>/')
 def tooltip(key):        
     return render_template_string(TOOLTIPS_DICT[key])
+
+@app.route('/gallery/<type>/<id>/')
+def gallery(type,id):
+    dir = os.path.join(os.path.dirname(__file__), 'static/img/' + type + 's/' + id + "_img")
+    names = os.listdir(dir)   # список файлов и поддиректорий в данной директории
+    if len (names) != 1: names.remove('main.jpg')
+    return render_template('gallery.html', images=names, type = type, id = id)
 
 
 if __name__ == '__main__':

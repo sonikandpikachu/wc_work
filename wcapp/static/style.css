@@ -1,6 +1,6 @@
 /* CSS Document */
 @import url("reset.css");
-@import url(http://fonts.googleapis.com/css?family=Ubuntu:400,700);
+@import url(http://fonts.googleapis.com/css?family=Open+Sans&subset=latin,cyrillic);
 @font-face
 {
 font-family: main_font;
@@ -52,10 +52,10 @@ body {
 	float:left;
 	background:#fff;
 	width: 110%;
-	margin-left: -5%;
+	margin-left: -6%;
 }
 .answer {
-	margin: 10px 0px;
+	margin: 10px 10px;
 	display:inline;
 	background:#FBFBFB;
 	/*background:#fff;*/
@@ -96,12 +96,12 @@ body {
 	float:left;
 	clear: left;
 }
-.paramName {
-	float:left;
+.paramName,.paramValue {
+	float: left;
+	margin-top: 2px;
 }
 .paramValue {
-	float:left;
-	padding: 0px 5px;
+	margin-left: 5px;
 }
 .answerButtons {
 	float:right;
@@ -122,6 +122,22 @@ body {
 .answerButtons li {
 	padding-top: 30px;
 }
+
+.compOpenButton{
+	height: 42px;
+	width: 60px;
+	margin-left: 55px;
+	background-image:url(img/greenButtons/wNextButton1.png); 
+}
+
+.compOpenButton:hover{
+	background-image:url(img/greenButtons/wNextButton2.png); 
+}
+
+.compOpenButton:active{
+	background-image:url(img/greenButtons/wNextButton3.png); 
+}
+
 #footer {
 	width:100%;
 	/*position: absolute;*/
@@ -161,6 +177,7 @@ body {
 	z-index: 102;
 }
 .paramStars {
+	margin-left: 5px;
 	float:left;
 	position: relative;
 	width: 83px;
@@ -193,14 +210,6 @@ body {
 	display:inline;
 	padding: 0px 5px;
 }
-#pagination li a {
-	text-decoration:none;
-	color:#3399CC;
-}
-#pagination li a:hover {
-	text-decoration:none;
-	color:#4CE126;
-}
 #pagination .select {
 	text-decoration:none;
 	font-size: 16px;
@@ -208,7 +217,7 @@ body {
 }
 /* Tabs */
 #tabContainer {
-	margin-top:10px;
+	margin-top:20px;
 	width:100%;
 	float:left;
 }
@@ -275,7 +284,7 @@ body {
 
 .key > .tableName{
 	padding-left: 20px;
-	font-family:'Ubuntu',sans-serif;
+	font-family:'Open Sans', sans-serif;
 	font-size:13px;
 
 }
@@ -386,7 +395,7 @@ body {
 
 .question-slider label{
 	font-size: 12px;
-	font-family: 'Ubuntu',sans-serif;  
+	font-family: 'Open Sans', sans-serif;  
 	color: #4CE126;
 }
 
@@ -442,7 +451,7 @@ a:hover.tooltip{
 
 .question-radio label, .question-checkbox label{
     color: #145571;    
-    font-family: 'Ubuntu', sans-serif;
+    font-family: 'Open Sans', sans-serif;
     font-size:14px;
 
 }
@@ -455,12 +464,16 @@ a:hover.tooltip{
 .rows label, .table label{
 	display: block;
 	margin-bottom: 3px;
-	margin-left: 30px;
     clear: both;
 }
 
+.rows label,.table table {
+	margin-left: 30px;
+}
+
+
 .table td{
-	width: 200px;
+	width: 225px;
 }
 
 .cPart .arrow, .nPart .arrow{
@@ -483,12 +496,21 @@ a:hover.tooltip{
 }
 
 /* Hrefs*/
-a {
+a#trigger {
 	text-decoration:none;
 	color:#4CE126;
 }
-a:hover {
+a#trigger:hover  {
 	text-decoration:underline;
+	color:#4CE126;
+}
+
+a{
+	text-decoration:none;
+	color:#3399CC;
+}
+a:hover  {
+	text-decoration:none;
 	color:#4CE126;
 }
 
@@ -496,7 +518,7 @@ a:hover {
 .qtip-content p{
 	text-indent: 10px;
 	font-size: 14px;
-	font-family: 'Ubuntu', sans-serif;	
+	font-family: 'Open Sans', sans-serif;	
 }
 .qtip-content i{
 	font-style: italic;

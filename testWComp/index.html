@@ -2,37 +2,78 @@
 <html lang = "ru-RU">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link rel="stylesheet" type="text/css" href="style.css"/>
+<link rel="stylesheet" type="text/css" href="startpage.css"/>
+<script type = "text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<!--[if (gte IE 6)&(lte IE 8)]>
+  <script type="text/javascript" src="js/selectivizr.js"></script>
+<![endif]-->
 <title>What Computer</title>
 </head>
-
 <body>
-<div id = "wrapper">
-  <div id = "content">
-    <div id = "logo"> <img src="img/mainLogo.jpg" /> </div>
-    <div id = "topSeparator"> <img src="img/separator.jpg" /> </div>
-    <div id = "menu">
-      <ul id = "navigation">
-        <li> <a id = "button" href = "QandA.html"> <img src="img/greenButtons/wNextButton1.jpg" alt="Далее" 
-							onMouseOver="this.src='img/greenButtons/wNextButton2.jpg'" 
-							onMouseOut="this.src='img/greenButtons/wNextButton1.jpg'"
-							onMouseDown="this.src='img/greenButtons/wNextButton3.jpg'"
-                            /> </a> </li>
-        <li> <a id = "button" href = "QandA.html"> <img src="img/greenButtons/wFindButton1.jpg" alt="Найти"
-                        	onMouseOver="this.src='img/greenButtons/wFindButton2.jpg'" 
-							onMouseOut="this.src='img/greenButtons/wFindButton1.jpg'"
-							onMouseDown="this.src='img/greenButtons/wFindButton3.jpg'"
-                            /> </a> </li>
-        <li> <a id = "button" href = "QandA.html"> <img src="img/greenButtons/wHelpButton1.jpg" alt="Помошь"
-                        	onMouseOver="this.src='img/greenButtons/wHelpButton2.jpg'" 
-							onMouseOut="this.src='img/greenButtons/wHelpButton1.jpg'"
-							onMouseDown="this.src='img/greenButtons/wHelpButton3.jpg'"
-                            /> </a> </li>
-      </ul>
-    </div>
-    <div id = "bottomSeparator"> <img src="img/separator.jpg" /> </div>
+<div id = "container" class = "container">
+  <div class="row logo"><img class = "offset1" src="img/mainLogo.png" />
   </div>
-  <div id = "footer"> Developed by Sonik and Pikachu </div>
+  <hr/>
+  <div class="row main">
+    <div class="idea span7">
+      <h2 class = "title">Подбери себя оптимальный компьютер или ноутбук всего за пару минут</h2>
+      <p>
+      Сложно разобраться какой процессор сейчас лучше или найти ноутбук одновременно хороший для дома и для офиса? Наша систем сама подберет для тебя оптимальную модель учитывая объективные оценки практически всех параметров – начиная от цены заканчивая количеством портов в устройстве. Все что от тебя требуется – это ответить на пару вопросов.     
+      </p>
+      <div class="goButton">
+        <a href="http://whatcomputer.org/qa/" ><img src="img/wGo_02.png" alt="" onMouseOver="this.src='img/wGo_03.png'" 
+                                onMouseOut="this.src='img/wGo_02.png'"
+                                onMouseDown="this.src='img/wGo_04.png'"></a>
+      </div>
+      <a href="#manual" class = "ancLinks helpButton link">Как это работает?</a>
+    </div>
+    <div class="picture offset1 span3">
+      <img src="img/wComp.png" alt="">
+    </div>
+  </div>
+  <hr/>
+  <div id = "manual">
+    <div class = "row step" id = "step1">
+      <div class="span1 offset1">
+        <img src="img/step1.png" alt="Step1"/>
+      </div>
+      <div class="manualstepcontent span9"><p><b>Выбери тип устройства и отвечая на вопросы настрой необходимые параметры. На основе их наша система будет фильтровать и сортировать лучшие для тебя модели.</p><img src="img/step1image1.png" alt="Step1"/></div>
+    </div>
+    <div class = "row step" id = "step2">
+      <div class="span1 offset1">
+        <img src="img/step2.png" alt="Step2"/>
+      </div>
+      <div class="span3"><img src="img/step3image.png" alt="Step1"/></div>      
+      <div class="manualstepcontent offset1 span5"><p>Используя нечёткие вопросы  (слайдеры с одним ползунком) ты можешь указать насколько для тебя важен тот или иной параметр подбираемой модели</p></div>
+    </div>
+    <div class = "row step" id = "step3">
+      <div class="span1 offset1">
+        <img src="img/step3.png" alt="Step3"/>
+      </div>
+      <div class="manualstepcontent span9"><p>Нажав на кнопку «Подобрать» система составит для тебя персональный рейтинг. На первых местах расположатся наиболее подходящие твоему запросу модели которые в тоже время будут лучше своих конкурентов.  Profit!</p><img src="img/step3image1.png" alt="Step1"/></div>
+    </div>
+    <div class="row">
+      <div class="offset1 span3"> Не веришь? - <a href="http://whatcomputer.org/qa/" class = "link">Попробуй</a></div>
+      <div class="offset6 span1"><a href="#container" class = "ancLinks link">Вверх</a></div>
+    </div>
+  </div>
+  <div class="row">
+    <div class = "footer span12"> Developed by Sonik and Pikachu </div>
+  </div>
 </div>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $("a.ancLinks").click(function () { 
+      elementClick = $(this).attr("href");
+      destination = $(elementClick).offset().top;
+      if($.browser.safari){
+        $('body').animate( { scrollTop: destination }, 1100 );
+      }else{
+        $('html').animate( { scrollTop: destination }, 1100 );
+      }
+      return false;
+    });
+  });
+</script>
 </body>
 </html>

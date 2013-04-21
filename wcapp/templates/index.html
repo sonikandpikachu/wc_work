@@ -2,78 +2,91 @@
 <html lang = "ru-RU">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}"/>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/startpage.css') }}"/>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.png') }}" type="image/x-icon" />
+    <link rel="icon" href="{{ url_for('static', filename='img/favicon.png') }}" type="image/x-icon" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='startpage.css') }}"/>
     <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-1.7.2.min.js') }}"></script>
-	<title>What Computer</title>
+    <!--[if (gte IE 6)&(lte IE 8)]>
+      <script type="text/javascript" src="{{ url_for('static', filename='js/selectivizr.js') }}"></script>
+    <![endif]-->
+<title>WhatComputer - помогает выбрать оптимальный ноутбук или компьютер</title>
 </head>
-<script type="text/javascript" charset="utf-8"> 
-      $(function() {
-       $('#idknow').hover(function() {
-            $("#yid").animate({ left: '+=120' }, 600);
-            $("#oid").animate({ left: '-=120' }, 600);            
-            }, function(){           
-            $("#yid").animate({ left: '-=120' }, 600);
-            $("#oid").animate({ left: '+=120' }, 600);
-        });
-       $('#iknow').hover(function() {
-            $("#oi").animate({ top: '+=51' }, 300);
-            $("#yi").animate({ top: '-=51' }, 300);            
-            }, function(){            
-            $("#oi").animate({ top: '-=51' }, 300);
-            $("#yi").animate({ top: '+=51' }, 300);
-        });
-       });
-</script>
 <body>
-	<div id = "wrapper">
-		<div id = "content">		
-            <div id = "logo">
-                <img src="{{ url_for('static', filename='img/mainLogo.png') }}" />			
-            </div>
-            <div id = "menuBlock">
-                <div id = "topSeparator">
-                    <img src="{{ url_for('static', filename='img/separator.jpg') }}" />         
-                </div>
-                <div id = "menu">
-                <ul id = "navigation">
-                    <li class = "block" id = "idknow">
-                        <a href="qa" >
-                            <div class = "image">
-                                <i class = "yellowA arrow" id = "yAid"></i>
-                                <i class = "orangeA arrow" id = "oAid"></i>                                
-                                <i class = "greenLA arrow" ></i>
-                                <i class = "greenRA arrow" ></i>
-                                <i class = "yellow q" id = "yid"></i>
-                                <i class = "green q"></i>
-                                <i class = "orange q" id = "oid"></i>                                
-                            </div>
-                            <div class = "title">Я еще не знаю что я точно хочу</div>
-                            <div class = "text"> Вопросы задаються по очереди в зависимости от того как вы отвечаете. Займет 5-7 мин.</div>
-                        </a>
-                    </li>
-                    <li class = "block" id = "iknow">
-                        <a href="qa" >
-                            <div class = "image">                              
-                                <i id = "gAi"></i>
-                                <i id = "arrowsi" ></i>
-                                <i class = "yellow q" id = "yi"></i>
-                                <i class = "green q"></i>
-                                <i class = "orange q" id = "oi"></i> 
-                            </div>
-                            <div class = "title">Я примерно знаю что я хочу</div>
-                            <div class = "text">Вопросы выводяться все сразу списком. Займет не более 2 мин.</div>
-                        </a>
-                    </li>
-                </ul>      
-                </div>
-                <div id = "bottomSeparator">
-                    <img src="{{ url_for('static', filename='img/separator.jpg') }}" />         
-                </div>
-</div>
-		</div>
-	{% include 'footer.html' %}
+<div id = "container" class = "container">
+  <div class="row logo"><img class = "offset2" src="{{ url_for('static', filename='img/mainLogo1.png') }}" />
+  </div>
+  <div class="row main">
+    <div class="idea span7">
+      <h2 class = "title">Подбери себя оптимальный компьютер или ноутбук всего за пару минут</h2>
+      <p>
+      Сложно разобраться какой процессор сейчас лучше или найти ноутбук одновременно хороший для дома и для офиса? Наша систем сама подберет для тебя оптимальную модель учитывая объективные оценки практически всех параметров – начиная от цены заканчивая количеством портов в устройстве. Все что от тебя требуется – это ответить на пару вопросов.     
+      </p>
+      <div class="goButton">
+        <a href="/qa/" ><img src="{{ url_for('static', filename='img/wGo_02.png') }}" alt="" onMouseOver="this.src='{{ url_for('static', filename='img/wGo_04.png') }}'" 
+                                onMouseOut="this.src='{{ url_for('static', filename='img/wGo_02.png') }}'" 
+                                onMouseDown="this.src='{{ url_for('static', filename='img/wGo_03.png') }}'" ></a>
+      </div>
+      <a href="#manual" class = "ancLinks helpButton link">Как это работает?</a>
     </div>
+    <div class="picture offset1 span3">
+      <img src="{{ url_for('static', filename='img/wComp.png') }}" alt="">
+    </div>
+  </div>
+  <div id = "manual">
+    <div class = "row step" id = "step1">
+      <div class="span1 offset1">
+        <img src="{{ url_for('static', filename='img/step1.png') }}" alt="Step1"/>
+      </div>
+      <div class="manualstepcontent span9"><p><b>Выбери тип устройства и отвечая на вопросы настрой необходимые параметры. На основе их наша система будет фильтровать и сортировать лучшие для тебя модели.</p><img src="{{ url_for('static', filename='img/step1image1.png') }}" alt="Step1"/></div>
+    </div>
+    <div class = "row step" id = "step2">
+      <div class="span1 offset1">
+        <img src="{{ url_for('static', filename='img/step2.png') }}" alt="Step2"/>
+      </div>
+      <div class="span3"><img src="{{ url_for('static', filename='img/step3image.png') }}" alt="Step1"/></div>      
+      <div class="manualstepcontent offset1 span5"><p>Используя нечёткие вопросы  (слайдеры с одним ползунком) ты можешь указать насколько для тебя важен тот или иной параметр подбираемой модели</p></div>
+    </div>
+    <div class = "row step" id = "step3">
+      <div class="span1 offset1">
+        <img src="{{ url_for('static', filename='img/step3.png') }}" alt="Step3"/>
+      </div>
+      <div class="manualstepcontent span9"><p>Нажав на кнопку «Подобрать» система составит для тебя персональный рейтинг. На первых местах расположатся наиболее подходящие твоему запросу модели которые в тоже время будут лучше своих конкурентов.  Profit!</p><img src="{{ url_for('static', filename='img/step3image1.png') }}" alt="Step1"/></div>
+    </div>
+    <div class="row">
+      <div class="offset1 span3"> Не веришь? - <a href="/qa/" class = "link">Попробуй</a></div>
+      <div class="offset6 span1"><a href="#container" class = "ancLinks link">Вверх</a></div>
+    </div>
+  </div>
+  <div class="row">
+    <div class = "footer span12"> Developed by Sonik and Pikachu </div>
+  </div>
+</div>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $("a.ancLinks").click(function () { 
+      elementClick = $(this).attr("href");
+      destination = $(elementClick).offset().top;
+      if($.browser.safari){
+        $('body').animate( { scrollTop: destination }, 1100 );
+      }else{
+        $('html').animate( { scrollTop: destination }, 1100 );
+      }
+      return false;
+    });
+  });
+</script>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-40243760-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
 </body>
 </html>
- 

@@ -1,5 +1,5 @@
 {% macro titlePart(title, description) -%}
-   <p class = "qText">{{ title }} {% if description %}<a href="javascript:void(0)" class = "tooltip" rel="/tooltip/{{ description }}/" text = "{{ title }}"> ?</a> {% endif %}</p>
+   <p class = "qText">{{ title }} {% if description %}<a href="javascript:void(0)" class = "tooltip" tooltip="/tooltip/{{ description }}/" text = "{{ title }}"> ?</a> {% endif %}</p>
 {%- endmacro %}
 {% macro checkbox(title, name, texts, values, selected_values, description, style, type) -%}                     
           <div class="question question-checkbox {{ type }}" style = "{{ style }}">       
@@ -7,17 +7,15 @@
             {% if type != 'table' %}  
                 {% for i in range(values|length) %}
                 <label>
-                    <input type="checkbox" name="{{ name }}" id="{{ name }}_{{ values[i] }}" value="{{ values[i] }}"> 
+                    <input type="checkbox" name="{{ name }}_{{ values[i] }}" id="{{ name }}_{{ values[i] }}" value="{{ values[i] }}"> 
                     {{ texts[i] }}   
                 </label>
                 <script type="text/javascript">
-                    cheks.push("{{ name }}");
-                </script>   
+                    cheks.push("{{ name }}_{{ values[i] }}");                  
                  {% if selected_values %} {% if i in selected_values %}
-                              <script type="text/javascript">
-                                  qParams["{{ name }}_{{ values[i] }}"] = "checked";
-                                </script>                  
-                {% endif %} {% endif %}   
+                                  qParams["{{ name }}_{{ values[i] }}"] = "checked";                                                 
+                {% endif %} {% endif %}
+                </script>   
                 {% endfor %}
             {% else %}
                 <table>
@@ -27,17 +25,15 @@
                    {% set colloop = loop %} 
                     {%- for post in col -%}                                        
                         <label>
-                            <input type="checkbox" name="{{ name }}" id="{{ name }}_{{ values[colloop.index0*4 + loop.index0] }}" value="{{ values[colloop.index0*4 + loop.index0] }}">
+                            <input type="checkbox" name="{{ name }}_{{ values[colloop.index0*4 + loop.index0] }}" id="{{ name }}_{{ values[colloop.index0*4 + loop.index0] }}" value="{{ values[colloop.index0*4 + loop.index0] }}">
                             {{ texts[colloop.index0*4 + loop.index0] }}
                         </label>
                         <script type="text/javascript">
-                            cheks.push("{{ name }}");
-                        </script>                                                    
-                        {% if selected_values %} {% if colloop.index0*4 + loop.index0 in selected_values %}                         
-                              <script type="text/javascript">
+                            cheks.push("{{ name }}_{{ values[colloop.index0*4 + loop.index0] }}");
+                        {% if selected_values %} {% if colloop.index0*4 + loop.index0 in selected_values %}
                                   qParams["{{ name }}_{{ values[colloop.index0*4 + loop.index0] }}"] = "checked";
-                              </script>                  
-                        {% endif %} {% endif %}                    
+                        {% endif %} {% endif %}
+                        </script>                   
                     {%- endfor -%}
                     </td>
                 {%- endfor -%}

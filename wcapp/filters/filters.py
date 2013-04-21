@@ -73,11 +73,11 @@ class ContainerFilter(Filter):
 	def get_answers(self, values):
 		dss = {}
 		cut = []
-		print "Container Values", values
+		#print "Container Values", values
 		for child in self.children:
 			newvalues = dict( (key,values[key]) for key in values if key.split('_')[0] in child.get_names() )
 			if newvalues:
-				print "newvalues", newvalues
+				#print "newvalues", newvalues
 				if child.dss_function: dss.update(child.dss_function(newvalues.values())) 
 				if child.cut_function: cut += [child.cut_function(newvalues.values())]
 		while '' in cut:
@@ -111,7 +111,7 @@ class TwoPartFilter(Filter):
 	def get_answers(self, values):
 		dss = {}
 		cut = []
-		part = self.cPart if values[self.name + '_hi'] == u'0' else self.nPart
+		part = self.cPart if values[self.name + "_hi"] == u'0' else self.nPart
 		newvalues = {}		
 		for key in values:						
 			if key in part.get_names():				
@@ -121,8 +121,12 @@ class TwoPartFilter(Filter):
 
 
 	def get_names(self):
-		names = self.cPart.get_names()
-		names += self.nPart.get_names()
+		names = []
+		cPart_names = self.cPart.get_names()
+		nPart_names = self.nPart.get_names()
+		names += cPart_names if type(cPart_names) == list else [cPart_names]
+		names += nPart_names if type(nPart_names) == list else [nPart_names]
+		names += [self.name]
 		return names					
 
 

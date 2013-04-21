@@ -21,7 +21,7 @@ class DBWrapper (object):
     #in this dictionary we defines dsses for every device type
     _device_dss = {
         u'computer': {
-            'price': -9,
+            'price': -22,
             'cpu': 4,
             'ram': 3,
             'vga': 3,
@@ -36,7 +36,7 @@ class DBWrapper (object):
         },
 
         u'notebook': {
-            'price': -12,
+            'price': -24,
             'cpu': 4,
             'ram': 3,
             'vga': 3,
@@ -84,7 +84,8 @@ class DBWrapper (object):
         '''
         # print cut_values
         cut_string = ' AND '.join(cut_values)
-        print 'CUT STRING', cut_string
+        cut_string += " AND price > 0"
+        print 'CUTSTRING', cut_string
         devices_id = db.session.query(self.device_table.id).filter(cut_string).all()
         return tuple(int(comp[0]) for comp in devices_id)
 
@@ -101,7 +102,6 @@ class DBWrapper (object):
             for key in dss:
                 dss_dict[key] += dss[key]
         devices_id = self._cutted_devices_id(cut_values)  # all devices after cutting
-        print 'devices_id', devices_id
         #getting dss for this devices from db
         sqldsses = db.session.query(self.dss_table).filter(self.dss_table.id.in_(devices_id)).all()
         devices_dss = {}  # dict of id and dss for each device
@@ -163,5 +163,6 @@ def delete_user(id):
 
 def get_user(id):
     json_data = redis.get(id)
+    if not json_data: return None
     user = json.loads(str(json_data))
     return user

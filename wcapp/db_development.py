@@ -166,7 +166,7 @@ def __update_comp_dss():
     Works only for computers and notebooks
     '''
 
-    ram_dss = {'1':20,'2':40,'3':50,'4':60,'6':70,'8':80,'12':90,'16':100}
+    ram_dss = {'1':15,'2':35,'3':45,'4':55,'6':65,'8':75,'12':85,'16':100}
 
     def oss_dss_calc(os_name):
         os_dss_dict = {'FreeDOS': 0,'Linux': 20,'Windows 7 Starter': 30,'Windows 7 Home Basic': 40,'Windows 8':80,'Windows 7 Professional':100}
@@ -265,7 +265,7 @@ def __update_notebook_dss():
     notebooks'''
 
     def ram_dss_calc(comp):
-        ram_dss = {'1024':15,'2048':35,'3072':45,'3096':55,'4096':55,'6144':65,'8192':75,'12288':85,'16384':95}
+        ram_dss = {'1':15,'2':35,'3':45,'4':55,'6':65,'8':75,'12':85,'16':100}
         rez = ram_dss[str(comp.ram_amount)]
         if comp.ram_standart:
             if 'PC2' in comp.ram_standart: rez *=0.7
@@ -508,12 +508,13 @@ def __correct_notebooks_hdd():
 
 if __name__ == '__main__':
     import support.utf8_converter
-    # __correct_notebooks_ram()
-    # __correct_notebooks_hdd()
+    #__correct_notebooks_ram()
+    #__correct_notebooks_hdd()
+    #__correct_computers_hdd()
     # __insert_computers()
     # __separete_name()
-    # __update_comp_dss()
-    # __update_notebook_dss()
+    #__update_comp_dss()
+    __update_notebook_dss()
     # __insert_prices()
     __insert_shops()
     __insert_concdevices()
@@ -524,7 +525,6 @@ if __name__ == '__main__':
     # __generate_third_page()
     # __rename_photo_folders()
     # __grab_device_prices()
-
     # f = open('../data/existed_notebooks.txt', 'rb')
     # existed = [line[:-1] for line in f]
     # print len(existed)
@@ -535,3 +535,10 @@ if __name__ == '__main__':
     #     db.session.delete(device)
     # db.session.commit()
 
+    #print '1'
+    #for conc in db.session.query(workconcdevice).all():
+    #    newgrn = conc.price_usd
+    #    newusd = conc.price_grn
+    #    db.session.query(workconcdevice).filter_by(id=conc.id).update({'price_grn': newgrn, 'price_usd': newusd})
+    #    print conc.id
+    #db.session.commit()
