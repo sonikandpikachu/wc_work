@@ -11,7 +11,7 @@ from flask import render_template, request, abort, session, jsonify, render_temp
 from tooltips import TOOLTIPS_DICT
 import json
 
-from wcconfig import app
+from wcconfig import app, PROM
 import filters.settings
 import pretty_data
 import db_queries
@@ -60,9 +60,9 @@ def second():
         devices_dss_on_page = devices_dss[first_comp_index: last_comp_index]
         pretty_devices = pretty_data.small_devices(devices_id_on_page, devices_dss_on_page, dbwrapper)
         return render_template('QandA.html', computers=pretty_devices, filters=FILTERS[u'all'],
-            pagination_pages=pretty_data.pagination_pages(last_page), dss_dict=dss_dict)
+            pagination_pages=pretty_data.pagination_pages(last_page), dss_dict=dss_dict, prom = PROM)
 
-    return render_template('QandA.html', computers=[], filters=FILTERS[u'all'], pagination_pages=[], dss_dict=dss_dict)
+    return render_template('QandA.html', computers=[], filters=FILTERS[u'all'], pagination_pages=[], dss_dict=dss_dict, prom = PROM)
 
 
 def filtered_devices_id(filters, args, dbwrapper):
@@ -95,7 +95,7 @@ def third_computer(id, dss):
     return render_template('Comp.html', big_comp=big_pretty_comp,
                                 small_comp=small_pretty_comp,
                                 tooltips = TOOLTIPS_DICT,
-                                conccomps=concdevices)
+                                conccomps=concdevices, prom = PROM)
 
 
 @app.route('/notebook/<id>/<dss>/')
@@ -108,7 +108,7 @@ def third_notebook(id, dss):
                                 small_comp=small_pretty_notebook,
                                 
                                 tooltips = TOOLTIPS_DICT,
-                                conccomps=concdevices)
+                                conccomps=concdevices, prom = PROM)
 
 
 @app.route('/getPage/<page>/<type>/')

@@ -12,6 +12,7 @@
 <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.png') }}" type="image/x-icon" />
 <link rel="icon" href="{{ url_for('static', filename='img/favicon.png') }}" type="image/x-icon" />
 
+{% if not prom %}
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='fancybox/jquery.fancybox.css') }}"/>
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='fancybox/helpers/jquery.fancybox-thumbs.css') }}"/>
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}"/>
@@ -23,6 +24,8 @@
 <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.qtip-1.0.0-rc3.min.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/helpers.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/tabs.js') }}"></script>
+{% else %}
+{% endif %}
 <script type=text/javascript>
       var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
   </script> 

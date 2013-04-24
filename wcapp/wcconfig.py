@@ -47,6 +47,8 @@ app = Flask('wcapp')
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'  # test
 app.config.from_object(__name__)
 
+PROM = False
+
 db = SQLAlchemy(app)
 mail = Mail(app)
 redis = init_redis(app)
