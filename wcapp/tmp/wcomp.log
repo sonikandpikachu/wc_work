@@ -1,5 +1,6 @@
 2013-04-01 22:01:37,676 INFO: WCOMP Startup [in /home/jenya/projects/wc_work/wcapp/wcconfig.py:60]
 2013-04-01 22:01:38,047 INFO: WCOMP Startup [in /home/jenya/projects/wc_work/wcapp/wcconfig.py:60]
+<<<<<<< HEAD
 2013-04-01 22:02:55,878 INFO: -- WCOMP Startup -- [in /home/jenya/projects/wc_work/wcapp/wcconfig.py:60]
 <<<<<<< HEAD
 2013-04-14 17:39:46,260 INFO: -- WCOMP Startup -- [in /home/pavel/Python/projects/wc_work/wcapp/wcconfig.py:64]
@@ -520,3 +521,6 @@ ZeroDivisionError: integer division or modulo by zero
 2013-04-24 12:53:46,159 INFO: -- WCOMP Startup -- [in /home/pavel/Python/projects/wc_work/wcapp/wcconfig.py:59]
 2013-04-24 12:57:26,094 INFO: -- WCOMP Startup -- [in /home/pavel/Python/projects/wc_work/wcapp/wcconfig.py:59]
 2013-04-24 12:59:03,900 INFO: -- WCOMP Startup -- [in /home/pavel/Python/projects/wc_work/wcapp/wcconfig.py:59]
+=======
+2013-04-01 22:02:55,878 INFO: -- WCOMP Startup -- [in /home/jenya/projects/wc_work/wcapp/wcconfig.py:60]
+>>>>>>> 178ac61280ac9654349c94085c5d852e5af3c480

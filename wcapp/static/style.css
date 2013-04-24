@@ -140,11 +140,8 @@ body {
 
 #footer {
 	width:100%;
-	/*position: absolute;*/
-	/*bottom: 10px;*/
 	padding-top: 20px;
 	text-align: center;
-	font-style:italic;
 	font-size:13px;
 	color:#666;
 	float:left;
@@ -334,7 +331,7 @@ body {
 
 /* Questions */
 #questions {
-	margin-top: 10px;
+	margin-top: 20px;
 	margin-bottom: 20px;
 	float: left;
 	width: 100%;

@@ -20,14 +20,15 @@ def small_devices(computers_id, computers_dss, dbwrapper):
         max_price, min_price = dbwrapper.max_and_min_price(computer)
 
         dir = os.path.join(os.path.dirname(__file__), 'static/img/' + computer.__class__.__name__[3:].lower() + 's/' + str(computer.id) + "_img")
-        names = os.listdir(dir)
-        if len (names) != 1: names.remove('main.jpg')
+        names = os.listdir(dir)        
         for name in names:
             if name.split(".")[1] == "db": names.remove(name)
+        if len (names) != 1: names.remove('main.jpg')
 
         if computer.__class__.__name__[3:].lower() == 'computer':
             pretty_computer = {
                 'type': 'computer',
+                'typer': u'компьютер',
                 'id': str(computer.id),
                 'name': computer.name,
                 'model': computer.model,
@@ -60,6 +61,7 @@ def small_devices(computers_id, computers_dss, dbwrapper):
         else:
             pretty_computer = {
                 'type': 'notebook',
+                'typer': u'ноутбук',
                 'id': str(computer.id),
                 'name': computer.name,
                 'model': computer.model,
@@ -165,8 +167,8 @@ def big_computer(id, dbwrapper):
         (u"Кардридер", comp.panel_cardreader),        
         (u"Цифровой дисплей", comp.panel_digital_display),
         (u"Аудио (микрофон/наушники)", comp.panel_audio),
-        (u"Отсеков 5.25", comp.panel_cell5),
-        (u"Отсеков 3.5", comp.panel_cell3),
+        (u"Отсеков 5.25\"", comp.panel_cell5),
+        (u"Отсеков 3.5\"", comp.panel_cell3),
     ])
 
     pretty_computer[u"Общее"] = OrderedDict([
@@ -204,7 +206,7 @@ def big_notebook(id, dbwrapper):
         (u"Серия процессора", notebook.cpu_name),
         (u"Модель", notebook.cpu_model),
         (u"Частота процессора", notebook.cpu_frequency),
-        (u"Кол-во ядер процессора", notebook.cpu_kernel_count),
+        (u"Кол-во ядер", notebook.cpu_kernel_count),
         (u"Объем кэш памяти 3-го уровня", str(notebook.cpu_cash3) + u" КБ"),        
         (u"Объем кэш памяти 2-го уровня", str(notebook.cpu_cash2) + u" КБ"),
     ])
@@ -213,12 +215,12 @@ def big_notebook(id, dbwrapper):
         (u"Модель", notebook.vga_number),
         (u"Объем видеопамяти", notebook.vga_amount),
         (u"Тип видеокарты", notebook.vga_type),
-        (u"Тип памяти", notebook.vga_memory_type)
+        (u"Тип видеопамяти", notebook.vga_memory_type)
     ])
 
     pretty_notebook[u"Оперативная память"] = OrderedDict([
-        (u"Объем оперативной памяти", notebook.ram_amount),
-        (u"Тип", notebook.ram_type),
+        (u"Объем ОЗУ", notebook.ram_amount),
+        (u"Тип памяти", notebook.ram_type),
         (u"Стандарт памяти", notebook.ram_standart),
         (u"Максимально устанавливаемый объем", notebook.ram_max),
         (u"Кол-во слотов", notebook.ram_jacks)        
@@ -226,7 +228,7 @@ def big_notebook(id, dbwrapper):
 
     pretty_notebook[u"Дисплей"] = OrderedDict([        
         (u"Диагональ экрана", str(notebook.display_diagonal) + " \""),        
-        (u"Разрешение дисплея", notebook.disply_resolution),        
+        (u"Разрешение", notebook.disply_resolution),        
         (u"Сенсорный", notebook.display_sensor),
         (u"Поворотный экран", notebook.display_rotation),
         (u"Поддержка мультитач", notebook.display_multitouch), 
@@ -249,7 +251,7 @@ def big_notebook(id, dbwrapper):
     ])   
 
     pretty_notebook[u"Привод оптических дисков"] = OrderedDict([
-        (u"Тип", notebook.panel_drive),
+        (u"Привод", notebook.panel_drive),
         (u"Поддержка BluRay", notebook.panel_bluraydrive)
     ]) 
 
@@ -271,12 +273,12 @@ def big_notebook(id, dbwrapper):
     pretty_notebook[u"Устройство"] = OrderedDict([
         (u"USB 2.0", notebook.panel_usb2),
         (u"USB 3.0", notebook.panel_usb3),
-        (u"LAN (RJ-45)", notebook.lan),
+        (u"LAN", notebook.lan),
         (u"Thunderbolt", notebook.thunderbolt),
         (u"Вэб-камера", notebook.web_camera),
-        (u"Порты подключения", notebook.connection_ports),
+        (u"Разъемы", notebook.connection_ports),
         (u"Мультимедиа", notebook.multimedia),
-        (u"Формат акустики", notebook.accoustic_format),        
+        (u"Звук", notebook.accoustic_format),        
         (u"Дополнительный выход на наушники", notebook.additional_headphones_port),
     ])
 
@@ -291,7 +293,7 @@ def big_notebook(id, dbwrapper):
     ])  
 
     pretty_notebook[u"Аккумулятор"] = OrderedDict([
-        (u"Время работы (при макс_ нагрузке)", notebook.battery_work_time),
+        (u"Макс. время работы", notebook.battery_work_time),
         (u"Емкость батареи", notebook.battery_capacity),
         (u"Напряжение батареи", notebook.battery_voltage),
         (u"Время зарядки", notebook.battery_charging_time),
@@ -305,7 +307,7 @@ def big_notebook(id, dbwrapper):
         (u"Подключение док-станции", notebook.doc_station_connection),                
         (u"Вес", notebook.weight),
         (u"Материал корпуса", notebook.material),
-        (u"Габариты (ШхГхТ)", str(notebook.height) + "x" + str(notebook.width) + "x" + str(notebook.length)),        
+        (u"Габариты (ШхГхТ)", str(notebook.width) + "x" + str(notebook.length) + "x" + str(notebook.height) ),        
         (u"Цвет", notebook.color),
     ])
 

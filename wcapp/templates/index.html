@@ -2,6 +2,11 @@
 <html lang = "ru-RU">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name='keywords' content='WhatComputer - ноутбуки, компьютеры, где купить, цены, интернет-магазины, продажа, каталог, описания'>
+    
+    <title>WhatComputer - выбери оптимальный ноутбук или компьютер</title>
+    <meta name="description" content="WhatComputer - интеллектуальная система подбора поможет выбрать ноутбук или компьютер наиболее оптимально, учитывая современные потребности и важность выбранных характеристик." />
+
     <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.png') }}" type="image/x-icon" />
     <link rel="icon" href="{{ url_for('static', filename='img/favicon.png') }}" type="image/x-icon" />
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='startpage.css') }}"/>
@@ -9,7 +14,6 @@
     <!--[if (gte IE 6)&(lte IE 8)]>
       <script type="text/javascript" src="{{ url_for('static', filename='js/selectivizr.js') }}"></script>
     <![endif]-->
-<title>WhatComputer - помогает выбрать оптимальный ноутбук или компьютер</title>
 </head>
 <body>
 <div id = "container" class = "container">
@@ -17,9 +21,9 @@
   </div>
   <div class="row main">
     <div class="idea span7">
-      <h2 class = "title">Подбери себя оптимальный компьютер или ноутбук всего за пару минут</h2>
+      <h2 class = "title">Подбери себе оптимальный компьютер или ноутбук всего за пару минут</h2>
       <p>
-      Сложно разобраться какой процессор сейчас лучше или найти ноутбук одновременно хороший для дома и для офиса? Наша систем сама подберет для тебя оптимальную модель учитывая объективные оценки практически всех параметров – начиная от цены заканчивая количеством портов в устройстве. Все что от тебя требуется – это ответить на пару вопросов.     
+      Сложно разобраться какой процессор сейчас лучше или найти ноутбук одновременно хороший для дома и для офиса? Наша система сама подберет для тебя оптимальную модель, учитывая объективные оценки практически всех параметров: начиная от цены, заканчивая количеством портов в устройстве. Все что от тебя требуется – это ответить на пару вопросов.     
       </p>
       <div class="goButton">
         <a href="/qa/" ><img src="{{ url_for('static', filename='img/wGo_02.png') }}" alt="" onMouseOver="this.src='{{ url_for('static', filename='img/wGo_04.png') }}'" 
@@ -37,29 +41,27 @@
       <div class="span1 offset1">
         <img src="{{ url_for('static', filename='img/step1.png') }}" alt="Step1"/>
       </div>
-      <div class="manualstepcontent span9"><p><b>Выбери тип устройства и отвечая на вопросы настрой необходимые параметры. На основе их наша система будет фильтровать и сортировать лучшие для тебя модели.</p><img src="{{ url_for('static', filename='img/step1image1.png') }}" alt="Step1"/></div>
+      <div class="manualstepcontent span9"><p><b>Выбери тип устройства и, отвечая на вопросы, настрой необходимые параметры. На их основе наша система будет фильтровать и сортировать лучшие для тебя модели.</p><img src="{{ url_for('static', filename='img/step1image1.png') }}" alt="Step1"/></div>
     </div>
     <div class = "row step" id = "step2">
       <div class="span1 offset1">
         <img src="{{ url_for('static', filename='img/step2.png') }}" alt="Step2"/>
       </div>
       <div class="span3"><img src="{{ url_for('static', filename='img/step3image.png') }}" alt="Step1"/></div>      
-      <div class="manualstepcontent offset1 span5"><p>Используя нечёткие вопросы  (слайдеры с одним ползунком) ты можешь указать насколько для тебя важен тот или иной параметр подбираемой модели</p></div>
+      <div class="manualstepcontent offset1 span5"><p>Используя нечёткие вопросы  (слайдеры с одним ползунком), ты можешь указать насколько для тебя важен тот или иной параметр подбираемой модели</p></div>
     </div>
     <div class = "row step" id = "step3">
       <div class="span1 offset1">
         <img src="{{ url_for('static', filename='img/step3.png') }}" alt="Step3"/>
       </div>
-      <div class="manualstepcontent span9"><p>Нажав на кнопку «Подобрать» система составит для тебя персональный рейтинг. На первых местах расположатся наиболее подходящие твоему запросу модели которые в тоже время будут лучше своих конкурентов.  Profit!</p><img src="{{ url_for('static', filename='img/step3image1.png') }}" alt="Step1"/></div>
+      <div class="manualstepcontent span9"><p>Нажав на кнопку «Подобрать», система составит для тебя персональный рейтинг. На первых местах распологаются наиболее подходящие твоему запросу модели, которые, в то же время, будут лучше своих конкурентов.  Profit!</p><img src="{{ url_for('static', filename='img/step3image1.png') }}" alt="Step1"/></div>
     </div>
-    <div class="row">
-      <div class="offset1 span3"> Не веришь? - <a href="/qa/" class = "link">Попробуй</a></div>
-      <div class="offset6 span1"><a href="#container" class = "ancLinks link">Вверх</a></div>
-    </div>
-  </div>
+  </div> 
   <div class="row">
-    <div class = "footer span12"> Developed by Sonik and Pikachu </div>
-  </div>
+    <div class="offset1 span3"> Не веришь? - <a href="/qa/" class = "link">Попробуй</a></div>
+    <div class="offset6 span1"><a href="#container" class = "ancLinks link">Вверх</a></div>
+  </div>  
+  {% include 'footer.html' %}
 </div>
 <script type="text/javascript">
   $(document).ready(function() {

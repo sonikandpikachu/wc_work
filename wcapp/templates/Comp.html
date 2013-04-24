@@ -5,6 +5,9 @@
 <html lang = "ru-RU">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name='keywords' content='{{ small_comp.name }} {{ small_comp.typer }}, описание, цены, где купить'>
+<meta name="description" content="Детальные характеристики {{ small_comp.typer }}а {{ small_comp.name }}, его рейтинг, цена, описание, а также перечень интернет-магазинов, где его можно купить" />
+<title>{{ small_comp.name }} - описание, цены, где купить</title>
 
 <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.png') }}" type="image/x-icon" />
 <link rel="icon" href="{{ url_for('static', filename='img/favicon.png') }}" type="image/x-icon" />
@@ -20,9 +23,12 @@
 <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.qtip-1.0.0-rc3.min.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/helpers.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/tabs.js') }}"></script>
+<script type=text/javascript>
+      var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+  </script> 
 
 
-<title>{{ small_comp.name }} - описание</title>
+
 </head>
 
 <body>
