@@ -20,10 +20,10 @@ def small_devices(computers_id, computers_dss, dbwrapper):
         max_price, min_price = dbwrapper.max_and_min_price(computer)
 
         dir = os.path.join(os.path.dirname(__file__), 'static/img/' + computer.__class__.__name__[3:].lower() + 's/' + str(computer.id) + "_img")
-        names = os.listdir(dir)
-        if len (names) != 1: names.remove('main.jpg')
+        names = os.listdir(dir)        
         for name in names:
             if name.split(".")[1] == "db": names.remove(name)
+        if len (names) != 1: names.remove('main.jpg')
 
         if computer.__class__.__name__[3:].lower() == 'computer':
             pretty_computer = {
