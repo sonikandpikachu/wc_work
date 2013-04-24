@@ -508,16 +508,32 @@ def __correct_notebooks_hdd():
 
 if __name__ == '__main__':
     import support.utf8_converter
-    #__correct_notebooks_ram()
-    #__correct_notebooks_hdd()
-    #__correct_computers_hdd()
+    from dbupdate.update import update_devices, NOTEBOOK_MEDIA, COMPUTER_MEDIA
+    import argparse
+
+    parser = argparse.ArgumentParser(description='database updating and development')
+    parser.add_argument(
+        '-u', '--update', nargs='?', metavar='str',
+        help='takes device type as argument (`computer` or `notebook`).'
+             'Updates concdevices and media of devices if last_update field is None or'
+             ' is lower then 45 days ago')
+    args = parser.parse_args()
+
+    print args.update
+    if args.update == 'notebook':
+        update_devices(sql.wc_Notebook, sql.wc_ConcNotebook, NOTEBOOK_MEDIA)
+    if args.update == 'computer':
+        update_devices(sql.wc_Computer, sql.wc_ConcComputer, COMPUTER_MEDIA)
+    # __correct_notebooks_ram()
+    # __correct_notebooks_hdd()
+    # __correct_computers_hdd()
     # __insert_computers()
     # __separete_name()
-    #__update_comp_dss()
-    __update_notebook_dss()
+    # __update_comp_dss()
+    # __update_notebook_dss()
     # __insert_prices()
-    __insert_shops()
-    __insert_concdevices()
+    # __insert_shops()
+    # __insert_concdevices()
     # __dss_values_to_db()
     # __insert_empty_dss()
     # __export_dss_notebooks()
@@ -525,20 +541,19 @@ if __name__ == '__main__':
     # __generate_third_page()
     # __rename_photo_folders()
     # __grab_device_prices()
-    # f = open('../data/existed_notebooks.txt', 'rb')
-    # existed = [line[:-1] for line in f]
-    # print len(existed)
     # __insert_computers(existed_names=existed)
     # __insert_shops()
     # __insert_prices()
-    # for device in db.session.query(workdevice).all():
-    #     db.session.delete(device)
-    # db.session.commit()
 
-    #print '1'
-    #for conc in db.session.query(workconcdevice).all():
-    #    newgrn = conc.price_usd
-    #    newusd = conc.price_grn
-    #    db.session.query(workconcdevice).filter_by(id=conc.id).update({'price_grn': newgrn, 'price_usd': newusd})
-    #    print conc.id
-    #db.session.commit()
+#     parser = argparse.ArgumentParser(description='Task 1: removes empty strings from string sequence')
+#     parser.add_argument('-t', '--test', action='store_true', help='run doctests for module')
+#     parser.add_argument('-r', '--run', nargs='+', metavar='str',
+#         help='''
+#             get sequence of strings and remove empty from begin and end of sequence,
+#             also replace many empty strings by one in the midle of sequence
+#              ''')
+#     args = parser.parse_args()
+
+#     if args.test:
+#         doctest.testmod(verbose=True)
+#     elif args.run:

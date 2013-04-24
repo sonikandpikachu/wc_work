@@ -11,3 +11,7 @@ xlrd==0.8.0
 xlwt==0.7.4
 Flask-Mail==0.7.6
 flask-redis
+lxml
+cssselect
+fn
+requests
