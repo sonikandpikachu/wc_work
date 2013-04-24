@@ -5,6 +5,7 @@ Comp elements
 venv
 data
 
+wcapp/tmp/
 wcapp/local_config.py
 wcapp/static/img/computers/
 wcapp/static/img/notebooks/
