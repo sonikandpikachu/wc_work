@@ -85,7 +85,7 @@ def __dss_values_to_db():
         db.session.commit()
 
 
-def __insert_computers(only_new=True):
+def __insert_computers(only_new=True, existed_names=[]):
     '''
     Inserts .pkl devices to notebooks, as it setted in config file.
     Inserts only computers with new urls if only_new = True
@@ -94,12 +94,13 @@ def __insert_computers(only_new=True):
     pkldevices = ptd.computers(workpass, workconfig)
     i = 0
     for pkldevice in pkldevices:
-        # if not pkldevice['name'] + pkldevice['model'] in existed_names:
-        if not pkldevice['url'] in existed_urls:
-            device = workdevice(**pkldevice)
-            print device.model
-            i = i + 1
-        db.session.add(device)
+        if not pkldevice['name'] + '$$$' + pkldevice['model'] in existed_names:
+            if not pkldevice['url'] in existed_urls:
+                device = workdevice(**pkldevice)
+                i = i + 1
+                db.session.add(device)
+        else:
+            print 'dublicate'
     db.session.commit()
 
 
@@ -204,7 +205,7 @@ def __update_comp_dss():
         return rez   
 
     def media_dss_calc(comp):
-        rez = 0        
+        rez = 0
         if comp.media_jacks3: rez += comp.media_jacks3
         if comp.media_microphone: rez += 20
         if comp.media_remote: rez += 20
@@ -215,9 +216,11 @@ def __update_comp_dss():
         return rez
 
     def network_dss_calc(comp):
-        rez = 0        
-        if 'Wi-Fi' in comp.network: rez +=50
-        if 'Bluetooth' in comp.network: rez +=50
+        rez = 0
+        if 'Wi-Fi' in comp.network:
+            rez += 50
+        if 'Bluetooth' in comp.network:
+            rez += 50
         return rez
 
     computers = workdevice.query.all()
@@ -227,8 +230,8 @@ def __update_comp_dss():
     alldisplay = [display_dss_calc(comp) for comp in computers if comp.display_diagonal]
     allsize = [size_dss_calc(comp) for comp in computers if comp.height]
     allpanel = [panel_dss_calc(comp) for comp in computers]
-    allmedia = [media_dss_calc(comp) for comp in computers]   
-  
+    allmedia = [media_dss_calc(comp) for comp in computers]
+
     hddmin, hddmax = min(allhdd), max(allhdd)
     sizemin, sizemax = min(allsize), max(allsize)
     cpumin, cpumax = min(allcpu), max(allcpu)
@@ -513,8 +516,8 @@ if __name__ == '__main__':
     #__update_comp_dss()
     __update_notebook_dss()
     # __insert_prices()
-    # __insert_shops()
-    # __insert_concdevices()
+    __insert_shops()
+    __insert_concdevices()
     # __dss_values_to_db()
     # __insert_empty_dss()
     # __export_dss_notebooks()
@@ -522,6 +525,16 @@ if __name__ == '__main__':
     # __generate_third_page()
     # __rename_photo_folders()
     # __grab_device_prices()
+    # f = open('../data/existed_notebooks.txt', 'rb')
+    # existed = [line[:-1] for line in f]
+    # print len(existed)
+    # __insert_computers(existed_names=existed)
+    # __insert_shops()
+    # __insert_prices()
+    # for device in db.session.query(workdevice).all():
+    #     db.session.delete(device)
+    # db.session.commit()
+
     #print '1'
     #for conc in db.session.query(workconcdevice).all():
     #    newgrn = conc.price_usd

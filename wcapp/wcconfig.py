@@ -7,6 +7,7 @@ settings for project. In production version need to move main part of settings t
 
 from flask import Flask
 
+from flask.ext.redis import init_redis
 from flask.ext.mail import Mail
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.redis import init_redis
@@ -20,6 +21,10 @@ HOST = '127.0.0.1:3306'
 DB_SCHEME = 'wc'
 SQLALCHEMY_DATABASE_URI = DATABASE + USERNAME + ':' + PASSWORD + '@' + HOST + '/' + DB_SCHEME + '?charset=utf8'
 
+UPDATE_DB_SCHEME = 'update_wc'
+UPDATE_SQLALCHEMY_DATABASE_URI = DATABASE + USERNAME + ':' + PASSWORD + '@' + HOST + '/' + UPDATE_DB_SCHEME + '?charset=utf8'
+IS_UPDATE = False
+
 MAIL_SERVER = 'smtp.gmail.com'
 MAIL_PORT = 465
 MAIL_USE_TLS = False
@@ -31,7 +36,11 @@ DEFAULT_MAIL_SENDER = 'some_user@gmail.com'
 # administrator list
 ADMINS = ['whatcompute@gmail.com']
 
+from local_config import *
 
+if IS_UPDATE:
+    DB_SCHEME = UPDATE_DB_SCHEME
+    SQLALCHEMY_DATABASE_URI = UPDATE_SQLALCHEMY_DATABASE_URI
 
 #flask configurations:
 app = Flask('wcapp')
