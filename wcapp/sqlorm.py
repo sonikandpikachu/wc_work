@@ -70,7 +70,7 @@ class wc_Computer(db.Model):
     testvga_3dmark06 = db.Column(db.Float)
     in_view = db.Column(db.Boolean)
     hdd_clear_capacity = db.Column(db.Integer)
-    media_url = db.Column(db.String(300))
+    last_update = db.Column(db.DateTime)
 
     def __init__(self, id=None, chipset=None, color=None, cpu_frequency=None, cpu_kernel_count=None, cpu_model=None,
         cpu_name=None, display_brightness=None, display_diagonal=None, display_led_backlight=None, display_sensor=None,
@@ -81,7 +81,7 @@ class wc_Computer(db.Model):
         panel_drive=None, panel_usb2=None, panel_usb3=None, pb_power=None, ps2=None,
         ram_amount=None, ram_frequency=None, ram_jacks=None, ram_type=None, thunderbolt=None, type=None, url=None,
         vga_amount=None, vga_model=None, vga_type=None, weight=None, width=None, price=None,
-        testcpu_passmark=None, testvga_3dmark06=None, in_view=None, hdd_clear_capacity=None, media_url=None):
+        testcpu_passmark=None, testvga_3dmark06=None, in_view=None, hdd_clear_capacity=None, last_update=None):
         self.chipset = chipset
         self.color = color
         self.cpu_frequency = cpu_frequency
@@ -139,7 +139,7 @@ class wc_Computer(db.Model):
         self.testvga_3dmark06 = testvga_3dmark06
         self.in_view = in_view
         self.hdd_clear_capacity = hdd_clear_capacity
-        self.media_url = media_url
+        self.last_update = last_update
         if id:
             self.id = id
 
@@ -153,17 +153,20 @@ class wc_ConcComputer(db.Model):
 
     wc_Computer_id = db.Column(db.Integer, db.ForeignKey('wc_Computer.id'))
     device = db.relationship('wc_Computer',
-        backref=db.backref('concretes', lazy='dynamic'))
+                             backref=db.backref('concretes', lazy='dynamic'))
 
     wc_Shop_id = db.Column(db.Integer, db.ForeignKey('wc_Shop.id'))
     shop = db.relationship('wc_Shop',
-        backref=db.backref('conccomputers', lazy='dynamic'))
+                           backref=db.backref('conccomputers', lazy='dynamic'))
 
-    def __init__(self, id=None, price_usd=None, price_grn=None, device=None, shop=None):
+    url = db.Column(db.String(500))
+
+    def __init__(self, id=None, price_usd=None, price_grn=None, device=None, shop=None, url=None):
         self.price_grn = price_grn
         self.price_usd = price_usd
         self.shop = shop
         self.device = device
+        self.url = url
         if id:
             self.id = id
 
@@ -310,7 +313,7 @@ class wc_Notebook(db.Model):
     price = db.Column(db.Float)
     in_view = db.Column(db.Boolean)
     hdd_clear_capacity = db.Column(db.Integer)
-    media_url = db.Column(db.String(300))
+    last_update = db.Column(db.DateTime)
 
     def __init__(self, id=None, battery_capacity=None, battery_cells=None, battery_charging_time=None,
             battery_voltage=None, battery_work_time=None,
@@ -336,7 +339,7 @@ class wc_Notebook(db.Model):
             testcpu_3dmark06=None, testcpu_passmark=None, testcpu_super=None, testvga_3dmark=None,
             testvga_3dmark06=None, thunderbolt=None, type=None, url=None, vga_memory_type=None,
             vga_model=None, vga_number=None, waterproof=None, web_camera=None, weight=None,
-            width=None, length=None, height=None, price=None, in_view=None, hdd_clear_capacity=None, media_url=None):
+            width=None, length=None, height=None, price=None, in_view=None, hdd_clear_capacity=None, last_update=None):
         self.battery_capacity = battery_capacity
         self.battery_cells = battery_cells
         self.battery_charging_time = battery_charging_time
@@ -429,7 +432,7 @@ class wc_Notebook(db.Model):
         self.price = price
         self.in_view = in_view
         self.hdd_clear_capacity = hdd_clear_capacity
-        self.media_url = media_url
+        self.last_update = last_update
         if id:
             self.id = id
 
@@ -449,11 +452,14 @@ class wc_ConcNotebook(db.Model):
     shop = db.relationship('wc_Shop',
         backref=db.backref('concnotebooks', lazy='dynamic'))
 
-    def __init__(self, id=None, price_usd=None, price_grn=None, device=None, shop=None):
+    url = db.Column(db.String(500))
+
+    def __init__(self, id=None, price_usd=None, price_grn=None, device=None, shop=None, url=None):
         self.price_grn = price_grn
         self.price_usd = price_usd
         self.shop = shop
         self.device = device
+        self.url = url
         if id:
             self.id = id
 
