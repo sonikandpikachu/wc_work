@@ -26,6 +26,7 @@ body {
     width: 960px;
     margin: 0 auto;
     background: #fff;
+    color: #145571;
 }
 
 /*=======Grid=========*/
@@ -93,7 +94,6 @@ hr{
 }
 
 .idea {
-    color: #145571;
     margin-bottom: 30px;
 }
 
@@ -153,19 +153,15 @@ a:link:hover{
 
 }
 
-#manual{
-    color: #145571;
+#manual{    
     font-family: main_font;
     font-size: 1em;
-}
-
-.step {
     transition: opacity 0.2s;
     -webkit-transition: opacity 0.2s;
     opacity: 0.3;
 }
 
-.step:hover{
+#manual:hover{
     opacity: 1;
 }
 
@@ -176,9 +172,8 @@ a:link:hover{
 
 /*=======Footer========*/
 
-.footer {;    
+#footer {;    
     text-align: center;
-    font-style:italic;
     font-size:13px;
     color:#666;
 }

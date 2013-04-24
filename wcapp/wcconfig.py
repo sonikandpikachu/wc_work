@@ -22,9 +22,11 @@ SQLALCHEMY_DATABASE_URI = DATABASE + USERNAME + ':' + PASSWORD + '@' + HOST + '/
 
 MAIL_SERVER = 'smtp.gmail.com'
 MAIL_PORT = 465
+MAIL_USE_TLS = False
 MAIL_USE_SSL = True
 MAIL_USERNAME = 'whatcompute'
 MAIL_PASSWORD = 'ilovecloude'
+DEFAULT_MAIL_SENDER = 'some_user@gmail.com'
 
 # administrator list
 ADMINS = ['whatcompute@gmail.com']

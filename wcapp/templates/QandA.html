@@ -2,6 +2,10 @@
 <html lang = "ru-RU">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name='keywords' content='WhatComputer - ноутбуки, компьютеры, где купить, цены, интернет-магазины, продажа, каталог, описания'>
+
+  <title>WhatComputer - пару ответов на вопросы и ты получаешь свой оптимальный ноутбук или компьютер</title>
+  <meta name="description" content="WhatComputer - подбери себе оптимальный компьютер или ноутбук ответив всего на пару вопросов. Ты узнаешь где купить и цену выбранной модели." />
 
   <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.png') }}" type="image/x-icon" />
   <link rel="icon" href="{{ url_for('static', filename='img/favicon.png') }}" type="image/x-icon" />
@@ -32,18 +36,15 @@
   <script type=text/javascript>
       var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
   </script> 
-
-  <title>WhatComputer - пару ответов на вопросы и ты получаешь свой оптимальный ноутбук или компьютер</title>
 </head>
 
 <body>
   <div id = "wrapper">
     {% include 'header.html' %}
     <div id = "content">
-      {% include 'menu.html' %}
       <form method = 'get' action = '/qa/' name = "qForm">
         <ul id = "questions">
-          <a href = "javascript:void(0)" id="defaultButton" >Востановить начальные значения</a>
+          <a href = "javascript:void(0)" id="defaultButton" >Восстановить начальные значения</a>
           <li>    
             {% include 'mainQuestion.html' %} 
           </li>
@@ -55,20 +56,7 @@
                                 />  </a>
         </ul> 
       </form>
-  <a href = "#questions" id="trigger">Show/Hide</a>
-  <table  class = "console" style = "width: 100%">
--        
--                  {% for col in dss_dict.iteritems()|slice(4) %}
--                     <tr style = "width: 100%">                    
--                      {%- for k , v in col -%}                    
--                          <td style = "padding-left: 20px;">
--                              {{ k }}&emsp;{{ v }}
--                          </td>                   
--                      {%- endfor -%}
--                      </tr>
--                  {%- endfor -%}      
--      </table>
-    <ul id = "answerList">
+        <ul id = "answerList">
        {% for comp in computers %}      
         <li class="answer">
           <div class = "image">            
