@@ -4,6 +4,7 @@ libs
 Comp elements
 venv
 data
+tmp
 
 wcapp/tmp/
 wcapp/local_config.py
