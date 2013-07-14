@@ -25,13 +25,6 @@ UPDATE_DB_SCHEME = 'update_wc'
 UPDATE_SQLALCHEMY_DATABASE_URI = DATABASE + USERNAME + ':' + PASSWORD + '@' + HOST + '/' + UPDATE_DB_SCHEME + '?charset=utf8'
 IS_UPDATE = False
 
-# DEFAULT_FROM_EMAIL = 'marchukpavelp@gmail.com'
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_HOST_USER = 'marchukpavelp@gmail.com'
-# EMAIL_HOST_PASSWORD = 'onlyspam'
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-
 MAIL_SERVER = 'smtp.gmail.com'
 MAIL_PORT = 587
 MAIL_USE_TLS = True
