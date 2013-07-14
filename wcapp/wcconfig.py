@@ -41,7 +41,7 @@ MAIL_PASSWORD = 'ilovecloude'
 DEFAULT_MAIL_SENDER = 'whatcompute@gmail.com'
 
 # administrator list
-ADMINS = ['whatcompute@gmail.com', 'marchukpavelp@gmail.com']
+ADMINS = ['whatcompute@gmail.com', 'marchukpavelp@gmail.com', 'terpiljenya@gmail.com']
 
 from local_config import *
 
