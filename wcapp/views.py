@@ -134,9 +134,9 @@ def getPage(page, type):
 
 @app.route('/feedback/', methods=['GET'])
 def feedback():
-    a = mail.send_admin_messages('WComp: Feedback', request.args['email'], request.args['msg'])
+    mail.send_admin_messages('WComp: Feedback', request.args['email'], request.args['msg'])
     # mail.save_feedback(request.args['msg'], request.args['email'])
-    resp = jsonify({"Send": "true", "a": a})
+    resp = jsonify({"Send": "true"})
     resp.status_code = 200
     return resp
 
