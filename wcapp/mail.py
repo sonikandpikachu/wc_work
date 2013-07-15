@@ -3,7 +3,7 @@ from wcconfig import app, ADMINS, mail
 from decorators import async
 
 
-@async
+# @async
 def send_async_email(msg):
     mail.send(msg)
 
@@ -23,3 +23,4 @@ def send_admin_messages(subject, sender, text):
     msg = Message(subject, recipients=ADMINS)
     msg.body = "From: {0}\nText: {1}".format(sender, text)
     send_async_email(msg)
+    return 'ololo'
