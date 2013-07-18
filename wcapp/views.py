@@ -139,8 +139,9 @@ def getPage(page, type):
 
 @app.route('/feedback/', methods=['GET'])
 def feedback():
-    mail.save_feedback(request.args['msg'], request.args['email'])
-    resp = jsonify({"Send":"true"})
+    mail.send_admin_messages('WComp: Feedback', request.args['email'], request.args['msg'])
+    # mail.save_feedback(request.args['msg'], request.args['email'])
+    resp = jsonify({"Send": "true"})
     resp.status_code = 200
     return resp
 
@@ -153,7 +154,7 @@ def gallery(type,id):
     dir = os.path.join(os.path.dirname(__file__), 'static/img/' + type + 's/' + id + "_img")
     names = os.listdir(dir)   # список файлов и поддиректорий в данной директории
     if len (names) != 1: names.remove('main.jpg')
-    return render_template('gallery.html', images=names, type = type, id = id)
+    return render_template('gallery.html', images=names, type=type, id=id)
 
 
 if __name__ == '__main__':

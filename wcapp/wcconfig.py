@@ -26,15 +26,15 @@ UPDATE_SQLALCHEMY_DATABASE_URI = DATABASE + USERNAME + ':' + PASSWORD + '@' + HO
 IS_UPDATE = False
 
 MAIL_SERVER = 'smtp.gmail.com'
-MAIL_PORT = 465
-MAIL_USE_TLS = False
-MAIL_USE_SSL = True
-MAIL_USERNAME = 'whatcompute'
+MAIL_PORT = 587
+MAIL_USE_TLS = True
+MAIL_USE_SSL = False
+MAIL_USERNAME = 'whatcompute@gmail.com'
 MAIL_PASSWORD = 'ilovecloude'
-DEFAULT_MAIL_SENDER = 'some_user@gmail.com'
+DEFAULT_MAIL_SENDER = 'whatcompute@gmail.com'
 
 # administrator list
-ADMINS = ['whatcompute@gmail.com']
+ADMINS = ['whatcompute@gmail.com', 'marchukpavelp@gmail.com', 'terpiljenya@gmail.com']
 
 from local_config import *
 
