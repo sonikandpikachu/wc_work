@@ -67,9 +67,10 @@
                                 onMouseDown="this.src='{{ url_for('static', filename='img/greenButtons/wGoButton3.jpg') }}'"
                                 />  </a>
         </ul> 
-      </form>
+      </form>        
+        {% if computers%}
         <ul id = "answerList">
-       {% for comp in computers %}      
+        {% for comp in computers %}      
         <li class="answer">
           <div class = "image">            
           <a class = "fancybox" rel = "gallery{{ comp.id }}" href = "{{ url_for('static', filename='img/' + comp.type + 's/'+ comp.id +'_img/' + comp.gallery|first) }}"> 
@@ -150,8 +151,17 @@
             <li> <a  href = "/{{ comp.type }}/{{ comp.id }}/{{ comp.comp_dss }}" target="_blank"> <div class="compOpenButton"></div></a> </li>
           </ul>
         </li>
-        {% endfor %} 
+        {% endfor %}
       </ul>
+        {% else %}
+          {% if not without_question %}
+            <div class="noFound">
+              <img class="noFound-img" src="../static/img/noFound.png" alt="К сожалению по данному запросу ничего не найдено"/>
+              </br>
+              К сожалению по данному запросу ничего не найдено
+            </div>            
+          {% endif %}
+        {% endif %}      
     <div id = "pagination">
             {% include 'pagination.html' %}
     </div>

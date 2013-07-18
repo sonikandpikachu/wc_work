@@ -50,7 +50,10 @@ def second():
         user_id = db_queries.add_user(devices_id, devices_dss)
         session['user_id'] = user_id
     else:
+        # first page (without_question)
         devices_id, devices_dss, dss_dict = None, None, {}  # nothing to return
+        return render_template('QandA.html', computers=[], filters=FILTERS[u'all'], pagination_pages=[], dss_dict=dss_dict,
+                                tooltips = TOOLTIPS_DICT, without_question=True, prom = PROM)
 
     if devices_id:
         last_page = int(round(float(len(devices_id)) / COMPUTERS_ON_PAGE + 0.49))
@@ -60,9 +63,12 @@ def second():
         devices_dss_on_page = devices_dss[first_comp_index: last_comp_index]
         pretty_devices = pretty_data.small_devices(devices_id_on_page, devices_dss_on_page, dbwrapper)
         return render_template('QandA.html', computers=pretty_devices, filters=FILTERS[u'all'],
-            pagination_pages=pretty_data.pagination_pages(last_page), dss_dict=dss_dict, prom = PROM)
+            pagination_pages=pretty_data.pagination_pages(last_page), dss_dict=dss_dict, tooltips = TOOLTIPS_DICT, without_question=False, prom = PROM)
+    else:
+        return render_template('QandA.html', computers=[], filters=FILTERS[u'all'], pagination_pages=[], dss_dict=dss_dict,
+                                tooltips = TOOLTIPS_DICT, without_question=False, prom = PROM)
 
-    return render_template('QandA.html', computers=[], filters=FILTERS[u'all'], pagination_pages=[], dss_dict=dss_dict, prom = PROM)
+    
 
 
 def filtered_devices_id(filters, args, dbwrapper):
@@ -105,8 +111,7 @@ def third_notebook(id, dss):
     big_pretty_notebook = pretty_data.big_notebook(id, dbwrapper)
     small_pretty_notebook = pretty_data.small_devices([id], [float(dss)], dbwrapper)[0]
     return render_template('Comp.html', big_comp=big_pretty_notebook,
-                                small_comp=small_pretty_notebook,
-                                
+                                small_comp=small_pretty_notebook,                                
                                 tooltips = TOOLTIPS_DICT,
                                 conccomps=concdevices, prom = PROM)
 

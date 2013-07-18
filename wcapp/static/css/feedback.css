@@ -66,6 +66,7 @@ input.error:focus, textarea.error:focus { border-color: #973d3d; color: #a35959;
 #feedbackBlock p{
     font-family: Myriad Pro,Verdana, Tahoma, Arial, Helvetica, sans-serif; 
     color: #39A91D; font-size: 1em;
-    font-style: italic; 
+    font-style: italic;
+    margin: 25px 0; 
 }
 

@@ -1,4 +1,4 @@
-{% macro description(text) -%}
+{% macro hint(text) -%}
    {% if text %}<a href="javascript:void(0)" class = "tooltip" tooltip="/tooltip/{{ text }}/" text = "{{ text }}"> ?</a> {% endif %}
 {%- endmacro %}
 <!DOCTYPE html>
@@ -139,7 +139,7 @@
             </tr>
             {% for key in big_comp[part].keys() %}
               <tr class = "key">
-                <td class="tableName">{{ key }}{% if tooltips[key] %} {{ description(key) }} {% endif %}</td>
+                <td class="tableName">{{ key }}{% if tooltips[key] %} {{ hint(key) }} {% endif %}</td>
                 <td class="tableSeparator"></td>
                 <td class="tableValue"> {{ big_comp[part][key] }} </td>
               </tr>

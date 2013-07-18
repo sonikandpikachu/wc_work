@@ -1,6 +1,0 @@
-if [ -e combined.js ]; then rm combined.js; fi
-2
-cat *.js > combined.js
-3
-java -jar ~/Programs/yuicompressor-2.4.7/build/yuicompressor-2.4.7.jar combined.js -o combined.js
-

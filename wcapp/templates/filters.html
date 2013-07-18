@@ -1,6 +1,9 @@
 {% macro titlePart(title, description) -%}
    <p class = "qText">{{ title }} {% if description %}<a href="javascript:void(0)" class = "tooltip" tooltip="/tooltip/{{ description }}/" text = "{{ title }}"> ?</a> {% endif %}</p>
 {%- endmacro %}
+{% macro textPart(title, key) -%}
+   {{ title }} {% if tooltips[key] %}<a href="javascript:void(0)" class = "tooltip" tooltip="/tooltip/{{ key }}/" text = "{{ title }}"> ?</a> {% endif %}
+{%- endmacro %}
 {% macro checkbox(title, name, texts, values, selected_values, description, style, type) -%}                     
           <div class="question question-checkbox {{ type }}" style = "{{ style }}">       
             {{ titlePart(title, description) }}
@@ -8,7 +11,8 @@
                 {% for i in range(values|length) %}
                 <label>
                     <input type="checkbox" name="{{ name }}_{{ values[i] }}" id="{{ name }}_{{ values[i] }}" value="{{ values[i] }}"> 
-                    {{ texts[i] }}   
+                   {# {{ texts[i] }} #}
+                    {{ textPart(texts[i], values[i]) }}  
                 </label>
                 <script type="text/javascript">
                     cheks.push("{{ name }}_{{ values[i] }}");                  
@@ -26,7 +30,7 @@
                     {%- for post in col -%}                                        
                         <label>
                             <input type="checkbox" name="{{ name }}_{{ values[colloop.index0*4 + loop.index0] }}" id="{{ name }}_{{ values[colloop.index0*4 + loop.index0] }}" value="{{ values[colloop.index0*4 + loop.index0] }}">
-                            {{ texts[colloop.index0*4 + loop.index0] }}
+                            {{ textPart(texts[colloop.index0*4 + loop.index0], values[colloop.index0*4 + loop.index0]) }}
                         </label>
                         <script type="text/javascript">
                             cheks.push("{{ name }}_{{ values[colloop.index0*4 + loop.index0] }}");

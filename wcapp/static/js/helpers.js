@@ -50,7 +50,7 @@ $(function(){
             title: {
               'font-family': "'Ubuntu',sans-serif",
                color: '#3399CC',
-               'font-size' : '14px'
+              'font-size' : '13px'
             },
             button: {
                'font-family': "'Ubuntu',sans-serif"
@@ -62,7 +62,8 @@ $(function(){
             },
             color: '#145571',            
             name: 'light', // Use the default light style
-            width: 570 // Set the tooltip width
+            width: 500, // Set the tooltip width
+            padding: '10px'
          }
       })
    });

@@ -158,11 +158,11 @@ a:link:hover{
     font-size: 1em;
     transition: opacity 0.2s;
     -webkit-transition: opacity 0.2s;
-    opacity: 0.3;
+    opacity: 1;
 }
 
 #manual:hover{
-    opacity: 1;
+   /* opacity: 1; */
 }
 
 .manualstepcontent p{

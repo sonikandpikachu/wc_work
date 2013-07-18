@@ -138,6 +138,19 @@ body {
 	background-image:url(img/greenButtons/wNextButton3.png); 
 }
 
+.noFound{
+	font-size: 1.1em;
+	clear: both;
+	margin: 20px 0 40px 0;
+	text-align: center;
+	color: rgb(149, 11, 135);
+}
+
+.noFound-img{
+	display: block;
+	margin: 0 auto 20px auto;
+}
+
 #footer {
 	width:100%;
 	padding-top: 20px;
@@ -514,7 +527,7 @@ a:hover  {
 /* Tooltips*/
 .qtip-content p{
 	text-indent: 10px;
-	font-size: 14px;
+	font-size: 13px;
 	font-family: 'Open Sans', sans-serif;	
 }
 .qtip-content i{
@@ -525,8 +538,8 @@ a:hover  {
 }
 .qtip-content .tooltip-text{
 	float: right;
-	width: 50%;
+	width: 48%;
 	height: 130px;
-	padding: 20px 10px;
+	padding: 20px 1%;
 	margin-top: 10px;
 }

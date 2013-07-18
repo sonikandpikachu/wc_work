@@ -277,7 +277,7 @@ def color_cut_function(selected_values):
 	if selected_values[0] == u"Всё равно":
 		return ''
 	if selected_values[0] == u'другие яркие цвета': 
-		other_colors = u"бордовый", u"оранжевый", u"фиолетовый"
+		other_colors = u'синий', u'красный' , u'розовый',  u'золотистый', u"бордовый", u"оранжевый", u"фиолетовый"
 		filters = []
 		for s in other_colors:
 			filters.append('color LIKE "%' + s + '%"')
@@ -285,8 +285,7 @@ def color_cut_function(selected_values):
 	return 'color LIKE "%' + selected_values[0] + '%"'
 	
 
-texts = u"Всё равно", u"чёрный", u'серебристый',u'серый',u'коричневый', u'белый',\
-u'синий', u'красный' , u'розовый',  u'золотистый',  u'другие яркие цвета',
+texts = u"Всё равно", u"чёрный", u'серебристый', u'серый', u'коричневый', u'белый', u'другие яркие цвета'
 values = texts[:]
 
 colorFilter = filters.SelectFilter('colorFilter', u'Цвет:', 

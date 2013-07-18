@@ -43,6 +43,17 @@ $(function () {
         setValues(qParams, 'first');
     } else {
         setValues(recognizeElements(urlParams), 'first');
+        scrollToAnswerList();
+
+    }
+
+    function scrollToAnswerList(){
+                destination = $("#goButton").offset().top;
+        if($.browser.safari){
+          $('body').animate( { scrollTop: destination }, 1100 );
+        }else{
+          $('html').animate( { scrollTop: destination }, 1100 );
+      }
     }
 
     function doPagination(event){
@@ -146,10 +157,10 @@ $(function () {
             $('#answerList').fadeOut("slow", function () {
                 $('#answerList').html(html);
                 $('#answerList').show();
+                scrollToAnswerList();
             });
         });
 
-        // TODO: Redraw pagination
 
         function addPage(number, isSelect) {
             var tmp = "<li><a href=\"javascript:void(0)\" class = '"
@@ -221,7 +232,7 @@ $(function () {
                 }
             } else {
                 if ($.inArray(key, selectes) != -1) {
-                    rez[key + "_select"] = params[key].replace("+", " ");
+                    rez[key + "_select"] = params[key].replace(/\+/g, " ");
                 } else {
                     rez[key] = params[key].replace("%3B", ";");
                 }
@@ -256,6 +267,7 @@ $(function () {
                     twoParts.push(key);
                 } else {
                     if (key.split('_')[1] == "select") {
+                        console.log(params[key]);
                         $("#" + key.split('_')[0]).selectbox("change", params[key], params[key]);
                     } else {
                         var param = params[key].split(';');
