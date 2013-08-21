@@ -442,7 +442,6 @@ def __generate_third_page():
         eng_name = line.split('|')[1].strip().lower()
         names[rus_name] = eng_name
     part_names = set([key.split('.')[0] for key in names])
-    # print ', '.join(part_namses)
     for part in part_names:
         print 'pretty_notebook[u"' + part + '"] = OrderedDict ( {'
         for key in names:
@@ -460,8 +459,6 @@ def __rename_photo_folders():
         print 'renaming', folder, 'to', newname
         os.rename(folder, newname)
 
-
-# def __insert_media_url():
 
 def __correct_notebooks_ram():
     notebooks = db.session.query(sql.wc_Notebook).all()
@@ -501,29 +498,50 @@ def __correct_notebooks_hdd():
     print 'all hdd_clear_capacity:', a
 
 
-# def __grab_device_prices():
-#     for device in workdevice.query(workdevice.url).filter(workdevice.price < 0).all()
-
-# str(comp.height) + str(comp.width) + str(comp.length)
-
 if __name__ == '__main__':
     import support.utf8_converter
-    from dbupdate.update import update_devices, NOTEBOOK_MEDIA, COMPUTER_MEDIA
+    from dbupdate.update_price import update_prices, NOTEBOOK_MEDIA, COMPUTER_MEDIA
+    from dbupdate.update_device import update_devices, export_dss, set_existed_dss
     import argparse
 
     parser = argparse.ArgumentParser(description='database updating and development')
     parser.add_argument(
+        '-p', '--prices', nargs='?', metavar='str',
+        help='takes device type as argument (`computer` or `notebook`).'
+             'Updates prices, concdevices and media for devices which last_update field is None or'
+             ' is lower then 45 days ago')
+    parser.add_argument(
         '-u', '--update', nargs='?', metavar='str',
         help='takes device type as argument (`computer` or `notebook`).'
-             'Updates concdevices and media of devices if last_update field is None or'
-             ' is lower then 45 days ago')
+             'Downloads all new devices(and theirs data) into new_`device_type`.xls file.'
+             'If device exists in our base (has the same name and model) it won`t be downloaded')
+    parser.add_argument(
+        '-ed', '--exportdss', nargs='?', metavar='str',
+        help='takes device type as argument (`computer` or `notebook`).'
+             'updates device dss .xls file')
+    parser.add_argument(
+        '-sd', '--setdss', nargs='?', metavar='str',
+        help='takes device type as argument (`computer` or `notebook`).'
+             'Sets marks to new devices if we already have marks for such config.')
+
     args = parser.parse_args()
 
-    print args.update
-    if args.update == 'notebook':
-        update_devices(sql.wc_Notebook, sql.wc_ConcNotebook, NOTEBOOK_MEDIA)
-    if args.update == 'computer':
-        update_devices(sql.wc_Computer, sql.wc_ConcComputer, COMPUTER_MEDIA)
+    if args.prices == 'notebook':
+        update_prices(sql.wc_Notebook, sql.wc_ConcNotebook, NOTEBOOK_MEDIA)
+    if args.prices == 'computer':
+        update_prices(sql.wc_Computer, sql.wc_ConcComputer, COMPUTER_MEDIA)
+
+    if args.update:
+        update_devices(args.update)
+
+    if args.exportdss:
+        export_dss(args.exportdss)
+
+    if args.setdss:
+        set_existed_dss(args.setdss)
+
+    # if 
+
     # __correct_notebooks_ram()
     # __correct_notebooks_hdd()
     # __correct_computers_hdd()
@@ -544,16 +562,3 @@ if __name__ == '__main__':
     # __insert_computers(existed_names=existed)
     # __insert_shops()
     # __insert_prices()
-
-#     parser = argparse.ArgumentParser(description='Task 1: removes empty strings from string sequence')
-#     parser.add_argument('-t', '--test', action='store_true', help='run doctests for module')
-#     parser.add_argument('-r', '--run', nargs='+', metavar='str',
-#         help='''
-#             get sequence of strings and remove empty from begin and end of sequence,
-#             also replace many empty strings by one in the midle of sequence
-#              ''')
-#     args = parser.parse_args()
-
-#     if args.test:
-#         doctest.testmod(verbose=True)
-#     elif args.run:
